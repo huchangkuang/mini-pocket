@@ -16,8 +16,8 @@ const config: Config = {
     list: [
       {
         pagePath: 'pages/pocket/index',
-        iconPath: './images/mine.png',
-        selectedIconPath: './images/mineSelected.png',
+        iconPath: './images/pocket.png',
+        selectedIconPath: './images/pocketSelected.png',
         text: '口袋'
       },
       {
