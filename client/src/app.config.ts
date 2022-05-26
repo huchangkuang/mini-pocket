@@ -2,8 +2,8 @@ import {Config} from "@tarojs/taro";
 
 const config: Config = {
   pages: [
+    'pages/pocket/index',
     'pages/mine/index',
-    'pages/index/index',
   ],
   window: {
     backgroundTextStyle: 'light',
@@ -15,16 +15,16 @@ const config: Config = {
   tabBar: {
     list: [
       {
+        pagePath: 'pages/pocket/index',
+        iconPath: './images/mine.png',
+        selectedIconPath: './images/mineSelected.png',
+        text: '口袋'
+      },
+      {
         pagePath: 'pages/mine/index',
         iconPath: './images/mine.png',
         selectedIconPath: './images/mineSelected.png',
         text: '我的'
-      },
-      {
-        pagePath: 'pages/index/index',
-        iconPath: './images/mine.png',
-        selectedIconPath: './images/mineSelected.png',
-        text: 'index'
       },
     ],
   }
