@@ -1,0 +1,58 @@
+@import "../../app.less";
+
+.pocket {
+  padding: 32px;
+  .link {
+    color: #4282cc;
+    font-size: 28px;
+  }
+  .filterWrapper {
+    margin-bottom: 20px;
+    .form {
+      display: flex;
+      align-items: center;
+      .label {
+        font-size: 24px;
+        color: #666;
+        margin-right: 20px;
+      }
+    }
+  }
+  .titleWrapper {
+    &:extend(.spaceBetween);
+    margin-bottom: 40px;
+    .btn {
+      font-size: 22px;
+      color: #fff;
+      height: 40px;
+      padding-left: 8px;
+      padding-right: 8px;
+      &:extend(.flexCenter);
+      border-radius: 10px;
+      &.add {
+        background: #cb6918;
+      }
+      &.chooseNum {
+        background: #cb4e18;
+      }
+    }
+
+  }
+}
+.numWrapper {
+  &:extend(.spaceBetween);
+  margin-bottom: 20px;
+  .redBallNum {
+    display: flex;
+  }
+  .squareItem {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    border: 2rpx solid #eee;
+    &:extend(.flexCenter);
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+}

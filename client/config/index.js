@@ -1,6 +1,8 @@
+import path from "path";
+
 const config = {
   projectName: 'mini-pocket',
-  date: '2022-5-24',
+  date: '2023-2-24',
   designWidth: 750,
   deviceRatio: {
     '640': 2.34 / 2,
@@ -19,6 +21,17 @@ const config = {
     }
   },
   framework: 'react',
+  compiler: 'webpack5',
+  cache: {
+    enable: false // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
+  },
+  alias: {
+    '@/components': path.resolve(__dirname, '../src/components'),
+    "@/utils": path.resolve(__dirname, "../src/utils"),
+    "@/requestApi": path.resolve(__dirname, "../src/requestApi"),
+    "@/pages": path.resolve(__dirname, "../src/pages"),
+    "@/common": path.resolve(__dirname, "../src/common"),
+  },
   mini: {
     postcss: {
       pxtransform: {

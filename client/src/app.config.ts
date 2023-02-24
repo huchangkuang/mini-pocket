@@ -1,9 +1,6 @@
-import {Config} from "@tarojs/taro";
-
-const config: Config = {
+export default defineAppConfig({
   pages: [
     'pages/pocket/index',
-    'pages/mine/index',
   ],
   window: {
     backgroundTextStyle: 'light',
@@ -12,21 +9,25 @@ const config: Config = {
     navigationBarTextStyle: 'black'
   },
   cloud: true,
-  tabBar: {
-    list: [
-      {
-        pagePath: 'pages/pocket/index',
-        iconPath: './images/pocket.png',
-        selectedIconPath: './images/pocketSelected.png',
-        text: '口袋'
-      },
-      {
-        pagePath: 'pages/mine/index',
-        iconPath: './images/mine.png',
-        selectedIconPath: './images/mineSelected.png',
-        text: '我的'
-      },
-    ],
-  }
-}
-export default config
+  // tabBar: {
+  //   borderStyle: "white",
+  //   list: [
+  //     {
+  //       pagePath: 'pages/pocket/index',
+  //       iconPath: './images/pocket.png',
+  //       selectedIconPath: './images/pocketSelected.png',
+  //       text: '口袋',
+  //       color: "#333",
+  //       selectedColor: "#42e17c",
+  //     },
+  //     {
+  //       pagePath: 'pages/mine/index',
+  //       iconPath: './images/mine.png',
+  //       selectedIconPath: './images/mineSelected.png',
+  //       text: '我的',
+  //       color: "#333",
+  //       selectedColor: "#42e17c",
+  //     },
+  //   ],
+  // }
+})
