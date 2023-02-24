@@ -29,12 +29,19 @@ const NumWrapper: FC<NumWrapperProps> = ({redBall = [], blueBall = ""}) => {
       data: `${redBall.join(",")}+${blueBall}`
     });
   };
+  const padZero = (value: string | number = "") => {
+    const str = value.toString();
+    if (str && str.length < 2) {
+      return str.padStart(2, "0");
+    }
+    return str;
+  };
   return <View className="numWrapper">
     <View className="redBallNum">
-      {redBall.map((i, index) => <View key={index} className="squareItem">{i}</View>)}
+      {redBall.map((i, index) => <View key={index} className="squareItem">{padZero(i)}</View>)}
     </View>
     <View>+</View>
-    <View className="squareItem">{blueBall}</View>
+    <View className="squareItem">{padZero(blueBall)}</View>
     <View className="link" onClick={copy}>复制</View>
   </View>;
 };
