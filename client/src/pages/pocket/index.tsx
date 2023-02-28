@@ -4,7 +4,8 @@ import {View, Text, Switch, Image} from "@tarojs/components";
 import './index.less';
 import {errorToast} from "@/utils/errorToast";
 import {generateNumList, randomNum} from "@/utils/generateNum";
-import subtract from "../../images/pocket/subtract.svg"
+import subtract from "@/images/pocket/subtract.svg";
+import {useThrottle} from "@/hooks/useThrottle";
 
 type RedBall = (number | string)[];
 type BlueBall = number | string;
@@ -37,7 +38,7 @@ const NumWrapper: FC<NumWrapperProps> = ({redBall = [], blueBall = "", onSubtrac
     <View>+</View>
     <View className="squareItem noRight">{blueBall}</View>
     <View className="link" onClick={copy}>复制</View>
-    <Image className="subtract" src={subtract} onClick={onSubtract} />
+    <Image className="subtract" src={subtract} onClick={onSubtract}/>
   </View>;
 };
 const Pocket: FC = () => {
@@ -54,7 +55,7 @@ const Pocket: FC = () => {
     });
   };
   const onAdd = () => {
-    if (list.length >= 16) return errorToast("不可再添加了")
+    if (list.length >= 16) return errorToast("不可再添加了");
     setList(arr => arr.concat(initialNum));
   };
   const padZero = (value: string | number = "") => {
@@ -77,27 +78,28 @@ const Pocket: FC = () => {
     });
     setList(newList);
   };
-  const onNumScroll = () => {
-    let i = 0
+  const onNumScroll = useThrottle(() => {
+    console.log("hihi");
+    let i = 0;
     const clock = setInterval(() => {
       if (i >= 10) {
-        clearInterval(clock)
+        clearInterval(clock);
         return;
       }
-      chooseNum()
-      i += 1
-    }, 100)
-  }
+      chooseNum();
+      i += 1;
+    }, 100);
+  }, 1000);
   const removeItem = (index: number) => {
-    const newList = list.filter((i, ids) => ids !== index)
-    setList(newList)
-  }
+    const newList = list.filter((i, ids) => ids !== index);
+    setList(newList);
+  };
   useShareAppMessage(() => {
     return {
       title: "双色球单式随机选号",
       path: "/pages/pocket/index"
-    }
-  })
+    };
+  });
   return <View className="pocket">
     <View className="content">
       <View className="filterWrapper">
@@ -109,10 +111,11 @@ const Pocket: FC = () => {
       <View className="titleWrapper">
         <View>6个 <Text style={{color: "#d73838"}}>红球</Text> + 1个 <Text style={{color: "#366ad7"}}>蓝球</Text></View>
         <View className="btn add" onClick={onAdd}>加一注</View>
-        {/*<View className="btn chooseNum" onClick={chooseNum}>选号</View>*/}
+        <View className="btn reset" onClick={() => setList([initialNum])}>重置</View>
         <View className="link" onClick={copyAll}>全部复制</View>
       </View>
-      {list.map((i, index) => <NumWrapper key={index} onSubtract={() => removeItem(index)} redBall={i.red} blueBall={i.blue}/>)}
+      {list.map((i, index) => <NumWrapper key={index} onSubtract={() => removeItem(index)} redBall={i.red}
+                                          blueBall={i.blue}/>)}
     </View>
     <View className="chooseNumWrapper">
       <View className="chooseNum" onClick={onNumScroll}>选号</View>

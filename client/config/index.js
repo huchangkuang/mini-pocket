@@ -31,6 +31,8 @@ const config = {
     "@/requestApi": path.resolve(__dirname, "../src/requestApi"),
     "@/pages": path.resolve(__dirname, "../src/pages"),
     "@/common": path.resolve(__dirname, "../src/common"),
+    "@/hooks": path.resolve(__dirname, "../src/hooks"),
+    "@/images": path.resolve(__dirname, "../src/images"),
   },
   mini: {
     postcss: {
