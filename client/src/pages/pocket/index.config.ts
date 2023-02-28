@@ -1,3 +1,3 @@
-export default {
-  navigationBarTitleText: '一只口袋'
-}
+export default definePageConfig({
+  navigationBarTitleText: '一只口袋',
+})

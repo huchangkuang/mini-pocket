@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import Taro from '@tarojs/taro';
+import Taro, {useShareAppMessage} from '@tarojs/taro';
 import {View, Text, Switch, Image} from "@tarojs/components";
 import './index.less';
 import {errorToast} from "@/utils/errorToast";
@@ -92,6 +92,12 @@ const Pocket: FC = () => {
     const newList = list.filter((i, ids) => ids !== index)
     setList(newList)
   }
+  useShareAppMessage(() => {
+    return {
+      title: "双色球单式随机选号",
+      path: "/pages/pocket/index"
+    }
+  })
   return <View className="pocket">
     <View className="content">
       <View className="filterWrapper">
