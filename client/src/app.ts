@@ -5,8 +5,6 @@ import "./app.less";
 
 class App extends Component {
   componentDidMount() {
-    this.updateApp();
-
     if (process.env.TARO_ENV === "weapp") {
       Taro.cloud.init();
     }
@@ -38,7 +36,9 @@ class App extends Component {
     });
   }
 
-  componentDidShow() {}
+  componentDidShow() {
+    this.updateApp();
+  }
 
   componentDidHide() {}
 

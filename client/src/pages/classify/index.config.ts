@@ -1,3 +1,3 @@
-export default {
-  navigationBarTitleText: "一只口袋",
-};
+export default definePageConfig({
+  navigationStyle: "custom"
+});
