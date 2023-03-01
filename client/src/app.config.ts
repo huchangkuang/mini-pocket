@@ -1,12 +1,10 @@
 export default defineAppConfig({
-  pages: [
-    'pages/pocket/index',
-  ],
+  pages: ["pages/classify/index", "pages/pocket/index"],
   window: {
-    backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
+    backgroundTextStyle: "light",
+    navigationBarBackgroundColor: "#fff",
+    navigationBarTitleText: "WeChat",
+    navigationBarTextStyle: "black",
   },
   cloud: true,
   // tabBar: {
@@ -30,4 +28,4 @@ export default defineAppConfig({
   //     },
   //   ],
   // }
-})
+});

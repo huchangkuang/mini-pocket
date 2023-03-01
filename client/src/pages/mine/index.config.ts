@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '我的信息'
-}
+  navigationBarTitleText: "我的信息",
+};

@@ -1,14 +1,13 @@
-import React, {Component} from 'react';
-import Taro from '@tarojs/taro';
+import React, { Component } from "react";
+import Taro from "@tarojs/taro";
 
-import './app.less';
+import "./app.less";
 
 class App extends Component {
-
   componentDidMount() {
     this.updateApp();
 
-    if (process.env.TARO_ENV === 'weapp') {
+    if (process.env.TARO_ENV === "weapp") {
       Taro.cloud.init();
     }
   }
@@ -23,14 +22,14 @@ class App extends Component {
 
     updateManager.onUpdateReady(function () {
       Taro.showModal({
-        title: '更新提示',
-        content: '新版本已经准备好，是否重启应用？',
+        title: "更新提示",
+        content: "新版本已经准备好，是否重启应用？",
         success: function (res) {
           if (res.confirm) {
             // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
             updateManager.applyUpdate();
           }
-        }
+        },
       });
     });
 
