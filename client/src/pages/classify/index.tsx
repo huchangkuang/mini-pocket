@@ -14,6 +14,10 @@ const Classify: React.FC = () => {
     { icon: barrageIcon, text: "手持弹幕", path: "" },
     { icon: decisionIcon, text: "做个决定吧", path: "" },
     { icon: randomIcon, text: "随机数生成", path: "" },
+    { icon: randomIcon, text: "日期计算", path: "" },
+    { icon: randomIcon, text: "图片压缩", path: "" },
+    { icon: randomIcon, text: "二维码生成", path: "" },
+    { icon: randomIcon, text: "颜色值生成", path: "" },
   ];
   const viewToPage = (url: string) => {
     if (!url) {
