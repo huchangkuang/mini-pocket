@@ -1,13 +1,13 @@
 import path from "path";
 
 const config = {
-  projectName: 'mini-pocket',
-  date: '2023-2-24',
+  projectName: 'test',
+  date: '2023-3-13',
   designWidth: 750,
   deviceRatio: {
-    '640': 2.34 / 2,
-    '750': 1,
-    '828': 1.81 / 2
+    640: 2.34 / 2,
+    750: 1,
+    828: 1.81 / 2
   },
   sourceRoot: 'src',
   outputRoot: 'dist',

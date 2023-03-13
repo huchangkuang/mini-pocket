@@ -1,0 +1,23 @@
+@keyframes scrollXTop {
+  0% {
+    transform: rotate(90deg) translateX(calc(100vh + 100%));
+  }
+  100% {
+    transform: rotate(90deg) translateX(-100%);
+  }
+}
+.handsBarrage {
+  background: #000;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .scrollText {
+    width: fit-content;
+    color: #ffffff;
+    font-size: 50px;
+    transform: rotate(90deg) translateX(calc(100vh + 100%));
+    animation: scrollXTop ease-in-out 10s infinite;
+  }
+}

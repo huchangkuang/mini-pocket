@@ -7,5 +7,5 @@ node_modules/
 .idea
 yarn.lock
 package-lock.json
-package.json
 /project.private.config.json
+.swc

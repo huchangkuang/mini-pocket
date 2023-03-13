@@ -11,7 +11,7 @@ import { errorToast } from "@/utils/errorToast";
 const Classify: React.FC = () => {
   const classifyList = [
     { icon: lotteryIcon, text: "双色球单式", path: "/pages/pocket/index" },
-    { icon: barrageIcon, text: "手持弹幕", path: "" },
+    { icon: barrageIcon, text: "手持弹幕", path: "/pages/handsBarrage/index" },
     { icon: decisionIcon, text: "做个决定吧", path: "" },
     { icon: randomIcon, text: "随机数生成", path: "" },
     { icon: randomIcon, text: "日期计算", path: "" },

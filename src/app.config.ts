@@ -1,5 +1,9 @@
 export default defineAppConfig({
-  pages: ["pages/classify/index", "pages/pocket/index"],
+  pages: [
+    "pages/classify/index",
+    "pages/pocket/index",
+    "pages/handsBarrage/index",
+  ],
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",

@@ -91,7 +91,6 @@ const Pocket: FC = () => {
     setList(newList);
   };
   const onNumScroll = useThrottle(() => {
-    console.log("hihi");
     let i = 0;
     const clock = setInterval(() => {
       if (i >= 10) {
