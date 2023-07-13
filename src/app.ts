@@ -4,9 +4,7 @@ import Taro from "@tarojs/taro";
 import "./app.less";
 
 class App extends Component {
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   updateApp() {
     const updateManager = Taro.getUpdateManager();

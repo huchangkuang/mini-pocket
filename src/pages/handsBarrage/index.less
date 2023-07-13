@@ -1,23 +1,33 @@
-@keyframes scrollXTop {
-  0% {
-    transform: rotate(90deg) translateX(calc(100vh + 100%));
-  }
-  100% {
-    transform: rotate(90deg) translateX(-100%);
-  }
-}
+
+ /* 文字滚动 */
+ @keyframes aniMove {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+ }
+ 
+ /* 抖动字幕效果 */
+ @keyframes aniShake {
+  0%, 33% { text-shadow: 3px -3px 0px #FE008E, -5px 5px 0px #00FFFF; }
+  34%, 66% { text-shadow: 5px -5px 0px #FE008E, -3px 3px 0px #00FFFF; }
+  67%, 100% { text-shadow: 3px -3px 0px #00FFFF, -5px 5px 0px #FE008E; }
+ }
+
 .handsBarrage {
   background: #000;
-  height: 100vh;
-  width: 100vw;
+  width: 100vh;
+  height: 100vw;
   display: flex;
   align-items: center;
-  justify-content: center;
+  transform: rotate(90deg);
+  transform-origin: 50vw 50vw;
   .scrollText {
-    width: fit-content;
+    width: 100%;
+    white-space: nowrap;
     color: #ffffff;
-    font-size: 50px;
-    transform: rotate(90deg) translateX(calc(100vh + 100%));
-    animation: scrollXTop ease-in-out 10s infinite;
+    font-size: 100px;
+    transform: translateX(100%);
+    animation: aniMove 5s linear infinite;
+    animation-fill-mode: forwards;
   }
 }
+
