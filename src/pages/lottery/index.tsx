@@ -53,7 +53,7 @@ const NumWrapper: FC<NumWrapperProps> = ({
     </View>
   );
 };
-const Pocket: FC = () => {
+const Lottery: FC = () => {
   const [list, setList] = useState([initialNum]);
   const [repeatBlue, setRepeatBlue] = useState(false);
   const copyAll = () => {
@@ -112,7 +112,7 @@ const Pocket: FC = () => {
     };
   });
   return (
-    <View className="pocket">
+    <View className="lottery">
       <View className="content">
         <View className="filterWrapper">
           <View className="form">
