@@ -155,4 +155,4 @@ const Lottery: FC = () => {
     </View>
   );
 };
-export default Pocket;
+export default Lottery;
