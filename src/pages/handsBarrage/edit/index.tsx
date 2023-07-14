@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View } from "@tarojs/components";
+import { View, Input } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
-import { AtSlider, AtIcon, AtModal, AtButton, AtInput } from "taro-ui";
+import { AtSlider, AtIcon, AtModal, AtButton } from "taro-ui";
 import { errorToast } from "@/utils/errorToast";
 
 const colorList = [
@@ -80,12 +80,12 @@ const EditBarrage: React.FC = () => {
         onChanging={(value) => setTime(value)}
       />
       <View className="title">弹幕内容</View>
-      <AtInput
+      <Input
         className="barrageInput"
         placeholder="弹幕字数限制20字"
         maxlength={20}
         value={barrage}
-        onChange={(value) => setBarrage(value.toString())}
+        onInput={(value) => setBarrage(value.toString())}
         name="barrage"
       />
       <AtButton className="confirm" type="primary" onClick={confirm}>

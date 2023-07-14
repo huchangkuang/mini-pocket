@@ -3,7 +3,6 @@
 @import "~taro-ui/dist/style/components/icon.scss";
 @import "~taro-ui/dist/style/components/modal.scss";
 @import "~taro-ui/dist/style/components/button.scss";
-@import "~taro-ui/dist/style/components/input.scss";
 
 .editBarrage {
   padding: 24px;
@@ -38,6 +37,10 @@
         margin-right: 20px;
       }
     }
+  }
+  .barrageInput {
+    border-bottom: 1px solid #eeeeee;
+    padding: 10px;
   }
   .confirm {
     margin-top: 80px;
