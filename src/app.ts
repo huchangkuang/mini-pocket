@@ -3,6 +3,8 @@ import Taro from "@tarojs/taro";
 
 import "./app.less";
 
+// 踩坑记录：
+// 1. https://github.com/NervJS/taro-ui/issues/1555
 class App extends Component {
   componentDidMount() {}
 

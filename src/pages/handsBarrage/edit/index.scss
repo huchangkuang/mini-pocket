@@ -1,0 +1,46 @@
+@import "../../../style/common.scss";
+@import "~taro-ui/dist/style/components/slider.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/modal.scss";
+@import "~taro-ui/dist/style/components/button.scss";
+@import "~taro-ui/dist/style/components/input.scss";
+
+.editBarrage {
+  padding: 24px;
+  .title {
+    color: #333333;
+    font-weight: bold;
+    font-size: 36px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+  .colorShow {
+    width: 36px;
+    height: 36px;
+    margin-left: 20px;
+    margin-right: 8px;
+    border: 1px solid #eeeeee;
+    border-radius: 8px;
+  }
+  .colorList {
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px;
+    .colorItem {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #eeeeee;
+      border-radius: 8px;
+      &:not(:last-child) {
+        margin-right: 20px;
+      }
+    }
+  }
+  .confirm {
+    margin-top: 80px;
+  }
+}
+

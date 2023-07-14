@@ -3,6 +3,7 @@ export default defineAppConfig({
     "pages/classify/index",
     "pages/lottery/index",
     "pages/handsBarrage/index",
+    "pages/handsBarrage/edit/index",
   ],
   window: {
     backgroundTextStyle: "light",
