@@ -34,9 +34,18 @@ const Classify: React.FC = () => {
     }
     Taro.navigateTo({ url });
   };
-  const confirm = () => {
+  const validateBarrage = () => {
+    if (!barrage) {
+      return '请输入弹幕内容'
+    }
     if (barrage.length > 20) {
-      errorToast("弹幕字数限制20字");
+      return "弹幕字数限制20字";
+    }
+  };
+  const confirm = () => {
+    const msg = validateBarrage()
+    if (msg) {
+      errorToast(msg)
       return;
     }
     Taro.navigateTo({ url: `/pages/handsBarrage/index?text=${barrage}` });
@@ -59,6 +68,7 @@ const Classify: React.FC = () => {
         <AtModalHeader>请输入弹幕内容</AtModalHeader>
         <AtModalContent>
           <Input
+            className='barrageInput'
             placeholder="弹幕字数限制20字"
             maxlength={20}
             value={barrage}

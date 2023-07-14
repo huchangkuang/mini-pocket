@@ -53,7 +53,7 @@
 		"@tarojs/taro": "3.6.8",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
-		"taro-ui": "3"
+		"taro-ui": "3.0.0-alpha.10"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.0",
