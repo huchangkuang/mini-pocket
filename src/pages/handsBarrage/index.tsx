@@ -36,6 +36,9 @@ const HandsBarrage: React.FC = () => {
   return (
     <View
       onClick={exist}
+      style={{
+        background: bgColor,
+      }}
       className={classNames(
         "handsBarrage",
         windowWidth > windowHeight && "noRotate"
@@ -46,7 +49,6 @@ const HandsBarrage: React.FC = () => {
         style={{
           fontSize,
           color: fontColor,
-          background: bgColor,
           "--time": `${time}s`,
         }}
       >
