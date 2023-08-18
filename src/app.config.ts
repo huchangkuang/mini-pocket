@@ -6,6 +6,7 @@ export default defineAppConfig({
     "pages/handsBarrage/edit/index",
     "pages/doDescription/index",
     "pages/doDescription/edit/index",
+    "pages/fingerUp/index",
   ],
   window: {
     backgroundTextStyle: "light",

@@ -1,5 +1,5 @@
 export default definePageConfig({
-  navigationBarTitleText: "做个决定",
+  navigationStyle: "custom",
   enableShareAppMessage: true,
   enableShareTimeline: true,
 });
