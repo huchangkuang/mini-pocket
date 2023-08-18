@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from "react";
 import { View } from "@tarojs/components";
-import "./index.less";
+import "./index.scss";
 import Taro from "@tarojs/taro";
 import classNames from "classnames";
 import { useDebounce } from "@/hooks/useDebounce";

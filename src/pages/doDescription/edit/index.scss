@@ -1,0 +1,37 @@
+@import "../../../app";
+@import "src/style/common";
+
+.editDecision {
+  padding: 32px;
+  .title {
+    color: #333333;
+    font-weight: bold;
+    font-size: 36px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+  input {
+    font-size: 28px;
+    border-bottom: 1px solid #eeeeee;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #333333;
+    flex: 1;
+  }
+  .titleInput {
+    margin-bottom: 32px;
+  }
+  .selectItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  .addItem {
+    color: #ffffff;
+    background: #ea3838;
+    border-radius: 12px;
+    @include flexCenter;
+    height: 60px;
+  }
+}

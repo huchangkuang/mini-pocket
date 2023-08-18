@@ -4,17 +4,22 @@ import { Image, View } from "@tarojs/components";
 import "./index.scss";
 import barrageIcon from "@/images/classify/barrage.svg";
 import lotteryIcon from "@/images/classify/lottery.svg";
+import decisionIcon from "@/images/classify/decision.svg";
 import { errorToast } from "@/utils/errorToast";
 
 const Classify: React.FC = () => {
   const classifyList = [
-    { icon: lotteryIcon, text: "双色球单式", path: "/pages/lottery/index" },
     {
       icon: barrageIcon,
       text: "手持弹幕",
       path: "/pages/handsBarrage/edit/index",
     },
-    // { icon: decisionIcon, text: "做个决定吧", path: "" },
+    {
+      icon: decisionIcon,
+      text: "做个决定吧",
+      path: "/pages/doDescription/index",
+    },
+    { icon: lotteryIcon, text: "随机选号", path: "/pages/lottery/index" },
     // { icon: randomIcon, text: "随机数生成", path: "" },
     // { icon: randomIcon, text: "日期计算", path: "" },
     // { icon: randomIcon, text: "图片压缩", path: "" },

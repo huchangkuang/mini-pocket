@@ -1,0 +1,76 @@
+@import "src/style/common";
+
+.doDescription {
+  padding: 32px;
+  .project {
+    @include flexCenter;
+    margin-bottom: 100px;
+    .projectTitle {
+      width: 400px;
+      word-break: break-all;
+      padding: 20px 10px;
+      @include flexCenter;
+      color: #333333;
+      font-size: 28px;
+      border-radius: 16px;
+      background: #f9f9f9;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+  .circleBox {
+    @include flexCenter;
+    position: relative;
+    .circle {
+      border-radius: 50%;
+      width: 580px;
+      height: 580px;
+      background: #f9f9f9;
+      transition: all 3s ease-in-out;
+      transform: rotate(0);
+      .selectItem {
+        color: #333;
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transform-origin: 50% 250px;
+        &:nth-child(2) {
+          transform: translate(-50%, -50%) rotate(180deg);
+        }
+      }
+    }
+    .upArrow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, calc(-50% - 74px));
+      z-index: 10;
+    }
+    .cursor {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: #ffffff;
+      border-radius: 50%;
+      @include flexCenter;
+      z-index: 9;
+      .second {
+        width: 90px;
+        height: 90px;
+        background: #999999;
+        border-radius: 50%;
+        @include flexCenter;
+        .third {
+          width: 70px;
+          height: 70px;
+          background: #ffffff;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}

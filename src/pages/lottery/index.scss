@@ -1,4 +1,5 @@
-@import "../../app.less";
+@import "../../app.scss";
+@import "src/style/common";
 
 .lottery {
   position: relative;
@@ -26,7 +27,7 @@
     }
   }
   .titleWrapper {
-    &:extend(.spaceBetween);
+    @include spaceBetween;
     margin-bottom: 40px;
     .btn {
       font-size: 22px;
@@ -34,7 +35,7 @@
       height: 40px;
       padding-left: 8px;
       padding-right: 8px;
-      &:extend(.flexCenter);
+      @include flexCenter;
       border-radius: 10px;
       &.add {
         background: #cb6918;
@@ -57,13 +58,13 @@
       height: 88px;
       background: #ea3838;
       color: #ffffff;
-      &:extend(.flexCenter);
+      @include flexCenter;
       font-size: 40px;
     }
   }
 }
 .numWrapper {
-  &:extend(.spaceBetween);
+  @include spaceBetween;
   margin-bottom: 20px;
   .redBallNum {
     display: flex;
@@ -73,16 +74,12 @@
     height: 60px;
     border-radius: 10px;
     border: 2rpx solid #eee;
-    &:extend(.flexCenter);
+    @include flexCenter;
     &:not(:last-child) {
       margin-right: 20px;
     }
     &.noRight {
       margin-right: 0;
     }
-  }
-  .subtract {
-    width: 32px;
-    height: 32px;
   }
 }

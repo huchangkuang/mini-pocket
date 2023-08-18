@@ -1,11 +1,11 @@
 import React, { FC, useState } from "react";
 import Taro, { useShareAppMessage } from "@tarojs/taro";
-import { View, Text, Switch, Image } from "@tarojs/components";
-import "./index.less";
+import { View, Text, Switch } from "@tarojs/components";
+import "./index.scss";
 import { errorToast } from "@/utils/errorToast";
 import { generateNumList, randomNum } from "@/utils/generateNum";
-import subtract from "@/images/pocket/subtract.svg";
 import { useThrottle } from "@/hooks/useThrottle";
+import { AtIcon } from "taro-ui";
 
 type RedBall = (number | string)[];
 type BlueBall = number | string;
@@ -49,7 +49,7 @@ const NumWrapper: FC<NumWrapperProps> = ({
       <View className="link" onClick={copy}>
         复制
       </View>
-      <Image className="subtract" src={subtract} onClick={onSubtract} />
+      <AtIcon value="subtract-circle" size={16} onClick={onSubtract} />
     </View>
   );
 };
@@ -116,7 +116,7 @@ const Lottery: FC = () => {
       <View className="content">
         <View className="filterWrapper">
           <View className="form">
-            <View className="label">蓝球可重复：</View>
+            <View className="label">蓝色可重复：</View>
             <Switch
               checked={repeatBlue}
               onChange={(e) => setRepeatBlue(e.detail.value)}
@@ -125,8 +125,8 @@ const Lottery: FC = () => {
         </View>
         <View className="titleWrapper">
           <View>
-            6个 <Text style={{ color: "#d73838" }}>红球</Text> + 1个{" "}
-            <Text style={{ color: "#366ad7" }}>蓝球</Text>
+            6个 <Text style={{ color: "#d73838" }}>红</Text> + 1个
+            <Text style={{ color: "#366ad7" }}>蓝</Text>
           </View>
           <View className="btn add" onClick={onAdd}>
             加一注
@@ -149,7 +149,7 @@ const Lottery: FC = () => {
       </View>
       <View className="chooseNumWrapper">
         <View className="chooseNum" onClick={onNumScroll}>
-          选号
+          随机选择
         </View>
       </View>
     </View>

@@ -85,7 +85,7 @@ const EditBarrage: React.FC = () => {
         placeholder="弹幕字数限制20字"
         maxlength={20}
         value={barrage}
-        onInput={(value) => setBarrage(value.toString())}
+        onInput={(e) => setBarrage(e.detail.value)}
         name="barrage"
       />
       <AtButton className="confirm" type="primary" onClick={confirm}>

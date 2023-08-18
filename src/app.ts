@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Taro from "@tarojs/taro";
 
-import "./app.less";
+import "./app.scss";
 
 // 踩坑记录：
 // 1. https://github.com/NervJS/taro-ui/issues/1555
