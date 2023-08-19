@@ -20,7 +20,7 @@ const colors = ["#cb4e18", "#2FD688", "#449de0", "#d73838", "#00FFFF"];
 let clock: NodeJS.Timer | undefined;
 const FingerUp: React.FC = () => {
   const { windowWidth = 0 } = getSystemInfoSync();
-  const transformX = (windowWidth / 375) * 40;
+  const transformX = (windowWidth / 375) * 50;
   const { height = 0, top = 0 } = getMenuButtonBoundingClientRect();
   const [fingers, setFingers] = useState<Fingers[]>([]);
   const [count, setCount] = useState(3);
@@ -146,7 +146,7 @@ const FingerUp: React.FC = () => {
         </View>
       )}
       <View
-        className={cs("start", !clock && disabled && "disabled")}
+        className={cs("start", (!clock || disabled) && "disabled")}
         onClick={start}
       >
         开始{clock ? `(${count})` : ""}

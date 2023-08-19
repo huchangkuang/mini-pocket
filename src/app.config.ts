@@ -1,7 +1,7 @@
 export default defineAppConfig({
   pages: [
     "pages/classify/index",
-    "pages/lottery/index",
+    // "pages/lottery/index",
     "pages/handsBarrage/index",
     "pages/handsBarrage/edit/index",
     "pages/doDescription/index",

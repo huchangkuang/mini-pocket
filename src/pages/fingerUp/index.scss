@@ -38,15 +38,15 @@ page {
     width: 100vw;
     height: 100vh;
     .item {
-      width: 160px;
-      height: 160px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
       background: var(--bgColor);
       position: relative;
       .bg {
         position: absolute;
-        width: 160px;
-        height: 160px;
+        width: 200px;
+        height: 200px;
         border-radius: 50%;
         background: radial-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, var(--bgColor) 100%);
         animation: scaleC 2s linear infinite;
