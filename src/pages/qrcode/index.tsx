@@ -15,7 +15,7 @@ const Qrcode: React.FC = () => {
     showLoading({ title: "生成二维码中", mask: true });
     try {
       await qrcode.api.draw(
-        "sdgfasgasg",
+        text,
         {
           ctx: createCanvasContext("qrcode"),
           width: canvasSize,
@@ -31,6 +31,10 @@ const Qrcode: React.FC = () => {
     }
   };
   const save = async () => {
+    if (!text && !showCode) {
+      errorToast("请先输入文本生成二维码");
+      return;
+    }
     try {
       await getWechatSetting();
       await canvasSaveImg("qrcode");
