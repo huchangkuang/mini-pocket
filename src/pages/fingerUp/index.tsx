@@ -18,6 +18,7 @@ type Fingers = {
 };
 const colors = ["#cb4e18", "#2FD688", "#449de0", "#d73838", "#00FFFF"];
 let clock: NodeJS.Timer | undefined;
+let timer: NodeJS.Timer | undefined;
 const FingerUp: React.FC = () => {
   const { windowWidth = 0 } = getSystemInfoSync();
   const transformX = (windowWidth / 375) * 50;
@@ -29,6 +30,7 @@ const FingerUp: React.FC = () => {
   const disabled = useMemo(() => fingers.length < 2, [fingers.length]);
   const colorList = useRef(colors);
   const touchStart = (e: Taro.ITouchEvent) => {
+    if (timer) return;
     const pickIndex = randomNum(0, colorList.current.length);
     const color =
       colorList.current.length === 1
@@ -68,9 +70,9 @@ const FingerUp: React.FC = () => {
       const index = randomNum(0, ids.length);
       indexArr.push(index);
     });
-    const timer = setInterval(() => {
+    timer = setInterval(() => {
       if (!indexArr.length) {
-        clearInterval(timer);
+        clearTimer();
         return;
       }
       const item = indexArr.splice(0, 1)[0];
@@ -82,8 +84,13 @@ const FingerUp: React.FC = () => {
     clock = undefined;
     isCountDown.current = false;
   };
+  const clearTimer = () => {
+    clearInterval(timer);
+    timer = undefined;
+  };
   useEffect(() => {
     if (fingers.length >= 2) {
+      if (timer) return;
       setCount(3);
       if (isCountDown.current) return;
       clock = setInterval(() => {
@@ -98,6 +105,7 @@ const FingerUp: React.FC = () => {
         });
       }, 1000);
     } else {
+      clearTimer();
       clearClock();
       setSelectId(undefined);
     }
