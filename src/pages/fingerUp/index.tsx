@@ -59,17 +59,17 @@ const FingerUp: React.FC = () => {
       setFingers((l) => l.filter((j) => j.id !== i.identifier));
     });
   };
-  const start = (e?: Taro.ITouchEvent) => {
+  const start = () => {
     if (disabled) return;
-    e?.stopPropagation();
     clearClock();
     const ids = fingers.map((i) => i.id);
     const indexArr: number[] = [];
-    indexArr.splice(0, indexArr.length);
-    new Array(10).fill("").forEach(() => {
-      const index = randomNum(0, ids.length);
-      indexArr.push(index);
+    const arr = ids.map((_, n) => n);
+    const times = Math.floor(10 / arr.length);
+    new Array(times).fill("").forEach(() => {
+      indexArr.push(...arr);
     });
+    indexArr.push(randomNum(0, ids.length));
     timer = setInterval(() => {
       if (!indexArr.length) {
         clearTimer();
@@ -154,6 +154,7 @@ const FingerUp: React.FC = () => {
         </View>
       )}
       <View
+        catchMove
         className={cs("start", (!clock || disabled) && "disabled")}
         onClick={start}
       >
