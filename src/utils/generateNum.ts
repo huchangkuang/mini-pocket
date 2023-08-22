@@ -1,5 +1,5 @@
 export const randomNum = (start: number, total: number) =>
-  Math.ceil(Math.random() * total || 1) + start - 1;
+  Math.floor(Math.random() * total) + start;
 
 export const generateNumList = (total = 33, resLength = 6) => {
   const redBallPool = new Array(total).fill("").map((_, index) => index + 1);
