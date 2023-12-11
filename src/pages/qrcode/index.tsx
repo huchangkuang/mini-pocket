@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Taro, { Canvas, Textarea, View } from "@tarojs/components";
+import Taro from "@tarojs/taro";
+import { Canvas, Textarea, View } from "@tarojs/components";
 import "./index.scss";
 import { createCanvasContext, hideLoading, showLoading } from "@tarojs/taro";
 import { BomFixed } from "@/components/bomFixed";

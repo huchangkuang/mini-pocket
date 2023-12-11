@@ -1,0 +1,68 @@
+@import "src/style/common";
+@import "~taro-ui/dist/style/components/icon.scss";
+
+.metronome {
+  background: #333;
+  padding: 32px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .nodes {
+    margin-top: 200px;
+    @include spaceBetween;
+    width: 100%;
+    margin-bottom: 64px;
+    .nodeItem {
+      width: 80px;
+      height: 200px;
+      background: #666666;
+      border-radius: 16px;
+      &.highLight {
+        background: #bbbbbb;
+      }
+    }
+  }
+  .beatNum {
+    width: 100%;
+    margin-bottom: 120px;
+    .formItem {
+      display: flex;
+      align-items: center;
+      &.disabled {
+        opacity: 0.5;
+      }
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+      .label {
+        font-size: 28px;
+        color: #bbbbbb;
+        margin-right: 32px;
+        flex-shrink: 0;
+      }
+      .value {
+        font-size: 36px;
+        color: #FFFFFF;
+      }
+      .right {
+        display: flex;
+        align-items: center;
+        .icon {
+          margin-left: 24px;
+        }
+        .inputNum {
+          color: #FFFFFF;
+        }
+      }
+    }
+  }
+  .actionBtn {
+    width: 100%;
+    @include flexCenter;
+    .btn {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}

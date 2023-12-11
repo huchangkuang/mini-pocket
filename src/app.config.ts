@@ -8,6 +8,7 @@ export default defineAppConfig({
     "pages/doDescription/edit/index",
     "pages/fingerUp/index",
     "pages/qrcode/index",
+    "pages/metronome/index",
   ],
   window: {
     backgroundTextStyle: "light",
