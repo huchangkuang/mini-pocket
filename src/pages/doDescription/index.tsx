@@ -45,6 +45,11 @@ const DoDecision: React.FC = () => {
     setRotateDeg(end);
   };
   const selectCurItem = (item: DecisionItem) => {
+    if (selectId === item.id) {
+      setSelectId(undefined);
+      decisionConfig.id = undefined;
+      return;
+    }
     setSelectId(item.id);
     setTitle(item.title);
     setItemList(item.list);
@@ -106,7 +111,7 @@ const DoDecision: React.FC = () => {
           </View>
         </View>
       </View>
-      {useList.length > 1 && (
+      {useList.length > 0 && (
         <View className="usuallyUse">
           <View className="usuallyUseTitle">
             <View>最近常用</View>

@@ -32,7 +32,7 @@ export const updateLocalItem = (item: DecisionItem) => {
   if (!list.length) return;
   const index = list.findIndex((i) => i.id === item.id);
   if (index > -1) {
-    list.splice(index, 0);
+    list.splice(index, 1);
     list.unshift(item);
     setStorageSync(USE_LIST, [...list]);
   }
