@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Taro, { MovableArea, MovableView, View } from "@tarojs/components";
+import Taro, {
+  CustomWrapper,
+  MovableArea,
+  MovableView,
+  View,
+} from "@tarojs/components";
 import "./index.scss";
 import { AtIcon } from "taro-ui";
 import {
@@ -17,25 +22,20 @@ type Fingers = {
   color: string;
 };
 const colors = ["#cb4e18", "#2FD688", "#449de0", "#d73838", "#00FFFF"];
-let clock: NodeJS.Timer | undefined;
-let timer: NodeJS.Timer | undefined;
 const FingerUp: React.FC = () => {
   const { windowWidth = 0 } = getSystemInfoSync();
   const transformX = (windowWidth / 375) * 50;
   const { height = 0, top = 0 } = getMenuButtonBoundingClientRect();
+  const clock = useRef<NodeJS.Timer>();
+  const timer = useRef<NodeJS.Timer>();
   const [fingers, setFingers] = useState<Fingers[]>([]);
   const [count, setCount] = useState(3);
-  const isCountDown = useRef(false);
   const [selectId, setSelectId] = useState<number>();
   const disabled = useMemo(() => fingers.length < 2, [fingers.length]);
-  const colorList = useRef(colors);
   const touchStart = (e: Taro.ITouchEvent) => {
-    if (timer) return;
-    const pickIndex = randomNum(0, colorList.current.length);
-    const color =
-      colorList.current.length === 1
-        ? colorList.current[0]
-        : colorList.current.splice(pickIndex, 1)[0];
+    if (timer.current) return;
+    const pickIndex = fingers.length % colors.length;
+    const color = colors[pickIndex];
     const newFingers = [...fingers];
     const ids = newFingers.map((i) => i.id);
     e.touches.forEach((i) => {
@@ -55,59 +55,75 @@ const FingerUp: React.FC = () => {
     });
   };
   const touchEnd = (e: Taro.ITouchEvent) => {
+    if (!e.touches.length) {
+      setFingers([]);
+      return;
+    }
     e.changedTouches.forEach((i) => {
       setFingers((l) => l.filter((j) => j.id !== i.identifier));
     });
   };
-  const start = () => {
+  const generateRandomArr = () => {
+    const ids = fingers.map((i) => i.id);
+    const idArr: number[] = [];
+    const times = Math.ceil(10 / ids.length);
+    for (let i = 0; i < times; i++) {
+      idArr.push(...ids);
+    }
+    const selectedIndex = randomNum(0, ids.length);
+    idArr.push(ids[selectedIndex]);
+    return idArr;
+  };
+  const start = (e?: Taro.ITouchEvent) => {
+    e?.stopPropagation();
     if (disabled) return;
     clearClock();
-    const ids = fingers.map((i) => i.id);
-    const indexArr: number[] = [];
-    const arr = ids.map((_, n) => n);
-    const times = Math.floor(10 / arr.length);
-    new Array(times).fill("").forEach(() => {
-      indexArr.push(...arr);
-    });
-    indexArr.push(randomNum(0, ids.length));
-    timer = setInterval(() => {
-      if (!indexArr.length) {
+    const idArr = generateRandomArr();
+    timer.current = setInterval(() => {
+      if (!idArr.length) {
         clearTimer();
         return;
       }
-      const item = indexArr.splice(0, 1)[0];
-      setSelectId(ids[item]);
-    }, 300);
+      const id = idArr.shift();
+      setSelectId(id);
+    }, 400);
   };
   const clearClock = () => {
-    clearInterval(clock);
-    clock = undefined;
-    isCountDown.current = false;
+    clearInterval(clock.current);
+    clock.current = undefined;
   };
   const clearTimer = () => {
-    clearInterval(timer);
-    timer = undefined;
+    clearInterval(timer.current);
+    timer.current = undefined;
+  };
+  const startCountDown = () => {
+    clock.current = setInterval(() => {
+      setCount((n) => {
+        const newN = n - 1;
+        if (newN <= 0) {
+          clearClock();
+          start();
+        }
+        return newN;
+      });
+    }, 1000);
+  };
+  const resetAction = () => {
+    clearTimer();
+    clearClock();
+    setSelectId(undefined);
+  };
+  const onNewFingerAdd = () => {
+    clearClock();
+    setCount(3);
+    startCountDown();
   };
   useEffect(() => {
     if (fingers.length >= 2) {
-      if (timer) return;
-      setCount(3);
-      if (isCountDown.current) return;
-      clock = setInterval(() => {
-        isCountDown.current = true;
-        setCount((n) => {
-          const newN = n - 1;
-          if (newN <= 0) {
-            clearClock();
-            start();
-          }
-          return newN;
-        });
-      }, 1000);
+      if (timer.current) return;
+      onNewFingerAdd();
     } else {
-      clearTimer();
-      clearClock();
-      setSelectId(undefined);
+      resetAction();
     }
   }, [fingers.length]);
   return (
@@ -120,30 +136,32 @@ const FingerUp: React.FC = () => {
       <View style={{ top }} className="goBack" onClick={() => navigateBack()}>
         <AtIcon value="chevron-left" size={height - 4} />
       </View>
-      {fingers.map((i) => (
-        <MovableArea className="area">
-          <MovableView
-            direction="all"
-            x={i.x - transformX}
-            y={i.y - transformX}
-            className="item"
-            style={{
-              "--bgColor": i.color,
-              opacity:
-                typeof selectId === "number" && i.id !== selectId ? 0.5 : 1,
-            }}
-          >
-            {[1, 2].map(() => (
-              <View
-                className={cs(
-                  "bg",
-                  typeof selectId === "number" && i.id !== selectId && "dark"
-                )}
-              />
-            ))}
-          </MovableView>
-        </MovableArea>
-      ))}
+      <CustomWrapper>
+        {fingers.map((i) => (
+          <MovableArea className="area">
+            <MovableView
+              direction="all"
+              x={i.x - transformX}
+              y={i.y - transformX}
+              className="item"
+              style={{
+                "--bgColor": i.color,
+                opacity:
+                  typeof selectId === "number" && i.id !== selectId ? 0.5 : 1,
+              }}
+            >
+              {[1, 2].map(() => (
+                <View
+                  className={cs(
+                    "bg",
+                    typeof selectId === "number" && i.id !== selectId && "dark"
+                  )}
+                />
+              ))}
+            </MovableView>
+          </MovableArea>
+        ))}
+      </CustomWrapper>
       {!fingers.length && (
         <View className="tips">
           <View>1.请每位玩家（2~5）人用一根手指按住屏幕</View>
@@ -155,10 +173,10 @@ const FingerUp: React.FC = () => {
       )}
       <View
         catchMove
-        className={cs("start", (!clock || disabled) && "disabled")}
+        className={cs("start", (!clock.current || disabled) && "disabled")}
         onClick={start}
       >
-        开始{clock ? `(${count})` : ""}
+        开始{clock.current ? `(${count})` : ""}
       </View>
     </View>
   );
