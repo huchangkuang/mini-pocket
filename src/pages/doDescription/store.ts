@@ -1,4 +1,44 @@
-export const decisionConfig = {
+import { idGenerator } from "@/utils/idGenerator";
+import { getStorageSync, setStorageSync } from "@tarojs/taro";
+
+export type DecisionItem = {
+  id: string;
+  title: string;
+  list: string[];
+};
+export const decisionConfig: Omit<DecisionItem, "id"> & { id?: string } = {
   title: "今晚吃什么？",
   list: ["饭", "面条"],
+};
+
+export const USE_LIST = "useList";
+
+const DESCRIPTION_KEY = "DESCRIPTION_KEY";
+
+const decisionIdFn = idGenerator(DESCRIPTION_KEY);
+
+export const getDecisionId = (ids?: string[]): string => {
+  let id = decisionIdFn() as string;
+  const idList: string[] =
+    ids ?? (getStorageSync(USE_LIST) || []).map((i) => i.id);
+  if (idList.includes(id)) {
+    id = getDecisionId(idList);
+  }
+  return id;
+};
+
+export const updateLocalItem = (item: DecisionItem) => {
+  const list: DecisionItem[] = getStorageSync(USE_LIST) || [];
+  if (!list.length) return;
+  const index = list.findIndex((i) => i.id === item.id);
+  if (index > -1) {
+    list.splice(index, 0);
+    list.unshift(item);
+    setStorageSync(USE_LIST, [...list]);
+  }
+};
+
+export const addLocalItem = (item: DecisionItem) => {
+  const list: DecisionItem[] = getStorageSync(USE_LIST) || [];
+  setStorageSync(USE_LIST, [item, ...list]);
 };

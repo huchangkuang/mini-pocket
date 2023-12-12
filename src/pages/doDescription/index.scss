@@ -21,6 +21,7 @@
   .circleBox {
     @include flexCenter;
     position: relative;
+    margin-bottom: 64px;
     .circle {
       border-radius: 50%;
       width: 580px;
@@ -69,6 +70,47 @@
           height: 70px;
           background: #ffffff;
           border-radius: 50%;
+        }
+      }
+    }
+  }
+  .usuallyUse {
+    background: #f9f9f9;
+    border-radius: 16px;
+    padding: 24px;
+    .usuallyUseTitle {
+      color: #333333;
+      font-size: 32px;
+      margin-bottom: 24px;
+      @include spaceBetween;
+    }
+    .useListWrap {
+      max-height: 400px;
+      .decisionItem {
+        width: 100%;
+        @include spaceBetween;
+        &-left {
+          display: flex;
+          align-items: center;
+          flex-grow: 1;
+        }
+        &-title {
+          color: #666666;
+          font-size: 28px;
+          margin-right: 20px;
+          max-width: 200px;
+          @include ellipsis;
+        }
+        &-list {
+          color: #999999;
+          font-size: 24px;
+          max-width: 400px;
+          @include ellipsis;
+        }
+        &:not(:last-child) {
+          padding-bottom: 32px;
+          border-bottom: 1px solid #eeeeee;
+          margin-bottom: 30px;
         }
       }
     }
