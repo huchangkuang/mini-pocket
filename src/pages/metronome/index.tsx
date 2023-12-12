@@ -39,13 +39,27 @@ const Metronome: React.FC = () => {
       }
     }, frequency);
   };
-  const onToggle = () => {
-    let beatTime = beatNum;
+  const validate = () => {
     if (customBeatNum) {
       if (/\D/g.test(customBeatNum)) {
-        errorToast("请输入正确的自定义频率值");
-        return;
+        return "请输入正确的自定义频率值";
       }
+      if (Number(customBeatNum) > 208) {
+        return "自定义频率值不得超过208";
+      }
+      if (Number(customBeatNum) < 1) {
+        return "自定义频率值不得小于1";
+      }
+    }
+  };
+  const onToggle = () => {
+    const msg = validate();
+    if (msg) {
+      errorToast(msg);
+      return;
+    }
+    let beatTime = beatNum;
+    if (customBeatNum) {
       beatTime = Number(customBeatNum);
     }
     setBeating(!beating);
