@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { View, Input } from "@tarojs/components";
+import { View, Input, Picker } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
 import { AtSlider, AtIcon, AtModal, AtButton } from "taro-ui";
 import { errorToast } from "@/utils/errorToast";
+import {
+  BarrageType,
+  barrageTypeMap,
+  BarrageTypeRange,
+} from "@/pages/handsBarrage/constants";
 
 const colorList = [
   "#fff",
@@ -23,6 +28,9 @@ const EditBarrage: React.FC = () => {
   const [bgColor, setBgColor] = useState("#000");
   const [time, setTime] = useState(5);
   const [barrage, setBarrage] = useState("");
+  const [barrageType, setBarrageType] = useState<BarrageType>(
+    BarrageType.scroll
+  );
   const [showColorModal, setShowColorModal] = useState<"font" | "bg">();
   const onColorChange = (value: string) => {
     if (showColorModal === "font") {
@@ -46,7 +54,7 @@ const EditBarrage: React.FC = () => {
       errorToast(msg);
       return;
     }
-    const data = { fontSize, fontColor, time, barrage, bgColor };
+    const data = { fontSize, fontColor, time, barrage, bgColor, barrageType };
     Taro.navigateTo({
       url: `/pages/handsBarrage/index?data=${encodeURIComponent(
         JSON.stringify(data)
@@ -88,6 +96,17 @@ const EditBarrage: React.FC = () => {
         onInput={(e) => setBarrage(e.detail.value)}
         name="barrage"
       />
+      <View className="title">弹幕形式</View>
+      <Picker
+        value={barrageType}
+        range={BarrageTypeRange}
+        onChange={(e) => setBarrageType(Number(e.detail.value))}
+      >
+        <View className="barrageType">
+          <View>{barrageTypeMap[barrageType]}</View>
+          <AtIcon value="chevron-right" size={16} color="#333" />
+        </View>
+      </Picker>
       <AtButton className="confirm" type="primary" onClick={confirm}>
         确认
       </AtButton>

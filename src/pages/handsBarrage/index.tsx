@@ -4,6 +4,8 @@ import "./index.scss";
 import Taro from "@tarojs/taro";
 import classNames from "classnames";
 import { useDebounce } from "@/hooks/useDebounce";
+import { classMap } from "@/pages/handsBarrage/constants";
+import cs from "classnames";
 
 const HandsBarrage: React.FC = () => {
   const {
@@ -11,12 +13,20 @@ const HandsBarrage: React.FC = () => {
   } = Taro.useRouter();
   const { windowWidth, windowHeight } = Taro.getSystemInfoSync();
   const confirmQuit = useRef(false);
-  const { fontSize, fontColor, time, barrage, bgColor } = useMemo(() => {
+  const {
+    fontSize,
+    fontColor,
+    time,
+    barrage,
+    bgColor,
+    barrageType = 0,
+  } = useMemo(() => {
     if (data) {
       return JSON.parse(decodeURIComponent(data));
     }
     return {};
   }, [data]);
+  const typeClass = useMemo(() => classMap[barrageType], [barrageType]);
   const exist = () => {
     if (!confirmQuit.current) {
       Taro.showToast({
@@ -45,10 +55,11 @@ const HandsBarrage: React.FC = () => {
       )}
     >
       <View
-        className="scrollText"
+        className={cs("scrollText", typeClass)}
         style={{
           fontSize,
           color: fontColor,
+          // @ts-ignore
           "--time": `${time}s`,
         }}
       >

@@ -26,14 +26,41 @@
     white-space: nowrap;
     color: #ffffff;
     font-size: 100px;
-    transform: translateX(100%);
-    animation: aniMove var(--time) linear infinite;
     animation-fill-mode: forwards;
+    &.scroll {
+      transform: translateX(100%);
+      animation: aniMove var(--time) linear infinite;
+    }
+    &.bounce {
+      padding-left: 120px;
+      padding-right: 120px;
+      animation: aniShake 300ms linear infinite;
+      text-align: center;
+      width: 100vh;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    &.static {
+      padding-left: 120px;
+      padding-right: 120px;
+      text-align: center;
+      white-space: pre-wrap;
+      word-break: break-all;
+      width: 100vh;
+    }
   }
   &.noRotate {
     transform: rotate(0deg);
     width: 100vw;
     height: 100vh;
+    .scrollText {
+      &.bounce {
+        width: 100vw;
+      }
+      &.static {
+        width: 100vw;
+      }
+    }
   }
 }
 

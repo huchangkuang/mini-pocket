@@ -38,9 +38,19 @@
   .barrageInput {
     border-bottom: 1px solid #eeeeee;
     padding: 10px;
+    margin-bottom: 32px;
   }
   .confirm {
     margin-top: 80px;
+  }
+  .barrageType {
+    display: flex;
+    align-items: center;
+    :first-child {
+      margin-right: 32px;
+      color: #333333;
+      font-size: 32;
+    }
   }
 }
 
