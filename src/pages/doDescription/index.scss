@@ -83,6 +83,10 @@
       font-size: 32px;
       margin-bottom: 24px;
       @include spaceBetween;
+      .tip {
+        color: #999999;
+        font-size: 24px;
+      }
     }
     .useListWrap {
       max-height: 400px;

@@ -42,3 +42,11 @@ export const addLocalItem = (item: DecisionItem) => {
   const list: DecisionItem[] = getStorageSync(USE_LIST) || [];
   setStorageSync(USE_LIST, [item, ...list]);
 };
+
+export const deleteLocalItem = (id: string) => {
+  const list: DecisionItem[] = getStorageSync(USE_LIST) || [];
+  setStorageSync(
+    USE_LIST,
+    list.filter((i) => i.id !== id)
+  );
+};

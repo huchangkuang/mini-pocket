@@ -1,12 +1,18 @@
 import React, { useMemo, useState } from "react";
-import { ScrollView, View } from "@tarojs/components";
+import { ScrollView, Text, View } from "@tarojs/components";
 import "./index.scss";
 import { AtIcon } from "taro-ui";
 import Triangle from "@/components/triangle";
-import Taro, { getStorageSync, navigateTo, useDidShow } from "@tarojs/taro";
+import Taro, {
+  getStorageSync,
+  navigateTo,
+  useDidShow,
+  showModal,
+} from "@tarojs/taro";
 import {
   decisionConfig,
   DecisionItem,
+  deleteLocalItem,
   USE_LIST,
 } from "@/pages/doDescription/store";
 
@@ -114,7 +120,9 @@ const DoDecision: React.FC = () => {
       {useList.length > 0 && (
         <View className="usuallyUse">
           <View className="usuallyUseTitle">
-            <View>最近常用</View>
+            <View>
+              最近常用<Text className="tip">(长按删除)</Text>
+            </View>
             <AtIcon
               onClick={() =>
                 navigateTo({ url: "/pages/doDescription/edit/index?type=add" })
@@ -130,6 +138,18 @@ const DoDecision: React.FC = () => {
                 onClick={() => selectCurItem(i)}
                 className="decisionItem"
                 key={i.id}
+                onLongPress={() =>
+                  showModal({
+                    title: "删除确认",
+                    content: "是否确认删除该选项？",
+                    success(res) {
+                      if (res.confirm) {
+                        deleteLocalItem(i.id);
+                        setUseList(getStorageSync(USE_LIST) || []);
+                      }
+                    },
+                  })
+                }
               >
                 <View className="decisionItem-left">
                   <View className="decisionItem-title">{i.title}</View>
