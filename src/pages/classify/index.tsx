@@ -7,6 +7,7 @@ import qrcode from "@/images/classify/qrcode.svg";
 import decisionIcon from "@/images/classify/decision.svg";
 import fingerUp from "@/images/classify/fingerUp.svg";
 import metronome from "@/images/classify/metronome.svg";
+import lottery from "@/images/classify/lottery.svg";
 import { errorToast } from "@/utils/errorToast";
 
 const Classify: React.FC = () => {
@@ -24,6 +25,7 @@ const Classify: React.FC = () => {
     { icon: fingerUp, text: "指尖轮盘", path: "/pages/fingerUp/index" },
     { icon: qrcode, text: "二维码生成", path: "/pages/qrcode/index" },
     { icon: metronome, text: "节拍器", path: "/pages/metronome/index" },
+    { icon: lottery, text: "随机数", path: "/pages/lottery/index" },
     // { icon: qrcode, text: "图片压缩", path: "" },
     // { icon: lotteryIcon, text: "随机选号", path: "/pages/lottery/index" },
     // { icon: randomIcon, text: "随机数生成", path: "" },

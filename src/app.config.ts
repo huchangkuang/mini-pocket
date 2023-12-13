@@ -1,7 +1,6 @@
 export default defineAppConfig({
   pages: [
     "pages/classify/index",
-    // "pages/lottery/index",
     "pages/handsBarrage/index",
     "pages/handsBarrage/edit/index",
     "pages/doDescription/index",
@@ -9,6 +8,7 @@ export default defineAppConfig({
     "pages/fingerUp/index",
     "pages/qrcode/index",
     "pages/metronome/index",
+    "pages/lottery/index",
   ],
   window: {
     backgroundTextStyle: "light",

@@ -28,7 +28,7 @@ const NumWrapper: FC<NumWrapperProps> = ({
 }) => {
   const copy = () => {
     if (!blueBall || redBall.some((i) => !i)) {
-      errorToast("请先选号");
+      errorToast("请先选数");
       return;
     }
     Taro.setClipboardData({
@@ -58,7 +58,7 @@ const Lottery: FC = () => {
   const [repeatBlue, setRepeatBlue] = useState(false);
   const copyAll = () => {
     if (list.some((i) => !i.blue || i.red.some((j) => !j))) {
-      errorToast("请先选号");
+      errorToast("请先选数");
       return;
     }
     const newList = list.map((i) => `${i.red.join(",")}+${i.blue}`);
@@ -107,7 +107,7 @@ const Lottery: FC = () => {
   };
   useShareAppMessage(() => {
     return {
-      title: "双色球单式随机选号",
+      title: "随机数选择",
       path: "/pages/pocket/index",
     };
   });
@@ -116,7 +116,7 @@ const Lottery: FC = () => {
       <View className="content">
         <View className="filterWrapper">
           <View className="form">
-            <View className="label">蓝色可重复：</View>
+            <View className="label">可重复：</View>
             <Switch
               checked={repeatBlue}
               onChange={(e) => setRepeatBlue(e.detail.value)}
@@ -125,11 +125,11 @@ const Lottery: FC = () => {
         </View>
         <View className="titleWrapper">
           <View>
-            6个 <Text style={{ color: "#d73838" }}>红</Text> + 1个
-            <Text style={{ color: "#366ad7" }}>蓝</Text>
+            <Text style={{ color: "#d73838" }}>6个数</Text> +
+            <Text style={{ color: "#366ad7" }}>1个数</Text>
           </View>
           <View className="btn add" onClick={onAdd}>
-            加一注
+            加一项
           </View>
           <View className="btn reset" onClick={() => setList([initialNum])}>
             重置
