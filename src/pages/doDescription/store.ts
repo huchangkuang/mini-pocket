@@ -21,8 +21,8 @@ export const getDecisionId = (ids?: string[]): string => {
   let id = decisionIdFn() as string;
   const idList: string[] =
     ids ?? (getStorageSync(USE_LIST) || []).map((i) => i.id);
-  if (idList.includes(id)) {
-    id = getDecisionId(idList);
+  while (idList.includes(id)) {
+    id = decisionIdFn() as string;
   }
   return id;
 };
