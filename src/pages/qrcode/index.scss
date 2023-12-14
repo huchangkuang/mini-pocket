@@ -20,15 +20,5 @@ page {
   }
   .bomBtn {
     padding: 16px 24px;
-    .btn {
-      height: 88px;
-      background: linear-gradient(90deg, #FF2956 0%, #FF310D 100%);
-      border-radius: 44px;
-      @include flexCenter;
-      font-size: 32px;
-      font-weight: bold;
-      color: #FFFFFF;
-      line-height: 44px;
-    }
   }
 }

@@ -5,7 +5,8 @@ import "./index.scss";
 import { errorToast } from "@/utils/errorToast";
 import { generateNumList, randomNum } from "@/utils/generateNum";
 import { useThrottle } from "@/hooks/useThrottle";
-import { AtIcon } from "taro-ui";
+import { AtButton, AtIcon, AtSwitch } from "taro-ui";
+import { BomFixed } from "@/components/bomFixed";
 
 type RedBall = (number | string)[];
 type BlueBall = number | string;
@@ -117,10 +118,7 @@ const Lottery: FC = () => {
         <View className="filterWrapper">
           <View className="form">
             <View className="label">可重复：</View>
-            <Switch
-              checked={repeatBlue}
-              onChange={(e) => setRepeatBlue(e.detail.value)}
-            />
+            <AtSwitch checked={repeatBlue} onChange={(v) => setRepeatBlue(v)} />
           </View>
         </View>
         <View className="titleWrapper">
@@ -147,11 +145,13 @@ const Lottery: FC = () => {
           />
         ))}
       </View>
-      <View className="chooseNumWrapper">
-        <View className="chooseNum" onClick={onNumScroll}>
-          随机选择
+      <BomFixed>
+        <View className="bomBtn">
+          <AtButton type="primary" onClick={onNumScroll}>
+            随机选择
+          </AtButton>
         </View>
-      </View>
+      </BomFixed>
     </View>
   );
 };

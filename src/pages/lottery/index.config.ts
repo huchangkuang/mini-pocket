@@ -1,5 +1,6 @@
 export default definePageConfig({
-  navigationBarTitleText: "一只口袋",
+  navigationBarTitleText: "随机数",
+  navigationBarBackgroundColor: "#f9f9f9",
   enableShareAppMessage: true,
   enableShareTimeline: true,
 });

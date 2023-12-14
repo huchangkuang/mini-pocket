@@ -7,6 +7,7 @@ import { BomFixed } from "@/components/bomFixed";
 import qrcode from "@/utils/code/qrcode";
 import { canvasSaveImg, getWechatSetting } from "@/utils/wechatApi";
 import { errorToast } from "@/utils/errorToast";
+import { AtButton } from "taro-ui";
 
 const Qrcode: React.FC = () => {
   const [text, setText] = useState("");
@@ -60,9 +61,9 @@ const Qrcode: React.FC = () => {
       )}
       <BomFixed>
         <View className="bomBtn">
-          <View className="btn" onClick={save}>
+          <AtButton type="primary" onClick={save}>
             保存二维码
-          </View>
+          </AtButton>
         </View>
       </BomFixed>
     </View>
