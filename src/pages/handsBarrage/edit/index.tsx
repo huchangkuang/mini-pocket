@@ -24,7 +24,7 @@ const colorList = [
 ];
 
 const EditBarrage: React.FC = () => {
-  const [fontSize, setFontSize] = useState(50);
+  const [fontSize, setFontSize] = useState(80);
   const [fontColor, setFontColor] = useState("#fff");
   const [bgColor, setBgColor] = useState("#000");
   const [time, setTime] = useState(5);
