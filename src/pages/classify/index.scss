@@ -1,5 +1,8 @@
 @import "../../style/common.scss";
 
+page {
+  background: #f9f9f9;
+}
 .classify {
   @include flexCenter;
   width: 100vw;
@@ -14,7 +17,7 @@
     .classifyItem {
       width: 260px;
       height: 200px;
-      background: rgba(200, 200, 200, 0.2);
+      background: #FFFFFF;
       border-radius: 10px;
       @include flexCenter;
       flex-direction: column;

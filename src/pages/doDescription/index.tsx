@@ -16,6 +16,9 @@ import {
   USE_LIST,
 } from "@/pages/doDescription/store";
 
+const COLOR1 = "#f4f4f4";
+const COLOR2 = "#eeeeee";
+const COLOR3 = "#e9e9e9";
 const DoDecision: React.FC = () => {
   const [itemList, setItemList] = useState(decisionConfig.list);
   const [title, setTitle] = useState(decisionConfig.title);
@@ -28,18 +31,18 @@ const DoDecision: React.FC = () => {
     const deg = Math.trunc((1 / itemList.length) * 360) / 2;
     let style = "";
     itemList.forEach((i, index) => {
-      let color = index % 2 ? "#eee" : "#f9f9f9";
+      let color = index % 2 ? COLOR2 : COLOR1;
       const start = deg - 2 * deg + index * 2 * deg;
       const end = start + 2 * deg;
       if (style) {
         style += ", ";
       }
       if (index === itemList.length - 1 && itemList.length % 2 === 1) {
-        color = "#ccc";
+        color = COLOR3;
       }
       style += `${color} ${index ? start : 0}deg, ${color} ${end}deg`;
       if (index === itemList.length - 1) {
-        style += `, #f9f9f9 ${end}deg, #f9f9f9 ${360}deg`;
+        style += `, ${COLOR1} ${end}deg, ${COLOR1} ${360}deg`;
       }
     });
     return style;

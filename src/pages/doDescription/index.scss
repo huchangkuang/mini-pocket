@@ -1,5 +1,8 @@
 @import "src/style/common";
 
+page {
+  background: #f9f9f9;
+}
 .doDescription {
   padding: 32px;
   .project {
@@ -13,7 +16,7 @@
       color: #333333;
       font-size: 28px;
       border-radius: 16px;
-      background: #f9f9f9;
+      background: #FFFFFF;
       margin-left: 20px;
       margin-right: 20px;
     }
@@ -62,7 +65,7 @@
       .second {
         width: 90px;
         height: 90px;
-        background: #999999;
+        background: #eeeeee;
         border-radius: 50%;
         @include flexCenter;
         .third {
@@ -75,7 +78,7 @@
     }
   }
   .usuallyUse {
-    background: #f9f9f9;
+    background: #FFFFFF;
     border-radius: 16px;
     padding: 24px;
     .usuallyUseTitle {

@@ -65,26 +65,28 @@ const EditBarrage: React.FC = () => {
   };
   return (
     <View className="editBarrage">
-      <View className="title">弹幕内容</View>
-      <Input
-        className="barrageInput"
-        placeholder="弹幕字数限制20字"
-        maxlength={20}
-        value={barrage}
-        onInput={(e) => setBarrage(e.detail.value)}
-        name="barrage"
-      />
-      <View className="title">弹幕形式</View>
-      <Picker
-        value={barrageType}
-        range={BarrageTypeRange}
-        onChange={(e) => setBarrageType(Number(e.detail.value))}
-      >
-        <View className="barrageType">
-          <View>{barrageTypeMap[barrageType]}</View>
-          <AtIcon value="chevron-right" size={16} color="#333" />
-        </View>
-      </Picker>
+      <View className="mainFormContent">
+        <View className="title">弹幕内容</View>
+        <Input
+          className="barrageInput"
+          placeholder="弹幕字数限制20字"
+          maxlength={20}
+          value={barrage}
+          onInput={(e) => setBarrage(e.detail.value)}
+          name="barrage"
+        />
+        <View className="title">弹幕形式</View>
+        <Picker
+          value={barrageType}
+          range={BarrageTypeRange}
+          onChange={(e) => setBarrageType(Number(e.detail.value))}
+        >
+          <View className="barrageType">
+            <View>{barrageTypeMap[barrageType]}</View>
+            <AtIcon value="chevron-right" size={16} color="#333" />
+          </View>
+        </Picker>
+      </View>
       <AtButton className="confirm" type="primary" onClick={confirm}>
         确认
       </AtButton>
