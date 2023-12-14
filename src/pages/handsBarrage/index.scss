@@ -1,8 +1,13 @@
 
  /* 文字滚动 */
- @keyframes aniMove {
-  0% { transform: translateX(100%); }
+ @keyframes aniMove1 {
+  0% { transform: translateX(100vh); }
   100% { transform: translateX(-100%); }
+ }
+ /* 文字滚动 */
+ @keyframes aniMove2 {
+   0% { transform: translateX(100vw); }
+   100% { transform: translateX(-100%); }
  }
  
  /* 抖动字幕效果 */
@@ -22,14 +27,14 @@
   transform-origin: 50vw 50vw;
   overflow: hidden;
   .scrollText {
-    width: 100%;
+    width: fit-content;
     white-space: nowrap;
     color: #ffffff;
     font-size: 100px;
     animation-fill-mode: forwards;
     &.scroll {
-      transform: translateX(100%);
-      animation: aniMove var(--time) linear infinite;
+      transform: translateX(100vh);
+      animation: aniMove1 var(--time) linear infinite;
     }
     &.bounce {
       padding-left: 120px;
@@ -54,6 +59,10 @@
     width: 100vw;
     height: 100vh;
     .scrollText {
+      &.scroll {
+        transform: translateX(100vw);
+        animation: aniMove2 var(--time) linear infinite;
+      }
       &.bounce {
         width: 100vw;
       }
