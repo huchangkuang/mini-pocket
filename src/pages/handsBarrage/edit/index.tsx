@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Input, Picker } from "@tarojs/components";
+import { View, Input, Picker, Text } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
 import { AtSlider, AtIcon, AtModal, AtButton } from "taro-ui";
@@ -9,6 +9,7 @@ import {
   barrageTypeMap,
   BarrageTypeRange,
 } from "@/pages/handsBarrage/constants";
+import cs from "classnames";
 
 const colorList = [
   "#fff",
@@ -32,6 +33,7 @@ const EditBarrage: React.FC = () => {
     BarrageType.scroll
   );
   const [showColorModal, setShowColorModal] = useState<"font" | "bg">();
+  const [expandCustom, setExpandCustom] = useState(false);
   const onColorChange = (value: string) => {
     if (showColorModal === "font") {
       setFontColor(value);
@@ -63,30 +65,6 @@ const EditBarrage: React.FC = () => {
   };
   return (
     <View className="editBarrage">
-      <View className="title" onClick={() => setShowColorModal("font")}>
-        <View>字体颜色: </View>
-        <View className="colorShow" style={{ background: fontColor }} />
-        <AtIcon value="edit" size="16" color="#333" />
-      </View>
-      <View className="title" onClick={() => setShowColorModal("bg")}>
-        <View>背景颜色: </View>
-        <View className="colorShow" style={{ background: bgColor }} />
-        <AtIcon value="edit" size="16" color="#333" />
-      </View>
-      <View className="title">字体大小: {fontSize}px</View>
-      <AtSlider
-        min={40}
-        max={120}
-        value={fontSize}
-        onChanging={(value) => setFontSize(value)}
-      />
-      <View className="title">弹幕时间: {time}秒</View>
-      <AtSlider
-        min={1}
-        max={10}
-        value={time}
-        onChanging={(value) => setTime(value)}
-      />
       <View className="title">弹幕内容</View>
       <Input
         className="barrageInput"
@@ -110,6 +88,44 @@ const EditBarrage: React.FC = () => {
       <AtButton className="confirm" type="primary" onClick={confirm}>
         确认
       </AtButton>
+      <View
+        className="customStr"
+        onClick={() => setExpandCustom(!expandCustom)}
+      >
+        <Text>自定义</Text>
+        <AtIcon
+          className={cs("arrow", expandCustom && "expand")}
+          value="chevron-down"
+          size={16}
+          color="#999"
+        />
+      </View>
+      <View className={cs("customContent", expandCustom && "expand")}>
+        <View className="title" onClick={() => setShowColorModal("font")}>
+          <View>字体颜色: </View>
+          <View className="colorShow" style={{ background: fontColor }} />
+          <AtIcon value="edit" size="16" color="#333" />
+        </View>
+        <View className="title" onClick={() => setShowColorModal("bg")}>
+          <View>背景颜色: </View>
+          <View className="colorShow" style={{ background: bgColor }} />
+          <AtIcon value="edit" size="16" color="#333" />
+        </View>
+        <View className="title">字体大小: {fontSize}px</View>
+        <AtSlider
+          min={40}
+          max={120}
+          value={fontSize}
+          onChanging={(value) => setFontSize(value)}
+        />
+        <View className="title">弹幕时间: {time}秒</View>
+        <AtSlider
+          min={1}
+          max={10}
+          value={time}
+          onChanging={(value) => setTime(value)}
+        />
+      </View>
       <AtModal
         isOpened={!!showColorModal}
         onClose={() => setShowColorModal(undefined)}
