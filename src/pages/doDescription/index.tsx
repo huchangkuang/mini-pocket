@@ -65,6 +65,7 @@ const DoDecision: React.FC = () => {
     decisionConfig.id = item.id;
     decisionConfig.title = item.title;
     decisionConfig.list = item.list;
+    setRotateDeg(0);
   };
   useDidShow(() => {
     setTitle(decisionConfig.title);
