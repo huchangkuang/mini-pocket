@@ -3,7 +3,6 @@ import { View } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
 import classNames from "classnames";
-import { useDebounce } from "@/hooks/useDebounce";
 import { classMap } from "@/pages/handsBarrage/constants";
 import cs from "classnames";
 
@@ -35,14 +34,16 @@ const HandsBarrage: React.FC = () => {
         duration: 500,
       });
       confirmQuit.current = true;
-      onQuit();
+      cancelQuit();
       return;
     }
     Taro.navigateBack();
   };
-  const onQuit = useDebounce(() => {
-    confirmQuit.current = false;
-  }, 500);
+  const cancelQuit = () => {
+    setTimeout(() => {
+      confirmQuit.current = false;
+    }, 500);
+  };
   return (
     <View
       onClick={exist}
