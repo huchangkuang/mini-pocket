@@ -14,6 +14,7 @@ import {
 } from "@tarojs/taro";
 import cs from "classnames";
 import { randomNum } from "@/utils/generateNum";
+import { IS_WECHAT } from "@/utils/constant";
 
 type Fingers = {
   id: number;
@@ -133,9 +134,11 @@ const FingerUp: React.FC = () => {
       onTouchEnd={touchEnd}
       onTouchMove={touchMove}
     >
-      <View style={{ top }} className="goBack" onClick={() => navigateBack()}>
-        <AtIcon value="chevron-left" size={height - 4} />
-      </View>
+      {IS_WECHAT && (
+        <View style={{ top }} className="goBack" onClick={() => navigateBack()}>
+          <AtIcon value="chevron-left" size={height - 4} />
+        </View>
+      )}
       <CustomWrapper>
         {fingers.map((i) => (
           <MovableArea className="area">

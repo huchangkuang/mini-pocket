@@ -9,6 +9,7 @@ import voice from "@/audio/beat_cut.mp3";
 import { AtIcon } from "taro-ui";
 import { errorToast } from "@/utils/errorToast";
 import { CommonBeatList } from "@/pages/metronome/constant";
+import { IS_ALIPAY } from "@/utils/constant";
 
 const Metronome: React.FC = () => {
   const [curN, setCurN] = useState<number>();
@@ -76,7 +77,7 @@ const Metronome: React.FC = () => {
     innerAudioContext.current.src = voice;
   }, []);
   return (
-    <View className="metronome">
+    <View className={cs("metronome", IS_ALIPAY && "isAlipay")}>
       <View className="nodes">
         {new Array(4).fill("").map((i, n) => (
           <View className={cs("nodeItem", n === curN && "highLight")} />
