@@ -9,6 +9,7 @@ export default defineAppConfig({
     "pages/qrcode/index",
     "pages/metronome/index",
     "pages/lottery/index",
+    "pages/returnClock/index",
   ],
   window: {
     backgroundTextStyle: "light",
