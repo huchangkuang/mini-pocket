@@ -2,39 +2,10 @@ import React from "react";
 import Taro from "@tarojs/taro";
 import { Image, View } from "@tarojs/components";
 import "./index.scss";
-import barrageIcon from "@/images/classify/barrage.svg";
-import qrcode from "@/images/classify/qrcode.svg";
-import decisionIcon from "@/images/classify/decision.svg";
-import fingerUp from "@/images/classify/fingerUp.svg";
-import metronome from "@/images/classify/metronome.svg";
-import lottery from "@/images/classify/lottery.svg";
-import clock from "@/images/classify/clock.svg";
 import { errorToast } from "@/utils/errorToast";
+import { classifyList, excludeClassifyList } from "@/pages/classify/constants";
 
 const Classify: React.FC = () => {
-  const classifyList = [
-    {
-      icon: barrageIcon,
-      text: "手持弹幕",
-      path: "/pages/handsBarrage/edit/index",
-    },
-    {
-      icon: decisionIcon,
-      text: "做个决定吧",
-      path: "/pages/doDescription/index",
-    },
-    { icon: fingerUp, text: "指尖轮盘", path: "/pages/fingerUp/index" },
-    { icon: qrcode, text: "二维码生成", path: "/pages/qrcode/index" },
-    { icon: metronome, text: "节拍器", path: "/pages/metronome/index" },
-    { icon: lottery, text: "随机数", path: "/pages/lottery/index" },
-    { icon: clock, text: "反方向的钟", path: "/pages/returnClock/index" },
-    // { icon: qrcode, text: "图片压缩", path: "" },
-    // { icon: lotteryIcon, text: "随机选号", path: "/pages/lottery/index" },
-    // { icon: randomIcon, text: "随机数生成", path: "" },
-    // { icon: randomIcon, text: "日期计算", path: "" },
-    // { icon: randomIcon, text: "二维码生成", path: "" },
-    // { icon: randomIcon, text: "颜色值生成", path: "" },
-  ];
   const viewToPage = (url: string) => {
     if (!url) {
       errorToast("更多功能正在开发中...");
@@ -45,16 +16,18 @@ const Classify: React.FC = () => {
   return (
     <View className="classify">
       <View className="classifyList">
-        {classifyList.map((i, index) => (
-          <View
-            key={index}
-            className="classifyItem"
-            onClick={() => viewToPage(i.path)}
-          >
-            <Image className="icon" src={i.icon} mode="aspectFill" />
-            <View>{i.text}</View>
-          </View>
-        ))}
+        {classifyList
+          .filter((i) => !excludeClassifyList.includes(i.path))
+          .map((i, index) => (
+            <View
+              key={index}
+              className="classifyItem"
+              onClick={() => viewToPage(i.path)}
+            >
+              <Image className="icon" src={i.icon} mode="aspectFill" />
+              <View>{i.text}</View>
+            </View>
+          ))}
       </View>
     </View>
   );
