@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Taro from "@tarojs/taro";
+import Taro, { useShareAppMessage } from "@tarojs/taro";
 import { Image, Input, Picker, View } from "@tarojs/components";
 import "./index.scss";
 import cs from "classnames";
@@ -76,6 +76,12 @@ const Metronome: React.FC = () => {
     innerAudioContext.current = Taro.createInnerAudioContext();
     innerAudioContext.current.src = voice;
   }, []);
+  useShareAppMessage(() => {
+    return {
+      title: "节拍器",
+      path: "/pages/metronome/index",
+    };
+  });
   return (
     <View className={cs("metronome", IS_ALIPAY && "isAlipay")}>
       <View className="nodes">

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Taro from "@tarojs/taro";
+import Taro, { useShareAppMessage } from "@tarojs/taro";
 import { View } from "@tarojs/components";
 import "./index.scss";
 import cs from "classnames";
@@ -24,6 +24,12 @@ const ReturnClock: React.FC = () => {
       clearInterval(clock);
     };
   }, []);
+  useShareAppMessage(() => {
+    return {
+      title: "反方向的钟",
+      path: "/pages/returnClock/index",
+    };
+  });
   return (
     <View className="returnClock">
       <View className="face">

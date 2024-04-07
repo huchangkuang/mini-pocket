@@ -11,6 +11,7 @@ import {
   getMenuButtonBoundingClientRect,
   getSystemInfoSync,
   navigateBack,
+  useShareAppMessage,
 } from "@tarojs/taro";
 import cs from "classnames";
 import { randomNum } from "@/utils/generateNum";
@@ -128,6 +129,12 @@ const FingerUp: React.FC = () => {
       resetAction();
     }
   }, [fingers.length]);
+  useShareAppMessage(() => {
+    return {
+      title: "指尖轮盘",
+      path: "/pages/fingerUp/index",
+    };
+  });
   return (
     <View
       className="fingerUp"

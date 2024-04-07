@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Input, Picker, Text } from "@tarojs/components";
 import "./index.scss";
-import Taro from "@tarojs/taro";
+import Taro, { useShareAppMessage } from "@tarojs/taro";
 import { AtSlider, AtIcon, AtModal, AtButton } from "taro-ui";
 import { errorToast } from "@/utils/errorToast";
 import {
@@ -63,6 +63,12 @@ const EditBarrage: React.FC = () => {
       )}`,
     });
   };
+  useShareAppMessage(() => {
+    return {
+      title: "手持弹幕",
+      path: "/pages/handsBarrage/edit/index",
+    };
+  });
   return (
     <View className="editBarrage">
       <View className="mainFormContent">

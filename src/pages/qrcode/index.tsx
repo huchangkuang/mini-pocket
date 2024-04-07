@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Taro from "@tarojs/taro";
+import Taro, { useShareAppMessage } from "@tarojs/taro";
 import { Canvas, Textarea, View } from "@tarojs/components";
 import "./index.scss";
 import { createCanvasContext, hideLoading, showLoading } from "@tarojs/taro";
@@ -44,6 +44,12 @@ const Qrcode: React.FC = () => {
       console.log(e);
     }
   };
+  useShareAppMessage(() => {
+    return {
+      title: "二维码生成",
+      path: "/pages/qrcode/index",
+    };
+  });
   return (
     <View className="qrcode">
       <View className="card">

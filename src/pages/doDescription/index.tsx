@@ -8,6 +8,7 @@ import Taro, {
   navigateTo,
   useDidShow,
   showModal,
+  useShareAppMessage,
 } from "@tarojs/taro";
 import {
   decisionConfig,
@@ -72,6 +73,12 @@ const DoDecision: React.FC = () => {
     setItemList(decisionConfig.list);
     setRotateDeg(0);
     setUseList(getStorageSync(USE_LIST) || []);
+  });
+  useShareAppMessage(() => {
+    return {
+      title: "做个决定",
+      path: "/pages/doDescription/index",
+    };
   });
   return (
     <View className="doDescription">
