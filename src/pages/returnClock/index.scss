@@ -1,9 +1,135 @@
 @import "src/style/common";
 
 page {
-  background: #f9f9f9;
+  background: #333333;
 }
 .returnClock {
-  padding: 32px;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  .face {
+    margin-top: 300px;
+    position: relative;
+    background-image: linear-gradient(to bottom right, #eee, #f5f5f5);
+    border-radius: 50%;
+    padding: 20px;
+    border: 20px solid #d9d9d9;
+    box-shadow: 20px 20px 30px -10px rgba(0,0,0,0.4), inset 10px 10px 20px rgba(0,0,0,0.2);
+    width: 400px;
+    height: 400px;
+    @include flexCenter;
+    .numbers {
+      position: relative;
+      .number {
+        position: absolute;
+        top: -160px;
+        transform-origin: 0 160px;
+        font-size: 28px;
+      }
+      @for $i from 1 through 12 {
+        .number-#{$i} {
+          transform: rotate(calc(360deg / 12 * #{$i} - 5deg));
+          view {
+            transform: rotate(calc(-360deg / 12 * #{$i} + 5deg));
+          }
+        }
+      }
+    }
+    .arms {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      .arm {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 80px;
+        width: 8px;
+        content: "";
+        background: black;
+        transform: translate(-50%, -100%);
+        border-radius: 0 0 20px 20px;
+        transform-origin: 50% 100%;
+        z-index: 4;
+        &::before {
+          display: block;
+          position: absolute;
+          top: -50px;
+          width: 0;
+          height: 0;
+          border: 10px solid transparent;
+          border-width: 10px 5px 41px;
+          border-bottom-color: black;
+          content: "";
+        }
+        &::after {
+          display: block;
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 80%;
+          height: calc(100% + 10px);
+          background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 70%);
+          z-index: 1;
+          animation: moveShadow 3600s linear infinite;
+          transform-origin: 50% 100%;
+        }
+      }
+      .arm-hour {
+        height: 50px;
+      }
+      .arm-second {
+        height: 120px;
+        width: 8px;
+        z-index: 3;
+        background: red;
+        .body {
+          display: block;
+          position: relative;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: "";
+          background: red;
+          z-index: 4;
+        }
+        &::before {
+          border-width: 10px 4px 41px;
+          border-bottom-color: red;
+          z-index: -1;
+        }
+        &::after {
 
+        }
+      }
+      &::after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 30px;
+        height: 30px;
+        content: "";
+        background: #ccc;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999;
+      }
+    }
+    &::after {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      content: "";
+      border-radius: 50%;
+      z-index: 9999;
+      background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, 59%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0) 80%), linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, 30%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0) 45%);
+    }
+  }
 }

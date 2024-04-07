@@ -33,7 +33,7 @@ const EditBarrage: React.FC = () => {
     BarrageType.scroll
   );
   const [showColorModal, setShowColorModal] = useState<"font" | "bg">();
-  const [expandCustom, setExpandCustom] = useState(false);
+  const [expandCustom, setExpandCustom] = useState(true);
   const onColorChange = (value: string) => {
     if (showColorModal === "font") {
       setFontColor(value);

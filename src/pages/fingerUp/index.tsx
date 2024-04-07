@@ -60,9 +60,10 @@ const FingerUp: React.FC = () => {
       setFingers([]);
       return;
     }
-    e.changedTouches.forEach((i) => {
-      setFingers((l) => l.filter((j) => j.id !== i.identifier));
-    });
+    const existIds = e.touches.map((i) => i.identifier);
+    setTimeout(() => {
+      setFingers((l) => l.filter((j) => existIds.includes(j.id)));
+    }, 100);
   };
   const generateRandomArr = () => {
     const ids = fingers.map((i) => i.id);
