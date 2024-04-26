@@ -19,6 +19,7 @@ const Metronome: React.FC = () => {
   const [customBeatNum, setCustomBeatNum] = useState("");
   const isStop = useRef(true);
   const innerAudioContext = useRef<Taro.InnerAudioContext>();
+  const timer = useRef<NodeJS.Timer>();
   const goBeatN = () => {
     innerAudioContext.current?.play();
     setCurN((_n) => {
@@ -31,7 +32,7 @@ const Metronome: React.FC = () => {
   };
   const dropBeat = (beatTime: number) => {
     const frequency = Math.floor((60 * 1000) / beatTime);
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       goBeatN();
       if (!isStop.current) {
         dropBeat(beatTime);
@@ -75,6 +76,10 @@ const Metronome: React.FC = () => {
   useEffect(() => {
     innerAudioContext.current = Taro.createInnerAudioContext();
     innerAudioContext.current.src = voice;
+    return () => {
+      clearTimeout(timer.current);
+      timer.current = undefined;
+    };
   }, []);
   useShareAppMessage(() => {
     return {
