@@ -77,8 +77,11 @@ const Metronome: React.FC = () => {
     innerAudioContext.current = Taro.createInnerAudioContext();
     innerAudioContext.current.src = voice;
     return () => {
+      isStop.current = true;
       clearTimeout(timer.current);
       timer.current = undefined;
+      innerAudioContext.current?.destroy();
+      innerAudioContext.current = undefined;
     };
   }, []);
   useShareAppMessage(() => {
