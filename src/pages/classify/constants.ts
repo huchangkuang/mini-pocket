@@ -5,6 +5,7 @@ import qrcode from "@/images/classify/qrcode.svg";
 import metronome from "@/images/classify/metronome.svg";
 import lottery from "@/images/classify/lottery.svg";
 import clock from "@/images/classify/clock.svg";
+import beadArtIcon from "@/images/classify/beadArt.svg";
 
 export const classifyList = [
   {
@@ -22,6 +23,7 @@ export const classifyList = [
   { icon: metronome, text: "节拍器", path: "/pages/metronome/index" },
   { icon: lottery, text: "随机数", path: "/pages/lottery/index" },
   { icon: clock, text: "反方向的钟", path: "/pages/returnClock/index" },
+  { icon: beadArtIcon, text: "拼豆图片生成", path: "/pages/beadArt/index" },
   // { icon: qrcode, text: "图片压缩", path: "" },
   // { icon: lotteryIcon, text: "随机选号", path: "/pages/lottery/index" },
   // { icon: randomIcon, text: "随机数生成", path: "" },
