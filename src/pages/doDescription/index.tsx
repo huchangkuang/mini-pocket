@@ -17,9 +17,9 @@ import {
   USE_LIST,
 } from "@/pages/doDescription/store";
 
-const COLOR1 = "#f4f4f4";
-const COLOR2 = "#eeeeee";
-const COLOR3 = "#e9e9e9";
+const COLOR1 = "#b8e6d4";
+const COLOR2 = "#a0d8c4";
+const COLOR3 = "#88cab4";
 const DoDecision: React.FC = () => {
   const [itemList, setItemList] = useState(decisionConfig.list);
   const [title, setTitle] = useState(decisionConfig.title);
