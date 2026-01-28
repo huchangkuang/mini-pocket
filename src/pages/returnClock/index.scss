@@ -45,24 +45,13 @@ page {
         top: 50%;
         left: 50%;
         height: 80px;
-        width: 8px;
+        width: 4px;
         content: "";
         background: black;
         transform: translate(-50%, -100%);
         border-radius: 0 0 20px 20px;
         transform-origin: 50% 100%;
         z-index: 4;
-        &::before {
-          display: block;
-          position: absolute;
-          top: -50px;
-          width: 0;
-          height: 0;
-          border: 10px solid transparent;
-          border-width: 10px 5px 41px;
-          border-bottom-color: black;
-          content: "";
-        }
         &::after {
           display: block;
           content: "";
@@ -82,7 +71,7 @@ page {
       }
       .arm-second {
         height: 120px;
-        width: 8px;
+        width: 2px;
         z-index: 3;
         background: red;
         .body {
@@ -95,11 +84,6 @@ page {
           content: "";
           background: red;
           z-index: 4;
-        }
-        &::before {
-          border-width: 10px 4px 41px;
-          border-bottom-color: red;
-          z-index: -1;
         }
         &::after {
 
