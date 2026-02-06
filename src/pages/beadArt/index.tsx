@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import Taro, { useShareAppMessage } from "@tarojs/taro";
-import { Canvas, Image, Slider, View } from "@tarojs/components";
+import {
+  Canvas,
+  Image,
+  Slider,
+  View,
+  ScrollView,
+  Text,
+} from "@tarojs/components";
+import ExcelJS from "exceljs";
 import "./index.scss";
-import { AtIcon } from "taro-ui";
+import { AtIcon, AtButton } from "taro-ui";
 
 interface PixelData {
   color: string;
@@ -12,9 +20,13 @@ interface PixelData {
 
 const BeadArt: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>("");
-  const [pixelSize, setPixelSize] = useState<number>(8);
+  const [pixelSize, setPixelSize] = useState<number>(10);
   const [pixelData, setPixelData] = useState<PixelData[]>([]);
   const [canvasSize, setCanvasSize] = useState({ width: 300, height: 300 });
+  const [imageData, setImageData] = useState<Uint8ClampedArray | null>(null);
+  const [excelData, setExcelData] = useState<any[][]>([]);
+  const [excelFilePath, setExcelFilePath] = useState<string>("");
+  const [isExcelGenerated, setIsExcelGenerated] = useState<boolean>(false);
 
   const chooseImage = () => {
     Taro.chooseImage({
@@ -72,6 +84,7 @@ const BeadArt: React.FC = () => {
                   canvasWidth,
                   canvasHeight
                 );
+                setImageData(imageData.data);
                 const pixels = extractPixelData(
                   imageData.data,
                   canvasWidth,
@@ -130,6 +143,154 @@ const BeadArt: React.FC = () => {
     }
   };
 
+  const generateExcel = () => {
+    if (pixelData.length === 0 || !imageData) {
+      Taro.showToast({
+        title: "请先上传图片",
+        icon: "none",
+      });
+      return;
+    }
+
+    const step = Math.max(1, Math.floor(pixelSize));
+    const cols = Math.ceil(canvasSize.width / step);
+    const rows = Math.ceil(canvasSize.height / step);
+
+    if (cols > 16384 || rows > 1048576) {
+      Taro.showToast({
+        title: "像素太小，Excel无法生成",
+        icon: "none",
+      });
+      return;
+    }
+
+    const data: any[][] = [];
+
+    for (let row = 0; row < rows; row++) {
+      const rowData: any[] = [];
+      for (let col = 0; col < cols; col++) {
+        const x = col * step;
+        const y = row * step;
+
+        const index = (y * canvasSize.width + x) * 4;
+        const r = imageData[index];
+        const g = imageData[index + 1];
+        const b = imageData[index + 2];
+        const a = imageData[index + 3];
+
+        if (a > 128) {
+          const color = rgbToHex(r, g, b);
+          rowData.push(color);
+        } else {
+          rowData.push("");
+        }
+      }
+      data.push(rowData);
+    }
+
+    setExcelData(data);
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("拼豆数据");
+
+    const cellWidth = 3;
+    const cellHeight = 15;
+
+    worksheet.columns = Array.from({ length: cols }, (_, i) => ({
+      key: String.fromCharCode(65 + (i % 26)),
+      width: cellWidth,
+    }));
+
+    data.forEach((row, rowIndex) => {
+      const rowData: any[] = row.map((cellValue) => "");
+      const excelRow = worksheet.addRow(rowData);
+      excelRow.height = cellHeight;
+
+      row.forEach((cellValue, colIndex) => {
+        const cell = excelRow.getCell(colIndex + 1);
+        cell.border = {
+          top: { style: "thin", color: { argb: "FFD3D3D3" } },
+          left: { style: "thin", color: { argb: "FFD3D3D3" } },
+          bottom: { style: "thin", color: { argb: "FFD3D3D3" } },
+          right: { style: "thin", color: { argb: "FFD3D3D3" } },
+        };
+        if (cellValue) {
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: cellValue.replace("#", "") },
+          };
+        }
+      });
+    });
+
+    workbook.xlsx
+      .writeBuffer()
+      .then((buffer) => {
+        const fileName = `拼豆_${Date.now()}.xlsx`;
+        const filePath = `${Taro.env.USER_DATA_PATH}/${fileName}`;
+
+        const uint8Array = new Uint8Array(buffer);
+        const binaryString = Array.from(uint8Array, (byte) =>
+          String.fromCharCode(byte)
+        ).join("");
+
+        const fs = Taro.getFileSystemManager();
+        fs.writeFile({
+          filePath,
+          data: binaryString,
+          encoding: "binary",
+          success: () => {
+            setExcelFilePath(filePath);
+            setIsExcelGenerated(true);
+            Taro.showToast({
+              title: "Excel生成成功",
+              icon: "success",
+            });
+          },
+          fail: (err) => {
+            console.error("保存Excel失败:", err);
+            Taro.showToast({
+              title: "生成失败",
+              icon: "none",
+            });
+          },
+        });
+      })
+      .catch((err) => {
+        console.error("生成Excel失败:", err);
+        Taro.showToast({
+          title: "生成失败",
+          icon: "none",
+        });
+      });
+  };
+
+  const downloadExcel = () => {
+    if (!excelFilePath) {
+      Taro.showToast({
+        title: "请先生成Excel",
+        icon: "none",
+      });
+      return;
+    }
+
+    Taro.openDocument({
+      filePath: excelFilePath,
+      fileType: "xlsx",
+      success: () => {
+        console.log("打开文档成功");
+      },
+      fail: (err) => {
+        console.error("打开文档失败:", err);
+        Taro.showToast({
+          title: "打开失败",
+          icon: "none",
+        });
+      },
+    });
+  };
+
   const clearImage = () => {
     setImageUrl("");
     setPixelData([]);
@@ -167,11 +328,17 @@ const BeadArt: React.FC = () => {
       {imageUrl && (
         <View className="controls">
           <View className="controlItem">
-            <View className="controlLabel">像素大小: {pixelSize}px</View>
+            <View className="controlLabel">
+              像素大小: {pixelSize}px{" "}
+              <Text className="unit">(调整像素后请重新生成Excel)</Text>
+            </View>
+            <View className="controlTip">
+              像素越小，生成的图片越精细，但同时方块格越多！
+            </View>
             <Slider
               value={pixelSize}
-              min={7}
-              max={15}
+              min={3}
+              max={20}
               step={1}
               activeColor="#88d8b0"
               backgroundColor="#e0e0e0"
@@ -179,26 +346,50 @@ const BeadArt: React.FC = () => {
               onChange={(e) => handlePixelSizeChange(e.detail.value)}
             />
           </View>
+          <View className="buttonGroup">
+            <AtButton
+              type="primary"
+              size="normal"
+              className="generateButton"
+              onClick={generateExcel}
+            >
+              生成Excel
+            </AtButton>
+            <AtButton
+              type="secondary"
+              size="normal"
+              className="downloadButton"
+              onClick={downloadExcel}
+              disabled={!isExcelGenerated}
+            >
+              下载Excel
+            </AtButton>
+          </View>
         </View>
       )}
 
-      {pixelData.length > 0 && (
-        <View className="pixelDisplay">
-          <View className="pixelGrid">
-            {pixelData.map((pixel, index) => (
-              <View
-                key={index}
-                className="pixel"
-                style={{
-                  backgroundColor: pixel.color,
-                  left: `${(pixel.x / canvasSize.width) * 100}%`,
-                  top: `${(pixel.y / canvasSize.height) * 100}%`,
-                  width: `${(pixelSize / canvasSize.width) * 100}%`,
-                  height: `${(pixelSize / canvasSize.height) * 100}%`,
-                }}
-              />
-            ))}
+      {isExcelGenerated && excelData.length > 0 && (
+        <View className="excelPreview">
+          <View className="previewHeader">
+            <Text className="previewTitle">预览</Text>
           </View>
+          <ScrollView scrollX scrollY className="previewContent">
+            <View className="excelTable">
+              {excelData.map((row, rowIndex) => (
+                <View key={rowIndex} className="excelRow">
+                  {row.map((cell, cellIndex) => (
+                    <View
+                      key={cellIndex}
+                      className="excelCell"
+                      style={{
+                        backgroundColor: cell || "#f5f5f5",
+                      }}
+                    />
+                  ))}
+                </View>
+              ))}
+            </View>
+          </ScrollView>
         </View>
       )}
 
