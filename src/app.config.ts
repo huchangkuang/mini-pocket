@@ -10,7 +10,12 @@ export default defineAppConfig({
     "pages/metronome/index",
     "pages/lottery/index",
     "pages/returnClock/index",
-    "pages/beadArt/index",
+  ],
+  subPackages: [
+    {
+      root: "pages/beadArt",
+      pages: ["index"],
+    },
   ],
   window: {
     backgroundTextStyle: "light",

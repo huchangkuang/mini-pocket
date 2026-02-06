@@ -266,7 +266,7 @@ const BeadArt: React.FC = () => {
       });
   };
 
-  const downloadExcel = () => {
+  const downloadExcel = async () => {
     if (!excelFilePath) {
       Taro.showToast({
         title: "请先生成Excel",
@@ -275,20 +275,56 @@ const BeadArt: React.FC = () => {
       return;
     }
 
-    Taro.openDocument({
-      filePath: excelFilePath,
-      fileType: "xlsx",
-      success: () => {
-        console.log("打开文档成功");
-      },
-      fail: (err) => {
-        console.error("打开文档失败:", err);
-        Taro.showToast({
-          title: "打开失败",
-          icon: "none",
-        });
-      },
-    });
+    Taro.showLoading({ title: "准备保存..." });
+
+    try {
+      const fs = Taro.getFileSystemManager();
+      const fileName = `拼豆_${Date.now()}.xlsx`;
+      const savedFilePath = `${Taro.env.USER_DATA_PATH}/${fileName}`;
+
+      fs.copyFile({
+        srcPath: excelFilePath,
+        destPath: savedFilePath,
+        success: () => {
+          Taro.hideLoading();
+          Taro.openDocument({
+            filePath: savedFilePath,
+            fileType: "xlsx",
+            showMenu: true,
+            success: () => {
+              console.log("打开文档成功");
+              Taro.showToast({
+                title: "请在打开的文档中点击右上角三个点选择保存位置",
+                icon: "none",
+                duration: 3000,
+              });
+            },
+            fail: (err) => {
+              console.error("打开文档失败:", err);
+              Taro.showToast({
+                title: "打开失败，请重试",
+                icon: "none",
+              });
+            },
+          });
+        },
+        fail: (err) => {
+          console.error("复制文件失败:", err);
+          Taro.hideLoading();
+          Taro.showToast({
+            title: "保存失败，请重试",
+            icon: "none",
+          });
+        },
+      });
+    } catch (err) {
+      console.error("保存文件出错:", err);
+      Taro.hideLoading();
+      Taro.showToast({
+        title: "保存失败，请重试",
+        icon: "none",
+      });
+    }
   };
 
   const clearImage = () => {
@@ -362,7 +398,7 @@ const BeadArt: React.FC = () => {
               onClick={downloadExcel}
               disabled={!isExcelGenerated}
             >
-              下载Excel
+              保存Excel
             </AtButton>
           </View>
         </View>
