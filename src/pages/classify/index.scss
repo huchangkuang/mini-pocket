@@ -2,11 +2,13 @@
 
 page {
   background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
+
 .classify {
   @include flexCenter;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   padding: 40px 30px;
   box-sizing: border-box;
   
@@ -29,6 +31,7 @@ page {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      cursor: pointer;
       
       &::before {
         content: '';
@@ -42,13 +45,36 @@ page {
         transition: opacity 0.3s ease;
       }
       
-      &:active {
-        transform: translateY(4px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(136, 216, 176, 0.1);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+      }
+      
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
         
         &::before {
           opacity: 1;
         }
+        
+        &::after {
+          width: 300px;
+          height: 300px;
+        }
+      }
+      
+      &:active {
+        transform: translateY(2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       
       .icon {
@@ -56,6 +82,23 @@ page {
         height: 72px;
         margin-bottom: 20px;
         filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+        transition: all 0.3s ease;
+        z-index: 1;
+      }
+      
+      &:hover .icon {
+        transform: scale(1.1);
+        filter: drop-shadow(0 4px 12px rgba(136, 216, 176, 0.4));
+      }
+      
+      > view {
+        z-index: 1;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      
+      &:hover > view {
+        color: #88d8b0;
       }
     }
   }
@@ -64,3 +107,69 @@ page {
     border-bottom: 1px solid #eeeeee;
   }
 }
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .classify {
+    padding: 30px 20px;
+  }
+  
+  .classifyList {
+    gap: 16px;
+    
+    .classifyItem {
+      padding: 30px 15px;
+      font-size: 24px;
+      
+      .icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .classifyList {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    
+    .classifyItem {
+      padding: 24px 12px;
+      font-size: 20px;
+      border-radius: 16px;
+      
+      .icon {
+        width: 52px;
+        height: 52px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+}
+
+/* 加载动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.classifyItem {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.classifyItem:nth-child(1) { animation-delay: 0.1s; }
+.classifyItem:nth-child(2) { animation-delay: 0.2s; }
+.classifyItem:nth-child(3) { animation-delay: 0.3s; }
+.classifyItem:nth-child(4) { animation-delay: 0.4s; }
+.classifyItem:nth-child(5) { animation-delay: 0.5s; }
+.classifyItem:nth-child(6) { animation-delay: 0.6s; }
+.classifyItem:nth-child(7) { animation-delay: 0.7s; }
+.classifyItem:nth-child(8) { animation-delay: 0.8s; }
