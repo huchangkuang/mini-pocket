@@ -1,7 +1,7 @@
 @import "src/style/common";
 
 page {
-  background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 100%);
+  background: linear-gradient(135deg, #d5f5e3 0%, #f9f7e8 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -27,18 +27,18 @@ page {
       @include flexCenter;
       flex-direction: column;
       padding: 60px 20px;
-      border: 2px dashed #88d8b0;
+      border: 2px dashed #d5f5e3;
       border-radius: 16px;
       transition: all 0.3s ease;
       cursor: pointer;
 
       &:hover {
-        background: rgba(136, 216, 176, 0.05);
-        border-color: #71c99e;
+        background: rgba(213, 245, 227, 0.05);
+        border-color: #c2f0d5;
       }
 
       &:active {
-        background: rgba(136, 216, 176, 0.1);
+        background: rgba(213, 245, 227, 0.1);
         transform: scale(0.98);
       }
 
@@ -135,19 +135,19 @@ page {
       margin-top: 32px;
 
       .generateButton {
-        background: linear-gradient(135deg, #88d8b0 0%, #71c99e 100%);
+        background: linear-gradient(135deg, #d5f5e3 0%, #f9f7e8 100%);
         border: none;
         border-radius: 12px;
         height: 80px;
         font-size: 28px;
         font-weight: 600;
         flex: 1;
-        color: white;
-        box-shadow: 0 4px 12px rgba(136, 216, 176, 0.3);
+        color: #333;
+        box-shadow: 0 4px 12px rgba(213, 245, 227, 0.3);
         transition: all 0.3s ease;
 
         &:hover {
-          box-shadow: 0 6px 16px rgba(136, 216, 176, 0.4);
+          box-shadow: 0 6px 16px rgba(213, 245, 227, 0.4);
           transform: translateY(-2px);
         }
 
@@ -271,8 +271,8 @@ slider {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #88d8b0;
-    box-shadow: 0 2px 8px rgba(136, 216, 176, 0.4);
+    background: #d5f5e3;
+    box-shadow: 0 2px 8px rgba(213, 245, 227, 0.4);
   }
 }
 

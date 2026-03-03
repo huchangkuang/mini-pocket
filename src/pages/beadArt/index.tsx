@@ -344,7 +344,7 @@ const BeadArt: React.FC = () => {
       <View className="uploadSection">
         {!imageUrl ? (
           <View className="uploadPlaceholder" onClick={chooseImage}>
-            <AtIcon value="image" size="60" color="#88d8b0" />
+            <AtIcon value="image" size="60" color="#d5f5e3" />
             <View className="uploadText">点击上传图片</View>
           </View>
         ) : (
@@ -376,7 +376,7 @@ const BeadArt: React.FC = () => {
               min={3}
               max={20}
               step={1}
-              activeColor="#88d8b0"
+              activeColor="#d5f5e3"
               backgroundColor="#e0e0e0"
               showValue={false}
               onChange={(e) => handlePixelSizeChange(e.detail.value)}

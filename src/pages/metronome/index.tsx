@@ -21,7 +21,11 @@ const Metronome: React.FC = () => {
   const innerAudioContext = useRef<Taro.InnerAudioContext>();
   const timer = useRef<NodeJS.Timer>();
   const goBeatN = () => {
-    innerAudioContext.current?.play();
+    if (innerAudioContext.current) {
+      innerAudioContext.current.stop();
+      innerAudioContext.current.seek(0);
+      innerAudioContext.current.play();
+    }
     setCurN((_n) => {
       if (_n === undefined) {
         return 0;
@@ -29,17 +33,6 @@ const Metronome: React.FC = () => {
       const newN = _n + 1;
       return newN > 3 ? 0 : newN;
     });
-  };
-  const dropBeat = (beatTime: number) => {
-    const frequency = Math.floor((60 * 1000) / beatTime);
-    timer.current = setTimeout(() => {
-      goBeatN();
-      if (!isStop.current) {
-        dropBeat(beatTime);
-      } else {
-        setCurN(undefined);
-      }
-    }, frequency);
   };
   const validate = () => {
     if (customBeatNum) {
@@ -67,18 +60,35 @@ const Metronome: React.FC = () => {
     setBeating(!beating);
     if (!beating) {
       isStop.current = false;
+      const frequency = Math.floor((60 * 1000) / beatTime);
       goBeatN();
-      dropBeat(beatTime);
+      timer.current = setInterval(() => {
+        if (!isStop.current) {
+          goBeatN();
+        } else {
+          clearInterval(timer.current);
+          timer.current = undefined;
+          setCurN(undefined);
+        }
+      }, frequency);
     } else {
       isStop.current = true;
+      clearInterval(timer.current);
+      timer.current = undefined;
     }
   };
   useEffect(() => {
     innerAudioContext.current = Taro.createInnerAudioContext();
     innerAudioContext.current.src = voice;
+    innerAudioContext.current.obeyMuteSwitch = false;
+    innerAudioContext.current.autoplay = false;
+    innerAudioContext.current.loop = false;
+    innerAudioContext.current.onCanplay(() => {
+      console.log("音频加载完成");
+    });
     return () => {
       isStop.current = true;
-      clearTimeout(timer.current);
+      clearInterval(timer.current);
       timer.current = undefined;
       innerAudioContext.current?.destroy();
       innerAudioContext.current = undefined;

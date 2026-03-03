@@ -1,7 +1,7 @@
 export default definePageConfig({
   navigationBarTitleText: "拼豆图片生成",
-  navigationBarBackgroundColor: "#88d8b0",
-  navigationBarTextStyle: "white",
+  navigationBarBackgroundColor: "#d5f5e3",
+  navigationBarTextStyle: "black",
   enableShareAppMessage: true,
   enableShareTimeline: true,
 });
