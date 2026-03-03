@@ -1,0 +1,159 @@
+.guessNumber {
+  padding: 48rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  
+  .hiddenInput {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .instructions {
+    background-color: #fff;
+    padding: 36rpx;
+    border-radius: 24rpx;
+    margin-bottom: 48rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    
+    Text {
+      display: block;
+      margin-bottom: 24rpx;
+      font-size: 32rpx;
+      color: #666;
+      line-height: 1.5;
+    }
+  }
+  
+  .targetSection,
+  .guessSection {
+    background-color: #fff;
+    padding: 48rpx;
+    border-radius: 24rpx;
+    margin-bottom: 48rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    
+    .sectionTitle {
+      font-size: 36rpx;
+      font-weight: bold;
+      margin-bottom: 24px;
+      color: #333;
+    }
+    
+    .inputGrid {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 48rpx;
+      
+      .numberInput {
+        width: 120rpx;
+        height: 120rpx;
+        font-size: 56rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 16rpx;
+        border: 4rpx solid #ddd;
+        border-radius: 16rpx;
+        background-color: #fff;
+        transition: border-color 0.3s ease;
+        position: relative;
+      }
+      
+      .cursor {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 4rpx;
+        height: 40rpx;
+        background-color: #1890ff;
+        animation: blink 1s infinite;
+      }
+      
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      
+      .numberInput-focused {
+        border-color: #1890ff;
+      }
+      
+      .numberInput-filled {
+        border-color: #1890ff;
+      }
+    }
+    
+    .setButton,
+    .verifyButton {
+      width: 100%;
+      height: 96rpx;
+      background-color: #1890ff;
+      color: #fff;
+      border: none;
+      border-radius: 16rpx;
+      font-size: 36rpx;
+    }
+  }
+  
+  .resultsSection {
+    background-color: #fff;
+    padding: 48rpx;
+    border-radius: 24rpx;
+    margin-bottom: 48rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    
+    .sectionTitle {
+      font-size: 36rpx;
+      font-weight: bold;
+      margin-bottom: 40rpx;
+      color: #333;
+    }
+    
+    .resultItem {
+      display: flex;
+      justify-content: space-between;
+      padding: 28rpx 0;
+      border-bottom: 2rpx solid #f0f0f0;
+      
+      .guessText {
+        font-size: 36rpx;
+        color: #333;
+      }
+      
+      .resultText {
+        font-size: 36rpx;
+        color: #1890ff;
+        font-weight: bold;
+      }
+    }
+  }
+  
+  .gameOverSection {
+    background-color: #fff;
+    padding: 56rpx;
+    border-radius: 24rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    text-align: center;
+    
+    .gameOverText {
+      font-size: 40rpx;
+      font-weight: bold;
+      margin-bottom: 48rpx;
+      color: #52c41a;
+    }
+    
+    .resetButton {
+      width: 100%;
+      height: 96rpx;
+      background-color: #1890ff;
+      color: #fff;
+      border: none;
+      border-radius: 16rpx;
+      font-size: 36rpx;
+    }
+  }
+}

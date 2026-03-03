@@ -10,6 +10,7 @@ export default defineAppConfig({
     "pages/metronome/index",
     "pages/lottery/index",
     "pages/returnClock/index",
+    "pages/guessNumber/index",
   ],
   subPackages: [
     {
