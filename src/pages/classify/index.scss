@@ -1,5 +1,6 @@
 @import "../../style/common.scss";
 
+/* 设计系统：Minimal Single Column - 简约工具集 */
 page {
   background: linear-gradient(135deg, #d5f5e3 0%, #f9f7e8 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -9,122 +10,69 @@ page {
   @include flexCenter;
   width: 100vw;
   min-height: 100vh;
-  padding: 40px 30px;
+  padding: 32px 24px 48px;
   box-sizing: border-box;
-  
+
   .classifyList {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: 20px;
     width: 100%;
     max-width: 690px;
-    
+
     .classifyItem {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
+      background: #FFFFFF;
+      border-radius: 16px;
       @include flexCenter;
       flex-direction: column;
       font-size: 28px;
-      color: #333;
-      padding: 40px 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
+      color: #1E293B;
+      padding: 36px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      min-height: 120px;
       cursor: pointer;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #d5f5e3, #f9f7e8);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      
-      &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(213, 245, 227, 0.1);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s ease, height 0.6s ease;
-      }
-      
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-        
-        &::before {
-          opacity: 1;
-        }
-        
-        &::after {
-          width: 300px;
-          height: 300px;
-        }
-      }
-      
+
       &:active {
-        transform: translateY(2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        background: #F1F5F9;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
       }
-      
+
       .icon {
-        width: 72px;
-        height: 72px;
-        margin-bottom: 20px;
-        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
-        transition: all 0.3s ease;
-        z-index: 1;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 16px;
       }
-      
-      &:hover .icon {
-        transform: scale(1.1);
-        filter: drop-shadow(0 4px 12px rgba(213, 245, 227, 0.4));
-      }
-      
+
       > view {
-        z-index: 1;
         font-weight: 500;
-        transition: all 0.3s ease;
-      }
-      
-      &:hover > view {
-        color: #d5f5e3;
+        line-height: 1.4;
       }
     }
   }
-  
-  .barrageInput {
-    border-bottom: 1px solid #eeeeee;
-  }
 }
 
-/* 响应式设计 */
+.barrageInput {
+  border-bottom: 1px solid #E2E8F0;
+}
+
+/* 响应式 */
 @media (max-width: 768px) {
   .classify {
-    padding: 30px 20px;
+    padding: 24px 16px 40px;
   }
-  
+
   .classifyList {
     gap: 16px;
-    
+
     .classifyItem {
-      padding: 30px 15px;
-      font-size: 24px;
-      
+      padding: 28px 16px;
+      font-size: 26px;
+      min-height: 108px;
+
       .icon {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 16px;
+        width: 56px;
+        height: 56px;
+        margin-bottom: 12px;
       }
     }
   }
@@ -132,44 +80,19 @@ page {
 
 @media (max-width: 480px) {
   .classifyList {
-    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    
+
     .classifyItem {
       padding: 24px 12px;
-      font-size: 20px;
-      border-radius: 16px;
-      
+      font-size: 24px;
+      border-radius: 12px;
+      min-height: 100px;
+
       .icon {
-        width: 52px;
-        height: 52px;
-        margin-bottom: 12px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 10px;
       }
     }
   }
 }
-
-/* 加载动画 */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.classifyItem {
-  animation: fadeInUp 0.5s ease forwards;
-}
-
-.classifyItem:nth-child(1) { animation-delay: 0.1s; }
-.classifyItem:nth-child(2) { animation-delay: 0.2s; }
-.classifyItem:nth-child(3) { animation-delay: 0.3s; }
-.classifyItem:nth-child(4) { animation-delay: 0.4s; }
-.classifyItem:nth-child(5) { animation-delay: 0.5s; }
-.classifyItem:nth-child(6) { animation-delay: 0.6s; }
-.classifyItem:nth-child(7) { animation-delay: 0.7s; }
-.classifyItem:nth-child(8) { animation-delay: 0.8s; }
