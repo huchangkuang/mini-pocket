@@ -8,3 +8,4 @@ node_modules/
 /project.private.config.json
 .swc
 mini.project.json
+__pycache__/
