@@ -16,7 +16,7 @@ page {
   }
 
   &__content {
-    padding: $spacing-xl $margin-mobile calc(env(safe-area-inset-bottom) + 240rpx);
+    padding: $spacing-xl $margin-mobile calc(env(safe-area-inset-bottom) + 32rpx);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -279,23 +279,32 @@ page {
     line-height: $line-height-body-md;
   }
 
-  &__fabWrap {
+  &__playSpacer {
+    width: 100%;
+    height: 120rpx;
+    flex-shrink: 0;
+  }
+
+  &__playZone {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(env(safe-area-inset-bottom) + 48rpx);
+    bottom: env(safe-area-inset-bottom);
+    height: 192rpx;
     display: flex;
+    align-items: center;
     justify-content: center;
     pointer-events: none;
-    z-index: 50;
+    z-index: 60;
   }
 
   &__fab {
-    width: $fab-size;
-    height: $fab-size;
+    width: 160rpx;
+    height: 160rpx;
+    margin-bottom: 64rpx;
     border-radius: $radius-full;
     background: $color-primary-container;
-    box-shadow: $shadow-fab;
+    box-shadow: 0 16rpx 48rpx rgba(0, 94, 164, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -306,9 +315,11 @@ page {
     }
   }
 
-  &__fabIcon {
-    width: 56rpx;
-    height: 56rpx;
+  &__fabPlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 8rpx;
   }
 
   &__panel {

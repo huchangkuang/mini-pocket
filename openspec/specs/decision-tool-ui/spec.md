@@ -1,5 +1,8 @@
-## ADDED Requirements
+# decision-tool-ui Specification
 
+## Purpose
+TBD - created by archiving change redesign-decision-tool-ui. Update Purpose after archive.
+## Requirements
 ### Requirement: 做个决定吧主页展示 MD3 完整结构
 
 系统 SHALL 在 `pages/doDescription/index` 渲染以下区块：当前问题卡片、转盘（含顶部指针与中心 GO 按钮）、提示文案、最近常用列表（含空态）、底部「开始抽取」主按钮；页面背景色 MUST 为 surface（#f7f9fc）。页面 MUST NOT 渲染 BottomNav。
@@ -60,13 +63,17 @@
 - **WHEN** 用户点击某条常用项
 - **THEN** 系统 MUST 将该条 title/list 加载至当前转盘，并以 border 高亮标记选中态
 
-### Requirement: 顶栏菜单删除常用项
+### Requirement: 常用项列表内删除
 
-系统 SHALL 通过页面顶栏区域 `⋯` 按钮打开 ActionSheet；当存在选中常用项（selectId）时 MUST 提供「删除此常用」选项；删除 MUST 经确认后从 USE_LIST 移除。系统 MUST NOT 使用长按删除。
+系统 SHALL 在每条「最近常用」列表项右侧展示删除图标；点击删除 MUST 弹出二次确认 Modal，确认后从 USE_LIST 移除该项。系统 MUST NOT 使用长按删除。
 
-#### Scenario: 删除选中常用项
-- **WHEN** 用户已选中某常用项并点击 ⋯ 选择「删除此常用」且确认
+#### Scenario: 点击删除图标
+- **WHEN** 用户点击某条常用项右侧删除图标并确认
 - **THEN** 系统 MUST 调用 deleteLocalItem 移除该项并刷新列表
+
+#### Scenario: 删除当前选中项
+- **WHEN** 用户删除的常用项为当前选中项（selectId）
+- **THEN** 系统 MUST 清除选中态
 
 #### Scenario: 无长按删除
 - **WHEN** 用户长按常用列表项
@@ -127,3 +134,4 @@
 #### Scenario: 按钮按压反馈
 - **WHEN** 用户按住「开始抽取」或「保存」按钮
 - **THEN** 按钮 MUST 有视觉缩放或 opacity 反馈
+

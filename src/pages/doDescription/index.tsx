@@ -115,34 +115,28 @@ const DoDecision: React.FC = () => {
     navigateTo({ url: "/pages/doDescription/edit/index?type=add" });
   };
 
-  const handleDeleteSelected = () => {
-    if (!selectId) return;
-    const item = useList.find((i) => i.id === selectId);
+  const handleDeleteItem = (item: DecisionItem) => {
     showModal({
       title: "删除确认",
-      content: `是否删除「${item?.title ?? "此常用"}」？`,
+      content: `是否删除「${item.title}」？`,
       success(res) {
-        if (res.confirm && selectId) {
-          deleteLocalItem(selectId);
+        if (res.confirm) {
+          deleteLocalItem(item.id);
           setUseList(getStorageSync(USE_LIST) || []);
-          setSelectId(undefined);
-          decisionConfig.id = undefined;
+          if (selectId === item.id) {
+            setSelectId(undefined);
+            decisionConfig.id = undefined;
+          }
         }
       },
     });
   };
 
   const openMenu = () => {
-    const itemList = selectId ? ["删除此常用", "分享给朋友"] : ["分享给朋友"];
     showActionSheet({
-      itemList,
+      itemList: ["分享给朋友"],
       success(res) {
-        if (res.tapIndex === 0 && selectId) {
-          handleDeleteSelected();
-        } else if (
-          (selectId && res.tapIndex === 1) ||
-          (!selectId && res.tapIndex === 0)
-        ) {
+        if (res.tapIndex === 0) {
           Taro.showToast({ title: "请点击右上角菜单分享", icon: "none" });
         }
       },
@@ -285,7 +279,19 @@ const DoDecision: React.FC = () => {
                           选项：{preview}
                         </Text>
                       </View>
-                      <AtIcon value="chevron-right" size="14" color="#c0c7d4" />
+                      <View
+                        className="doDescription__recentDelete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteItem(item);
+                        }}
+                      >
+                        <AtIcon
+                          value="subtract-circle"
+                          size="18"
+                          color="#ba1a1a"
+                        />
+                      </View>
                     </View>
                   );
                 })}

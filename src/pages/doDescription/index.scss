@@ -306,6 +306,16 @@ page {
     @include ellipsis;
   }
 
+  &__recentDelete {
+    flex-shrink: 0;
+    padding: 8rpx;
+    opacity: 0.7;
+
+    &:active {
+      opacity: 1;
+    }
+  }
+
   &__cta {
     display: flex;
     align-items: center;

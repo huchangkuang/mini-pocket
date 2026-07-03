@@ -1,119 +1,239 @@
 @import "src/style/common";
 
-page {
-  background: #333333;
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
 }
-.returnClock {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  .face {
-    margin-top: 300px;
-    position: relative;
-    background-image: linear-gradient(to bottom right, #eee, #f5f5f5);
-    border-radius: 50%;
-    padding: 20px;
-    border: 20px solid #d9d9d9;
-    box-shadow: 20px 20px 30px -10px rgba(0,0,0,0.4), inset 10px 10px 20px rgba(0,0,0,0.2);
-    width: 400px;
-    height: 400px;
-    @include flexCenter;
-    .numbers {
-      position: relative;
-      .number {
-        position: absolute;
-        top: -160px;
-        transform-origin: 0 160px;
-        font-size: 28px;
-      }
-      @for $i from 1 through 12 {
-        .number-#{$i} {
-          transform: rotate(calc(360deg / 12 * #{$i} - 5deg));
-          view {
-            transform: rotate(calc(-360deg / 12 * #{$i} + 5deg));
-          }
-        }
-      }
-    }
-    .arms {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      .arm {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        height: 80px;
-        width: 4px;
-        content: "";
-        background: black;
-        transform: translate(-50%, -100%);
-        border-radius: 0 0 20px 20px;
-        transform-origin: 50% 100%;
-        z-index: 4;
-        &::after {
-          display: block;
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          width: 80%;
-          height: calc(100% + 10px);
-          background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 70%);
-          z-index: 1;
-          animation: moveShadow 3600s linear infinite;
-          transform-origin: 50% 100%;
-        }
-      }
-      .arm-hour {
-        height: 50px;
-      }
-      .arm-second {
-        height: 120px;
-        width: 2px;
-        z-index: 3;
-        background: red;
-        .body {
-          display: block;
-          position: relative;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          content: "";
-          background: red;
-          z-index: 4;
-        }
-        &::after {
 
-        }
+page {
+  background: $color-surface;
+}
+
+.returnClock {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl $margin-mobile;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  &__grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, $color-primary 1px, transparent 1px);
+    background-size: 64rpx 64rpx;
+    opacity: 0.03;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__face {
+    position: relative;
+    width: 576rpx;
+    height: 576rpx;
+    border-radius: 50%;
+    border: 16rpx solid $color-surface-container-lowest;
+    background: radial-gradient(circle at center, #ffffff 0%, #f0f4f8 100%);
+    box-shadow:
+      inset 0 4rpx 8rpx rgba(0, 0, 0, 0.05),
+      0 20rpx 80rpx rgba(0, 0, 0, 0.1);
+    margin-bottom: $spacing-lg;
+  }
+
+  &__numbers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__number {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 48rpx;
+    margin-left: -24rpx;
+    margin-top: -20rpx;
+    text-align: center;
+    font-size: $font-body-md;
+    font-weight: 600;
+    color: $color-on-surface-variant;
+    opacity: 0.6;
+  }
+
+  &__arms {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+  }
+
+  &__arm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 50% 100%;
+    border-radius: 999rpx;
+
+    &--hour {
+      width: 12rpx;
+      height: 128rpx;
+      background: $color-on-surface;
+      z-index: 10;
+    }
+
+    &--minute {
+      width: 8rpx;
+      height: 192rpx;
+      background: $color-on-surface-variant;
+      z-index: 10;
+    }
+
+    &--second {
+      width: 4rpx;
+      height: 224rpx;
+      background: $color-secondary;
+      z-index: 20;
+    }
+  }
+
+  &__center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32rpx;
+    height: 32rpx;
+    margin: -16rpx 0 0 -16rpx;
+    border-radius: 50%;
+    background: $color-primary;
+    border: 4rpx solid $color-surface-container-lowest;
+    box-shadow: 0 4rpx 12rpx rgba(0, 94, 164, 0.3);
+    z-index: 30;
+  }
+
+  &__digital {
+    font-size: 96rpx;
+    line-height: 1.1;
+    font-weight: 700;
+    color: $color-on-surface;
+    letter-spacing: -2rpx;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-xl;
+
+    &--breathe {
+      animation: breathe 3s ease-in-out infinite;
+    }
+
+    &--primary {
+      .returnClock__statusDot {
+        background: $color-primary;
       }
-      &::after {
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 30px;
-        height: 30px;
-        content: "";
-        background: #ccc;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 999;
+      .returnClock__statusText {
+        color: $color-primary;
       }
     }
-    &::after {
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      content: "";
-      border-radius: 50%;
-      z-index: 9999;
-      background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, 59%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0) 80%), linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, 30%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0) 45%);
+
+    &--outline {
+      .returnClock__statusDot {
+        background: $color-outline;
+      }
+      .returnClock__statusText {
+        color: $color-outline;
+      }
     }
+
+    &--secondary {
+      .returnClock__statusDot {
+        background: $color-secondary;
+      }
+      .returnClock__statusText {
+        color: $color-secondary;
+      }
+    }
+  }
+
+  &__statusDot {
+    width: 16rpx;
+    height: 16rpx;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__statusText {
+    font-size: $font-label-sm;
+    line-height: $line-height-label-sm;
+    font-weight: 500;
+    letter-spacing: 1rpx;
+  }
+
+  &__controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-md;
+    width: 100%;
+    max-width: 640rpx;
+  }
+
+  &__btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-md;
+    background: $color-surface-container-low;
+    border: 2rpx solid $color-outline-variant;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-card;
+    transition: transform 0.15s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &--active {
+      background: $color-primary;
+      border-color: $color-primary;
+      box-shadow: 0 8rpx 24rpx rgba(0, 94, 164, 0.3);
+
+      .returnClock__btnLabel {
+        color: $color-on-primary;
+        margin-top: 0;
+      }
+    }
+  }
+
+  &__btnLabel {
+    font-size: $font-label-sm;
+    line-height: $line-height-label-sm;
+    font-weight: 500;
+    color: $color-on-surface;
+    margin-top: $spacing-xs;
+    text-align: center;
   }
 }

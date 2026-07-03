@@ -6,11 +6,9 @@ import React, {
   useState,
 } from "react";
 import Taro, { useShareAppMessage } from "@tarojs/taro";
-import { Image, Input, ScrollView, Switch, View } from "@tarojs/components";
+import { Input, ScrollView, Switch, View } from "@tarojs/components";
 import "./index.scss";
 import cs from "classnames";
-import startIcon from "@/images/common/start.svg";
-import stopIcon from "@/images/common/stop.svg";
 import voice from "@/audio/beat_cut.mp3";
 import { AtIcon } from "taro-ui";
 import { errorToast } from "@/utils/errorToast";
@@ -332,16 +330,20 @@ const Metronome: React.FC = () => {
               </View>
             </View>
           </View>
+
+          <View className="metronome__playSpacer" />
         </View>
       </ScrollView>
 
-      <View className="metronome__fabWrap">
+      <View className="metronome__playZone">
         <View className="metronome__fab" onClick={onToggle}>
-          <Image
-            src={beating ? stopIcon : startIcon}
-            mode="aspectFill"
-            className="metronome__fabIcon"
-          />
+          {beating ? (
+            <AtIcon value="pause" size="40" color="#fdfcff" />
+          ) : (
+            <View className="metronome__fabPlay">
+              <AtIcon value="play" size="40" color="#fdfcff" />
+            </View>
+          )}
         </View>
       </View>
 
