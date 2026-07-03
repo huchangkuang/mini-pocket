@@ -5,7 +5,7 @@ import qrcode from "@/images/classify/qrcode.svg";
 import metronome from "@/images/classify/metronome.svg";
 import lottery from "@/images/classify/lottery.svg";
 import clock from "@/images/classify/clock.svg";
-import beadArtIcon from "@/images/classify/beadArt.svg";
+// import beadArtIcon from "@/images/classify/beadArt.svg";
 import randomIcon from "@/images/classify/random.svg";
 
 export type Accent = "primary" | "secondary" | "tertiary";
@@ -89,14 +89,14 @@ export const classifyList: ToolItem[] = [
     accent: "primary",
     category: "life",
   },
-  {
-    icon: beadArtIcon,
-    text: "拼豆图片生成",
-    desc: "像素化艺术创作",
-    path: "/pages/beadArt/index",
-    accent: "secondary",
-    category: "efficiency",
-  },
+  // {
+  //   icon: beadArtIcon,
+  //   text: "拼豆图片生成",
+  //   desc: "像素化艺术创作",
+  //   path: "/pages/beadArt/index",
+  //   accent: "secondary",
+  //   category: "efficiency",
+  // },
   {
     icon: randomIcon,
     text: "猜数字",

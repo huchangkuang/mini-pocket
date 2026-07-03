@@ -1,25 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import Taro from "@tarojs/taro";
 import { ScrollView, View, Text } from "@tarojs/components";
-import { AtIcon } from "taro-ui";
 import HomeTopBar from "@/components/homeTopBar";
 import FeaturedBanner from "@/components/featuredBanner";
 import ToolCard from "@/components/toolCard";
-import CategoryChips from "@/components/categoryChips";
 import { errorToast } from "@/utils/errorToast";
 import { useTabBarSelected } from "@/utils/useTabBarSelected";
-import {
-  classifyList,
-  categoryChips,
-  excludeClassifyList,
-} from "@/pages/classify/constants";
+import { classifyList, excludeClassifyList } from "@/pages/classify/constants";
 import "./index.scss";
 
 const PLACEHOLDER_MSG = "更多功能正在开发中...";
 
 const Classify: React.FC = () => {
   useTabBarSelected("workshop");
-  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const viewToPage = (url: string) => {
     if (!url) {
@@ -69,20 +62,15 @@ const Classify: React.FC = () => {
             </View>
           </View>
 
-          <CategoryChips
-            chips={categoryChips}
-            selectedId={selectedCategory}
-            onSelect={setSelectedCategory}
-          />
+          {/* 暂时隐藏底部分类筛选 */}
+          {/* <CategoryChips chips={categoryChips} selectedId={selectedCategory} onSelect={setSelectedCategory} /> */}
         </View>
       </ScrollView>
 
-      <View
-        className="workshop__fab"
-        onClick={() => errorToast(PLACEHOLDER_MSG)}
-      >
+      {/* 暂时隐藏 FAB + 号 */}
+      {/* <View className="workshop__fab" onClick={() => errorToast(PLACEHOLDER_MSG)}>
         <AtIcon value="add" size="28" color="#ffffff" />
-      </View>
+      </View> */}
     </View>
   );
 };
