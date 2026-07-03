@@ -1,37 +1,51 @@
 @import "../../style/tokens.scss";
 
-.tabPage {
-  min-height: 100vh;
+page {
   background: $color-surface;
-  box-sizing: border-box;
-
-  &__body {
-    padding: $margin-mobile;
-    padding-bottom: calc(#{$bottom-nav-height} + env(safe-area-inset-bottom) + 32rpx);
-    box-sizing: border-box;
-  }
 }
 
-.emptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  text-align: center;
-  padding: 48rpx;
+.favoritesPage {
+  min-height: 100vh;
+  background: $color-surface;
+  position: relative;
 
-  &__title {
-    font-size: $font-headline-md;
-    font-weight: 600;
-    color: $color-on-surface;
-    line-height: $line-height-headline-md;
+  &__scroll {
+    height: 100vh;
+    box-sizing: border-box;
   }
 
-  &__desc {
-    margin-top: 16rpx;
+  &__content {
+    padding: $spacing-md $margin-mobile 0;
+    padding-bottom: calc(
+      #{$bottom-nav-height} + env(safe-area-inset-bottom) + 48rpx
+    );
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $gutter-mobile;
+    margin-top: $spacing-xs;
+  }
+
+  &__noResults {
+    padding: 80rpx 32rpx;
+    text-align: center;
     font-size: $font-body-md;
     color: $color-on-surface-variant;
-    line-height: $line-height-body-md;
+  }
+
+  &__emptyWrap {
+    padding-bottom: calc(
+      #{$bottom-nav-height} + env(safe-area-inset-bottom) + 32rpx
+    );
+    min-height: calc(100vh - 200rpx);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
