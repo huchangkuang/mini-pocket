@@ -118,21 +118,24 @@ const ReturnClock: React.FC = () => {
 
   const handleReverseClick = () => {
     setIsPaused(false);
-    if (
-      activeButton === "reverse" &&
-      (flowMode === "reverse" || flowMode === "accelerate")
-    ) {
-      setFlowMode(flowMode === "reverse" ? "accelerate" : "reverse");
-    } else {
+    if (activeButton === "reverse") {
       setFlowMode("reverse");
+      setActiveButton(null);
+    } else {
+      setFlowMode("accelerate");
+      setActiveButton("reverse");
     }
-    setActiveButton("reverse");
   };
 
   const handleNormalClick = () => {
     setIsPaused(false);
-    setFlowMode("normal");
-    setActiveButton("normal");
+    if (activeButton === "normal") {
+      setFlowMode("reverse");
+      setActiveButton(null);
+    } else {
+      setFlowMode("normal");
+      setActiveButton("normal");
+    }
   };
 
   const handlePauseToggle = () => {
