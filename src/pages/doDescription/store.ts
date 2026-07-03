@@ -8,7 +8,7 @@ export type DecisionItem = {
 };
 export const decisionConfig: Omit<DecisionItem, "id"> & { id?: string } = {
   title: "今晚吃什么？",
-  list: ["饭", "面条"],
+  list: ["火锅", "披萨", "寿司", "烤肉", "面条", "沙拉"],
 };
 
 export const USE_LIST = "useList";

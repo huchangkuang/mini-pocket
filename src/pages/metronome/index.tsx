@@ -1,6 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Taro, { useShareAppMessage } from "@tarojs/taro";
-import { Image, Input, Picker, View } from "@tarojs/components";
+import { Image, Input, ScrollView, Switch, View } from "@tarojs/components";
 import "./index.scss";
 import cs from "classnames";
 import startIcon from "@/images/common/start.svg";
@@ -8,23 +14,60 @@ import stopIcon from "@/images/common/stop.svg";
 import voice from "@/audio/beat_cut.mp3";
 import { AtIcon } from "taro-ui";
 import { errorToast } from "@/utils/errorToast";
-import { CommonBeatList } from "@/pages/metronome/constant";
-import { IS_ALIPAY } from "@/utils/constant";
+import {
+  CommonBeatList,
+  DEFAULT_BPM,
+  MAX_BPM,
+  PRESET_BPM_LABELS,
+  PRESET_BPM_LIST,
+} from "@/pages/metronome/constant";
+import {
+  loadMetronomeSettings,
+  MetronomeSettings,
+  saveMetronomeSettings,
+} from "@/pages/metronome/settings";
 
 const Metronome: React.FC = () => {
+  const [bpm, setBpmState] = useState(DEFAULT_BPM);
+  const [customInput, setCustomInput] = useState("");
   const [curN, setCurN] = useState<number>();
   const [beating, setBeating] = useState(false);
-  const [selectNum, setSelectNum] = useState(8);
-  const beatNum = useMemo(() => CommonBeatList[selectNum], [selectNum]);
-  const [customBeatNum, setCustomBeatNum] = useState("");
+  const [showAllPanel, setShowAllPanel] = useState(false);
+  const [settings, setSettings] = useState<MetronomeSettings>(() =>
+    loadMetronomeSettings()
+  );
+
   const isStop = useRef(true);
+  const beatingRef = useRef(false);
   const innerAudioContext = useRef<Taro.InnerAudioContext>();
   const timer = useRef<NodeJS.Timer>();
-  const goBeatN = () => {
-    if (innerAudioContext.current) {
+  const bpmRef = useRef(bpm);
+  const settingsRef = useRef(settings);
+
+  bpmRef.current = bpm;
+  beatingRef.current = beating;
+  settingsRef.current = settings;
+
+  const progressDeg = useMemo(() => (bpm / MAX_BPM) * 360, [bpm]);
+
+  const clearTimer = useCallback(() => {
+    clearInterval(timer.current);
+    timer.current = undefined;
+  }, []);
+
+  const goBeatN = useCallback(() => {
+    const { soundEnabled, vibrateEnabled } = settingsRef.current;
+    if (soundEnabled && innerAudioContext.current) {
       innerAudioContext.current.stop();
       innerAudioContext.current.seek(0);
       innerAudioContext.current.play();
+    }
+    if (vibrateEnabled) {
+      try {
+        Taro.vibrateShort({ type: "medium" });
+      } catch {
+        // platform may not support vibrate
+      }
     }
     setCurN((_n) => {
       if (_n === undefined) {
@@ -33,138 +76,312 @@ const Metronome: React.FC = () => {
       const newN = _n + 1;
       return newN > 3 ? 0 : newN;
     });
-  };
+  }, []);
+
+  const startMetronome = useCallback(() => {
+    isStop.current = false;
+    setBeating(true);
+    const frequency = Math.floor((60 * 1000) / bpmRef.current);
+    goBeatN();
+    setCurN(0);
+    clearTimer();
+    timer.current = setInterval(() => {
+      if (!isStop.current) {
+        goBeatN();
+      } else {
+        clearTimer();
+        setCurN(undefined);
+      }
+    }, frequency);
+  }, [clearTimer, goBeatN]);
+
+  const stopMetronome = useCallback(() => {
+    isStop.current = true;
+    clearTimer();
+    setBeating(false);
+    setCurN(undefined);
+  }, [clearTimer]);
+
+  const restartMetronome = useCallback(() => {
+    stopMetronome();
+    startMetronome();
+  }, [startMetronome, stopMetronome]);
+
+  const setBpm = useCallback(
+    (val: number) => {
+      const clamped = Math.min(Math.max(1, val), MAX_BPM);
+      setBpmState(clamped);
+      bpmRef.current = clamped;
+      if (beatingRef.current) {
+        restartMetronome();
+      }
+    },
+    [restartMetronome]
+  );
+
+  const changeBpm = useCallback(
+    (delta: number) => {
+      setBpm(bpmRef.current + delta);
+    },
+    [setBpm]
+  );
+
   const validate = () => {
-    if (customBeatNum) {
-      if (/\D/g.test(customBeatNum)) {
+    if (customInput) {
+      if (/\D/g.test(customInput)) {
         return "请输入正确的自定义频率值";
       }
-      if (Number(customBeatNum) > 208) {
+      if (Number(customInput) > MAX_BPM) {
         return "自定义频率值不得超过208";
       }
-      if (Number(customBeatNum) < 1) {
+      if (Number(customInput) < 1) {
         return "自定义频率值不得小于1";
       }
     }
   };
+
   const onToggle = () => {
     const msg = validate();
     if (msg) {
       errorToast(msg);
       return;
     }
-    let beatTime = beatNum;
-    if (customBeatNum) {
-      beatTime = Number(customBeatNum);
-    }
-    setBeating(!beating);
-    if (!beating) {
-      isStop.current = false;
-      const frequency = Math.floor((60 * 1000) / beatTime);
-      goBeatN();
-      timer.current = setInterval(() => {
-        if (!isStop.current) {
-          goBeatN();
-        } else {
-          clearInterval(timer.current);
-          timer.current = undefined;
-          setCurN(undefined);
-        }
-      }, frequency);
+    if (beating) {
+      stopMetronome();
     } else {
-      isStop.current = true;
-      clearInterval(timer.current);
-      timer.current = undefined;
+      startMetronome();
     }
   };
+
+  const onCustomInput = (value: string) => {
+    setCustomInput(value);
+    if (!value) {
+      return;
+    }
+    const num = Number(value);
+    if (!/\D/g.test(value) && num >= 1 && num <= MAX_BPM) {
+      setBpm(num);
+    }
+  };
+
+  const clearCustomInput = () => {
+    setCustomInput("");
+  };
+
+  const updateSettings = (patch: Partial<MetronomeSettings>) => {
+    setSettings((prev) => {
+      const next = { ...prev, ...patch };
+      saveMetronomeSettings(next);
+      return next;
+    });
+  };
+
+  const selectFromAllList = (val: number) => {
+    setBpm(val);
+    setCustomInput("");
+    setShowAllPanel(false);
+  };
+
   useEffect(() => {
     innerAudioContext.current = Taro.createInnerAudioContext();
     innerAudioContext.current.src = voice;
     innerAudioContext.current.obeyMuteSwitch = false;
     innerAudioContext.current.autoplay = false;
     innerAudioContext.current.loop = false;
-    innerAudioContext.current.onCanplay(() => {
-      console.log("音频加载完成");
-    });
     return () => {
       isStop.current = true;
-      clearInterval(timer.current);
-      timer.current = undefined;
+      clearTimer();
       innerAudioContext.current?.destroy();
       innerAudioContext.current = undefined;
     };
-  }, []);
-  useShareAppMessage(() => {
-    return {
-      title: "节拍器",
-      path: "/pages/metronome/index",
-    };
-  });
+  }, [clearTimer]);
+
+  useShareAppMessage(() => ({
+    title: "节拍器",
+    path: "/pages/metronome/index",
+  }));
+
   return (
-    <View className={cs("metronome", IS_ALIPAY && "isAlipay")}>
-      <View className="nodes">
-        {new Array(4).fill("").map((i, n) => (
-          <View className={cs("nodeItem", n === curN && "highLight")} />
-        ))}
-      </View>
-      <View className="beatNum">
-        <View
-          className={cs("formItem", (customBeatNum || beating) && "disabled")}
-        >
-          <View className="label">常用节拍频率</View>
-          {customBeatNum || beating ? (
-            <View className="value">{beatNum}</View>
-          ) : (
-            <Picker
-              value={selectNum}
-              range={CommonBeatList}
-              mode="selector"
-              onChange={(e) => {
-                setSelectNum(Number(e.detail.value));
-              }}
-            >
-              <View className="right">
-                <View className="value">{beatNum}</View>
-                <AtIcon
-                  className="icon"
-                  value="chevron-right"
-                  size="16"
-                  color="#bfbfbf"
+    <View className="metronome">
+      <ScrollView scrollY className="metronome__scroll">
+        <View className="metronome__content">
+          <View className="metronome__beats">
+            {new Array(4).fill("").map((_, n) => (
+              <View
+                key={n}
+                className={cs(
+                  "metronome__beat",
+                  n === 0 && "metronome__beat--first",
+                  n === curN && "metronome__beat--active"
+                )}
+              />
+            ))}
+          </View>
+
+          <View className="metronome__dial">
+            <View className="metronome__dialRing">
+              <View
+                className="metronome__dialTrack"
+                style={{
+                  background: `conic-gradient(from -90deg, #0077ce 0deg, #0077ce ${progressDeg}deg, #e6e8eb ${progressDeg}deg, #e6e8eb 360deg)`,
+                }}
+              />
+            </View>
+            <View className="metronome__dialCenter">
+              <View className="metronome__dialLabel">TEMPO</View>
+              <View className="metronome__dialControls">
+                <View
+                  className="metronome__dialBtn"
+                  onClick={() => changeBpm(-1)}
+                >
+                  <AtIcon value="subtract" size="16" color="#005ea4" />
+                </View>
+                <View className="metronome__dialValue">{bpm}</View>
+                <View
+                  className="metronome__dialBtn"
+                  onClick={() => changeBpm(1)}
+                >
+                  <AtIcon value="add" size="16" color="#005ea4" />
+                </View>
+              </View>
+              <View className="metronome__dialUnit">BPM</View>
+            </View>
+          </View>
+
+          <View className="metronome__section">
+            <View className="metronome__sectionHeader">
+              <View className="metronome__sectionTitle">常用节拍</View>
+              <View
+                className="metronome__viewAll"
+                onClick={() => setShowAllPanel(true)}
+              >
+                查看全部
+              </View>
+            </View>
+            <View className="metronome__presets">
+              {PRESET_BPM_LIST.map((preset) => (
+                <View
+                  key={preset}
+                  className={cs(
+                    "metronome__preset",
+                    bpm === preset &&
+                      !customInput &&
+                      "metronome__preset--active"
+                  )}
+                  onClick={() => {
+                    setCustomInput("");
+                    setBpm(preset);
+                  }}
+                >
+                  <View className="metronome__presetValue">{preset}</View>
+                  <View className="metronome__presetLabel">
+                    {PRESET_BPM_LABELS[preset]}
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          <View className="metronome__section">
+            <View className="metronome__inputCard">
+              <View className="metronome__inputMain">
+                <View className="metronome__inputLabel">自定义频率</View>
+                <Input
+                  value={customInput}
+                  onInput={(e) => onCustomInput(e.detail.value)}
+                  className="metronome__input"
+                  type="number"
+                  placeholder="1-208 内整数"
+                  placeholderClass="metronome__inputPlaceholder"
                 />
               </View>
-            </Picker>
-          )}
-        </View>
-        <View className={cs("formItem", beating && "disabled")}>
-          <View className="label">自定义节拍频率</View>
-          <View className="right">
-            <Input
-              disabled={beating}
-              value={customBeatNum}
-              onInput={(e) => setCustomBeatNum(e.detail.value)}
-              className="inputNum"
-              type="number"
-              placeholder="请输入1-208内整数"
-            />
-            <AtIcon
-              onClick={() => !beating && setCustomBeatNum("")}
-              className="icon"
-              value="close-circle"
-              size="16"
-              color="#bfbfbf"
-            />
+              <View
+                className="metronome__inputClear"
+                onClick={clearCustomInput}
+              >
+                <AtIcon value="close-circle" size="16" color="#404752" />
+              </View>
+            </View>
+
+            <View className="metronome__toggles">
+              <View className="metronome__toggleCard">
+                <View className="metronome__toggleInfo">
+                  <AtIcon value="sound" size="18" color="#005ea4" />
+                  <View className="metronome__toggleText">声音提示</View>
+                </View>
+                <Switch
+                  checked={settings.soundEnabled}
+                  color="#0077ce"
+                  onChange={(e) =>
+                    updateSettings({ soundEnabled: e.detail.value })
+                  }
+                />
+              </View>
+              <View className="metronome__toggleCard">
+                <View className="metronome__toggleInfo">
+                  <AtIcon value="streaming" size="18" color="#005ea4" />
+                  <View className="metronome__toggleText">震动反馈</View>
+                </View>
+                <Switch
+                  checked={settings.vibrateEnabled}
+                  color="#0077ce"
+                  onChange={(e) =>
+                    updateSettings({ vibrateEnabled: e.detail.value })
+                  }
+                />
+              </View>
+            </View>
           </View>
         </View>
+      </ScrollView>
+
+      <View className="metronome__fabWrap">
+        <View className="metronome__fab" onClick={onToggle}>
+          <Image
+            src={beating ? stopIcon : startIcon}
+            mode="aspectFill"
+            className="metronome__fabIcon"
+          />
+        </View>
       </View>
-      <View className="actionBtn">
-        <Image
-          onClick={onToggle}
-          src={beating ? stopIcon : startIcon}
-          mode="aspectFill"
-          className="btn"
-        />
-      </View>
+
+      {showAllPanel && (
+        <View className="metronome__panel">
+          <View
+            className="metronome__panelMask"
+            onClick={() => setShowAllPanel(false)}
+          />
+          <View className="metronome__panelBody">
+            <View className="metronome__panelHeader">
+              <View className="metronome__panelTitle">全部常用节拍</View>
+              <View
+                className="metronome__panelClose"
+                onClick={() => setShowAllPanel(false)}
+              >
+                <AtIcon value="close" size="16" color="#404752" />
+              </View>
+            </View>
+            <ScrollView scrollY className="metronome__panelScroll">
+              <View className="metronome__panelGrid">
+                {CommonBeatList.map((item) => (
+                  <View
+                    key={item}
+                    className={cs(
+                      "metronome__panelItem",
+                      bpm === item && "metronome__panelItem--active"
+                    )}
+                    onClick={() => selectFromAllList(item)}
+                  >
+                    {item}
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
+
 export default Metronome;

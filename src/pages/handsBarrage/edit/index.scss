@@ -1,90 +1,80 @@
-@import "../../../style/common.scss";
+@import "../../../style/tokens.scss";
 
 page {
-  background: #f9f9f9;
-}
-.editBarrage {
-  padding: 24px;
-  .title {
-    color: #333333;
-    font-weight: bold;
-    font-size: 36px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-  }
-  .colorShow {
-    width: 36px;
-    height: 36px;
-    margin-left: 20px;
-    margin-right: 8px;
-    border: 1px solid #eeeeee;
-    border-radius: 8px;
-  }
-  .colorList {
-    min-height: 160px;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 20px;
-    .colorItem {
-      width: 36px;
-      height: 36px;
-      border: 1px solid #eeeeee;
-      border-radius: 8px;
-      &:not(:last-child) {
-        margin-right: 20px;
-      }
-    }
-  }
-  .mainFormContent {
-    background: #FFFFFF;
-    border-radius: 16px;
-    padding: 16px 24px;
-  }
-  .barrageInput {
-    border-bottom: 1px solid #eeeeee;
-    padding: 10px;
-    margin-bottom: 32px;
-  }
-  .confirm {
-    margin-top: 40px;
-    margin-bottom: 32px;
-  }
-  .barrageType {
-    display: flex;
-    align-items: center;
-    :first-child {
-      margin-right: 32px;
-      color: #333333;
-      font-size: 32px;
-    }
-  }
-  .customStr {
-    color: #999999;
-    font-size: 28px;
-    @include flexCenter;
-    margin-bottom: 32px;
-    text:first-child {
-      margin-right: 8px;
-    }
-    .arrow {
-      transition: all 100ms linear;
-      &.expand {
-        transform: rotate(180deg);
-      }
-    }
-  }
-  .customContent {
-    border-radius: 16px;
-    transform: scaleY(0);
-    transition: all 100ms linear;
-    transform-origin: top center;
-    padding: 16px 24px;
-    background: #FFFFFF;
-    &.expand {
-      transform: scaleY(1);
-    }
-  }
+  background: $color-surface;
 }
 
+.editBarrage {
+  min-height: 100vh;
+  background: $color-surface;
+
+  &__scroll {
+    height: 100vh;
+    box-sizing: border-box;
+  }
+
+  &__content {
+    padding: $spacing-md $margin-mobile;
+    padding-bottom: calc(200rpx + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    box-sizing: border-box;
+  }
+
+  &__inputWrap {
+    width: 100%;
+    background: $color-surface-container-low;
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  &__input {
+    width: 100%;
+    height: 96rpx;
+    line-height: 96rpx;
+    padding: 0 32rpx;
+    background: transparent;
+    font-size: $font-body-md;
+    color: $color-on-surface;
+    box-sizing: border-box;
+  }
+
+  &__placeholder {
+    color: $color-outline;
+    font-size: $font-body-md;
+  }
+
+  &__charCount {
+    display: block;
+    margin-top: $spacing-xs;
+    text-align: right;
+    font-size: $font-label-sm;
+    color: $color-outline;
+    line-height: $line-height-label-sm;
+  }
+
+  &__grid {
+    display: flex;
+    gap: $spacing-md;
+  }
+
+  &__gridItem {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__colorGroups {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__sliders {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    height: 100%;
+    justify-content: center;
+  }
+}

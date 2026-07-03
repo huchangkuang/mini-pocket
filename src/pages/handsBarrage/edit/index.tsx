@@ -1,47 +1,32 @@
 import React, { useState } from "react";
-import { View, Input, Picker, Text } from "@tarojs/components";
+import { View, Input, Text, ScrollView } from "@tarojs/components";
 import "./index.scss";
 import Taro, { useShareAppMessage } from "@tarojs/taro";
-import { AtSlider, AtIcon, AtModal, AtButton } from "taro-ui";
 import { errorToast } from "@/utils/errorToast";
 import {
   BarrageType,
-  barrageTypeMap,
-  BarrageTypeRange,
+  barrageTypeOptions,
+  FONT_COLORS,
+  BG_COLORS,
 } from "@/pages/handsBarrage/constants";
-import cs from "classnames";
-
-const colorList = [
-  "#fff",
-  "#ff0000",
-  "#ff7f00",
-  "#ffff00",
-  "#00ff00",
-  "#00ffff",
-  "#0000ff",
-  "#8b00ff",
-  "#000",
-];
+import BarragePreview from "@/components/barragePreview";
+import ToolFormCard from "@/components/toolEdit/toolFormCard";
+import SegmentedControl from "@/components/toolEdit/segmentedControl";
+import ColorSwatchGroup from "@/components/toolEdit/colorSwatchGroup";
+import ToolSliderRow from "@/components/toolEdit/toolSliderRow";
+import ToolTipCard from "@/components/toolEdit/toolTipCard";
+import ToolBottomBar from "@/components/toolEdit/toolBottomBar";
 
 const EditBarrage: React.FC = () => {
-  const [fontSize, setFontSize] = useState(80);
-  const [fontColor, setFontColor] = useState("#fff");
-  const [bgColor, setBgColor] = useState("#000");
+  const [fontSize, setFontSize] = useState(64);
+  const [fontColor, setFontColor] = useState(FONT_COLORS[0]);
+  const [bgColor, setBgColor] = useState(BG_COLORS[0]);
   const [time, setTime] = useState(5);
   const [barrage, setBarrage] = useState("");
   const [barrageType, setBarrageType] = useState<BarrageType>(
     BarrageType.scroll
   );
-  const [showColorModal, setShowColorModal] = useState<"font" | "bg">();
-  const [expandCustom, setExpandCustom] = useState(true);
-  const onColorChange = (value: string) => {
-    if (showColorModal === "font") {
-      setFontColor(value);
-    } else {
-      setBgColor(value);
-    }
-    setShowColorModal(undefined);
-  };
+
   const validateBarrage = () => {
     if (!barrage) {
       return "请输入弹幕内容";
@@ -50,6 +35,7 @@ const EditBarrage: React.FC = () => {
       return "弹幕字数限制20字";
     }
   };
+
   const confirm = () => {
     const msg = validateBarrage();
     if (msg) {
@@ -63,92 +49,99 @@ const EditBarrage: React.FC = () => {
       )}`,
     });
   };
-  useShareAppMessage(() => {
-    return {
-      title: "手持弹幕",
-      path: "/pages/handsBarrage/edit/index",
-    };
-  });
+
+  useShareAppMessage(() => ({
+    title: "手持弹幕",
+    path: "/pages/handsBarrage/edit/index",
+  }));
+
+  const scrollTimeDisabled = barrageType !== BarrageType.scroll;
+
   return (
     <View className="editBarrage">
-      <View className="mainFormContent">
-        <View className="title">弹幕内容</View>
-        <Input
-          className="barrageInput"
-          placeholder="弹幕字数限制20字"
-          maxlength={20}
-          value={barrage}
-          onInput={(e) => setBarrage(e.detail.value)}
-          name="barrage"
-        />
-        <View className="title">弹幕形式</View>
-        <Picker
-          value={barrageType}
-          range={BarrageTypeRange}
-          onChange={(e) => setBarrageType(Number(e.detail.value))}
-        >
-          <View className="barrageType">
-            <View>{barrageTypeMap[barrageType]}</View>
-            <AtIcon value="chevron-right" size={16} color="#333" />
-          </View>
-        </Picker>
-      </View>
-      <AtButton className="confirm" type="primary" onClick={confirm}>
-        确认
-      </AtButton>
-      <View
-        className="customStr"
-        onClick={() => setExpandCustom(!expandCustom)}
-      >
-        <Text>自定义</Text>
-        <AtIcon
-          className={cs("arrow", expandCustom && "expand")}
-          value="chevron-down"
-          size={16}
-          color="#999"
-        />
-      </View>
-      <View className={cs("customContent", expandCustom && "expand")}>
-        <View className="title" onClick={() => setShowColorModal("font")}>
-          <View>字体颜色: </View>
-          <View className="colorShow" style={{ background: fontColor }} />
-          <AtIcon value="edit" size="16" color="#333" />
-        </View>
-        <View className="title" onClick={() => setShowColorModal("bg")}>
-          <View>背景颜色: </View>
-          <View className="colorShow" style={{ background: bgColor }} />
-          <AtIcon value="edit" size="16" color="#333" />
-        </View>
-        <View className="title">字体大小: {fontSize}px</View>
-        <AtSlider
-          min={40}
-          max={120}
-          value={fontSize}
-          onChanging={(value) => setFontSize(value)}
-        />
-        <View className="title">弹幕时间: {time}秒</View>
-        <AtSlider
-          min={1}
-          max={10}
-          value={time}
-          onChanging={(value) => setTime(value)}
-        />
-      </View>
-      <AtModal
-        isOpened={!!showColorModal}
-        onClose={() => setShowColorModal(undefined)}
-      >
-        <View className="colorList">
-          {colorList.map((i) => (
-            <View
-              onClick={() => onColorChange(i)}
-              className="colorItem"
-              style={{ background: i }}
+      <ScrollView scrollY className="editBarrage__scroll">
+        <View className="editBarrage__content">
+          <BarragePreview
+            text={barrage}
+            fontSize={fontSize}
+            fontColor={fontColor}
+            bgColor={bgColor}
+            barrageType={barrageType}
+            scrollTime={time}
+          />
+
+          <ToolFormCard icon="edit" title="弹幕内容">
+            <View className="editBarrage__inputWrap">
+              <Input
+                className="editBarrage__input"
+                placeholder="输入弹幕内容（限20字）"
+                placeholderClass="editBarrage__placeholder"
+                maxlength={20}
+                value={barrage}
+                onInput={(e) => setBarrage(e.detail.value)}
+              />
+            </View>
+            <Text className="editBarrage__charCount">{barrage.length}/20</Text>
+          </ToolFormCard>
+
+          <ToolFormCard icon="streaming" title="弹幕形式">
+            <SegmentedControl
+              options={barrageTypeOptions}
+              value={barrageType}
+              onChange={setBarrageType}
             />
-          ))}
+          </ToolFormCard>
+
+          <View className="editBarrage__grid">
+            <ToolFormCard className="editBarrage__gridItem">
+              <View className="editBarrage__colorGroups">
+                <ColorSwatchGroup
+                  label="字体颜色"
+                  colors={FONT_COLORS}
+                  value={fontColor}
+                  onChange={setFontColor}
+                />
+                <ColorSwatchGroup
+                  label="背景颜色"
+                  colors={BG_COLORS}
+                  value={bgColor}
+                  onChange={setBgColor}
+                />
+              </View>
+            </ToolFormCard>
+
+            <ToolFormCard className="editBarrage__gridItem">
+              <View className="editBarrage__sliders">
+                <ToolSliderRow
+                  label="字体大小"
+                  value={fontSize}
+                  min={20}
+                  max={100}
+                  unit="px"
+                  onChange={setFontSize}
+                />
+                <ToolSliderRow
+                  label="滚动时间"
+                  value={time}
+                  min={1}
+                  max={10}
+                  unit="s"
+                  disabled={scrollTimeDisabled}
+                  onChange={setTime}
+                />
+              </View>
+            </ToolFormCard>
+          </View>
+
+          <ToolTipCard>
+            小贴士：双击展示页面可以快速返回编辑界面。建议在暗光环境下调高字体亮度以获得最佳展示效果。
+          </ToolTipCard>
         </View>
-      </AtModal>
+      </ScrollView>
+
+      <ToolBottomBar label="开始展示" icon="play" onClick={confirm} />
     </View>
   );
 };
+
 export default EditBarrage;
