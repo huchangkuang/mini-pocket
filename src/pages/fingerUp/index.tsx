@@ -24,48 +24,78 @@ type Fingers = {
   color: string;
 };
 const colors = ["#cb4e18", "#2FD688", "#449de0", "#d73838", "#00FFFF"];
+
 const FingerUp: React.FC = () => {
   const { windowWidth = 0 } = getSystemInfoSync();
   const transformX = (windowWidth / 375) * 50;
   const { height = 0, top = 0 } = getMenuButtonBoundingClientRect();
   const clock = useRef<NodeJS.Timer>();
   const timer = useRef<NodeJS.Timer>();
+  const activeTouchIdsRef = useRef<Set<number>>(new Set());
   const [fingers, setFingers] = useState<Fingers[]>([]);
   const [count, setCount] = useState(3);
   const [selectId, setSelectId] = useState<number>();
   const disabled = useMemo(() => fingers.length < 2, [fingers.length]);
+
   const touchStart = (e: Taro.ITouchEvent) => {
     if (timer.current) return;
-    const pickIndex = fingers.length % colors.length;
-    const color = colors[pickIndex];
-    const newFingers = [...fingers];
-    const ids = newFingers.map((i) => i.id);
-    e.touches.forEach((i) => {
-      if (!ids.includes(i.identifier)) {
-        newFingers.push({ id: i.identifier, x: i.pageX, y: i.pageY, color });
-        setFingers(newFingers);
+    e.touches.forEach((t) => activeTouchIdsRef.current.add(t.identifier));
+    setFingers((prev) => {
+      const ids = new Set(prev.map((i) => i.id));
+      const additions: Fingers[] = [];
+      let colorIndex = prev.length;
+      e.touches.forEach((t) => {
+        if (!ids.has(t.identifier)) {
+          additions.push({
+            id: t.identifier,
+            x: t.pageX,
+            y: t.pageY,
+            color: colors[colorIndex % colors.length],
+          });
+          colorIndex += 1;
+          ids.add(t.identifier);
+        }
+      });
+      return additions.length ? [...prev, ...additions] : prev;
+    });
+  };
+
+  const touchMove = (e: Taro.ITouchEvent) => {
+    const moves = new Map(
+      e.changedTouches.map((t) => [t.identifier, { x: t.pageX, y: t.pageY }])
+    );
+    if (moves.size === 0) return;
+    setFingers((prev) =>
+      prev.map((f) => {
+        const pos = moves.get(f.id);
+        return pos ? { ...f, ...pos } : f;
+      })
+    );
+  };
+
+  const handleTouchEndOrCancel = (e: Taro.ITouchEvent) => {
+    e.changedTouches.forEach((t) =>
+      activeTouchIdsRef.current.delete(t.identifier)
+    );
+
+    const activeTouchIds = new Set(e.touches.map((t) => t.identifier));
+    activeTouchIdsRef.current.forEach((id) => {
+      if (!activeTouchIds.has(id)) {
+        activeTouchIdsRef.current.delete(id);
       }
     });
-  };
-  const touchMove = (e: Taro.ITouchEvent) => {
-    e.changedTouches.forEach((i) => {
-      setFingers((l) =>
-        l.map((j) =>
-          j.id === i.identifier ? { ...j, x: i.pageX, y: i.pageY } : j
-        )
-      );
-    });
-  };
-  const touchEnd = (e: Taro.ITouchEvent) => {
-    if (!e.touches.length) {
+
+    if (e.touches.length === 0 || activeTouchIdsRef.current.size === 0) {
+      activeTouchIdsRef.current.clear();
       setFingers([]);
       return;
     }
-    const existIds = e.touches.map((i) => i.identifier);
-    setTimeout(() => {
-      setFingers((l) => l.filter((j) => existIds.includes(j.id)));
-    }, 100);
+
+    setFingers((prev) =>
+      prev.filter((f) => activeTouchIdsRef.current.has(f.id))
+    );
   };
+
   const generateRandomArr = () => {
     const ids = fingers.map((i) => i.id);
     const idArr: number[] = [];
@@ -77,6 +107,7 @@ const FingerUp: React.FC = () => {
     idArr.push(ids[selectedIndex]);
     return idArr;
   };
+
   const start = (e?: Taro.ITouchEvent) => {
     e?.stopPropagation();
     if (disabled) return;
@@ -91,14 +122,17 @@ const FingerUp: React.FC = () => {
       setSelectId(id);
     }, 400);
   };
+
   const clearClock = () => {
     clearInterval(clock.current);
     clock.current = undefined;
   };
+
   const clearTimer = () => {
     clearInterval(timer.current);
     timer.current = undefined;
   };
+
   const startCountDown = () => {
     clock.current = setInterval(() => {
       setCount((n) => {
@@ -111,16 +145,19 @@ const FingerUp: React.FC = () => {
       });
     }, 1000);
   };
+
   const resetAction = () => {
     clearTimer();
     clearClock();
     setSelectId(undefined);
   };
+
   const onNewFingerAdd = () => {
     clearClock();
     setCount(3);
     startCountDown();
   };
+
   useEffect(() => {
     if (fingers.length >= 2) {
       if (timer.current) return;
@@ -129,18 +166,27 @@ const FingerUp: React.FC = () => {
       resetAction();
     }
   }, [fingers.length]);
-  useShareAppMessage(() => {
-    return {
-      title: "指尖轮盘",
-      path: "/pages/fingerUp/index",
+
+  useEffect(() => {
+    return () => {
+      clearClock();
+      clearTimer();
+      activeTouchIdsRef.current.clear();
     };
-  });
+  }, []);
+
+  useShareAppMessage(() => ({
+    title: "指尖轮盘",
+    path: "/pages/fingerUp/index",
+  }));
+
   return (
     <View
       className="fingerUp"
       onTouchStart={touchStart}
-      onTouchEnd={touchEnd}
       onTouchMove={touchMove}
+      onTouchEnd={handleTouchEndOrCancel}
+      onTouchCancel={handleTouchEndOrCancel}
     >
       {IS_WECHAT && (
         <View style={{ top }} className="goBack" onClick={() => navigateBack()}>
@@ -149,9 +195,10 @@ const FingerUp: React.FC = () => {
       )}
       <CustomWrapper>
         {fingers.map((i) => (
-          <MovableArea className="area">
+          <MovableArea key={i.id} className="area">
             <MovableView
-              direction="all"
+              direction="none"
+              disabled
               x={i.x - transformX}
               y={i.y - transformX}
               className="item"
@@ -161,8 +208,9 @@ const FingerUp: React.FC = () => {
                   typeof selectId === "number" && i.id !== selectId ? 0.5 : 1,
               }}
             >
-              {[1, 2].map(() => (
+              {[0, 1].map((ring) => (
                 <View
+                  key={ring}
                   className={cs(
                     "bg",
                     typeof selectId === "number" && i.id !== selectId && "dark"
@@ -192,4 +240,5 @@ const FingerUp: React.FC = () => {
     </View>
   );
 };
+
 export default FingerUp;

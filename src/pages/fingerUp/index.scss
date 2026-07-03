@@ -20,6 +20,7 @@ page {
     color: #333333;
     font-size: 24px;
     margin-top: 400px;
+    pointer-events: none;
     view {
       margin-bottom: 8px;
     }
@@ -37,12 +38,14 @@ page {
     left: 0;
     width: 100vw;
     height: 100vh;
+    pointer-events: none;
     .item {
       width: 200px;
       height: 200px;
       border-radius: 50%;
       background: var(--bgColor);
       position: relative;
+      pointer-events: none;
       .bg {
         position: absolute;
         width: 200px;
