@@ -6,6 +6,7 @@ import cs from "classnames";
 import "./index.scss";
 
 type FlowMode = "reverse" | "accelerate" | "normal";
+type ActiveButton = "reverse" | "normal" | null;
 
 const ACCELERATE_MULTIPLIER = 10;
 
@@ -44,6 +45,7 @@ const ReturnClock: React.FC = () => {
   const isPausedRef = useRef(false);
 
   const [flowMode, setFlowMode] = useState<FlowMode>("reverse");
+  const [activeButton, setActiveButton] = useState<ActiveButton>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [displayTime, setDisplayTime] = useState(() => {
     const now = new Date();
@@ -116,16 +118,21 @@ const ReturnClock: React.FC = () => {
 
   const handleReverseClick = () => {
     setIsPaused(false);
-    if (flowMode === "reverse" || flowMode === "accelerate") {
+    if (
+      activeButton === "reverse" &&
+      (flowMode === "reverse" || flowMode === "accelerate")
+    ) {
       setFlowMode(flowMode === "reverse" ? "accelerate" : "reverse");
     } else {
       setFlowMode("reverse");
     }
+    setActiveButton("reverse");
   };
 
   const handleNormalClick = () => {
     setIsPaused(false);
     setFlowMode("normal");
+    setActiveButton("normal");
   };
 
   const handlePauseToggle = () => {
@@ -144,8 +151,8 @@ const ReturnClock: React.FC = () => {
   const digitalTime = `${pad2(hour)}:${pad2(minute)}:${pad2(second)}`;
   const status = isPaused ? PAUSE_STATUS : FLOW_STATUS[flowMode];
 
-  const isReverseActive = flowMode === "reverse" || flowMode === "accelerate";
-  const isNormalActive = flowMode === "normal";
+  const isReverseActive = activeButton === "reverse";
+  const isNormalActive = activeButton === "normal";
 
   return (
     <View className="returnClock">
