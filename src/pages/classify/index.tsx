@@ -6,8 +6,8 @@ import HomeTopBar from "@/components/homeTopBar";
 import FeaturedBanner from "@/components/featuredBanner";
 import ToolCard from "@/components/toolCard";
 import CategoryChips from "@/components/categoryChips";
-import BottomNav from "@/components/bottomNav";
 import { errorToast } from "@/utils/errorToast";
+import { useTabBarSelected } from "@/utils/useTabBarSelected";
 import {
   classifyList,
   categoryChips,
@@ -18,6 +18,7 @@ import "./index.scss";
 const PLACEHOLDER_MSG = "更多功能正在开发中...";
 
 const Classify: React.FC = () => {
+  useTabBarSelected("workshop");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const viewToPage = (url: string) => {
@@ -82,8 +83,6 @@ const Classify: React.FC = () => {
       >
         <AtIcon value="add" size="28" color="#ffffff" />
       </View>
-
-      <BottomNav active="workshop" />
     </View>
   );
 };

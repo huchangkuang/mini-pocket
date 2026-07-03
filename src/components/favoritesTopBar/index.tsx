@@ -23,7 +23,7 @@ const FavoritesTopBar: FC<FavoritesTopBarProps> = memo(
           >
             <View className="favoritesTopBar__left">
               <View className="favoritesTopBar__action" onClick={onTerminal}>
-                <Text className="favoritesTopBar__terminal">&gt;_</Text>
+                <AtIcon value="heart" size="20" color="#005ea4" />
               </View>
               <Text className="favoritesTopBar__title">收藏</Text>
             </View>

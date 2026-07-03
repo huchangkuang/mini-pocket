@@ -23,7 +23,7 @@ const MineTopBar: FC<MineTopBarProps> = memo(
           >
             <View className="mineTopBar__left">
               <View className="mineTopBar__action" onClick={onTerminal}>
-                <Text className="mineTopBar__terminal">&gt;_</Text>
+                <AtIcon value="user" size="20" color="#005ea4" />
               </View>
               <Text className="mineTopBar__title">个人中心</Text>
             </View>

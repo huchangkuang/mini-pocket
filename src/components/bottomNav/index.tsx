@@ -7,7 +7,7 @@ import "./index.scss";
 
 export type TabKey = "workshop" | "favorites" | "mine";
 
-const TAB_ROUTES: Record<TabKey, string> = {
+export const TAB_ROUTES: Record<TabKey, string> = {
   workshop: "/pages/classify/index",
   favorites: "/pages/favorites/index",
   mine: "/pages/mine/index",
@@ -21,12 +21,17 @@ const TABS: { key: TabKey; label: string; icon: string }[] = [
 
 export type BottomNavProps = {
   active: TabKey;
+  onSwitch?: (key: TabKey) => void;
 };
 
-const BottomNav: FC<BottomNavProps> = memo(({ active }) => {
+const BottomNav: FC<BottomNavProps> = memo(({ active, onSwitch }) => {
   const switchTab = (key: TabKey) => {
     if (key === active) return;
-    Taro.reLaunch({ url: TAB_ROUTES[key] });
+    if (onSwitch) {
+      onSwitch(key);
+      return;
+    }
+    Taro.switchTab({ url: TAB_ROUTES[key] });
   };
 
   return (

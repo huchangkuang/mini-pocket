@@ -7,8 +7,8 @@ import StatsGrid from "@/components/statsGrid";
 import MineMenuList from "@/components/mineMenuList";
 import MineAuthActions from "@/components/mineAuthActions";
 import LevelProgress from "@/components/levelProgress";
-import BottomNav from "@/components/bottomNav";
 import { errorToast } from "@/utils/errorToast";
+import { useTabBarSelected } from "@/utils/useTabBarSelected";
 import {
   demoLoggedInUser,
   guestStats,
@@ -22,6 +22,7 @@ import "./index.scss";
 const PLACEHOLDER_MSG = "更多功能正在开发中...";
 
 const Mine: React.FC = () => {
+  useTabBarSelected("mine");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleToggle = () => {
@@ -80,8 +81,6 @@ const Mine: React.FC = () => {
           />
         </View>
       </ScrollView>
-
-      <BottomNav active="mine" />
     </View>
   );
 };

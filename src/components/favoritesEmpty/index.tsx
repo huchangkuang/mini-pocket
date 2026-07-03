@@ -6,7 +6,7 @@ import "./index.scss";
 
 const FavoritesEmpty: FC = memo(() => {
   const goDiscover = () => {
-    Taro.reLaunch({ url: "/pages/classify/index" });
+    Taro.switchTab({ url: "/pages/classify/index" });
   };
 
   return (

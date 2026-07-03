@@ -6,8 +6,8 @@ import SearchBar from "@/components/searchBar";
 import CategoryChips from "@/components/categoryChips";
 import FavoriteCard from "@/components/favoriteCard";
 import FavoritesEmpty from "@/components/favoritesEmpty";
-import BottomNav from "@/components/bottomNav";
 import { errorToast } from "@/utils/errorToast";
+import { useTabBarSelected } from "@/utils/useTabBarSelected";
 import {
   demoFavorites,
   favoriteFilterChips,
@@ -19,6 +19,7 @@ import "./index.scss";
 const PLACEHOLDER_MSG = "更多功能正在开发中...";
 
 const Favorites: React.FC = () => {
+  useTabBarSelected("favorites");
   const [favorites, setFavorites] = useState<FavoriteItem[]>(demoFavorites);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedChip, setSelectedChip] = useState("all");
@@ -85,8 +86,6 @@ const Favorites: React.FC = () => {
           </View>
         </ScrollView>
       )}
-
-      <BottomNav active="favorites" />
     </View>
   );
 };

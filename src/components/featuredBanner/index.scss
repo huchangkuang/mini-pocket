@@ -3,16 +3,14 @@
 .featuredBanner {
   position: relative;
   width: 100%;
-  height: 352rpx;
   border-radius: $radius-xl;
   background: $color-primary-container;
   color: $color-on-primary-container;
-  padding: 48rpx;
+  padding: 44rpx 48rpx 48rpx;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   box-shadow: $shadow-card;
 
   &__deco {
@@ -43,20 +41,22 @@
   &__content {
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   &__label {
     display: block;
     font-size: $font-label-sm;
     font-weight: 500;
-    opacity: 0.8;
-    letter-spacing: 1rpx;
-    text-transform: uppercase;
+    opacity: 0.85;
+    letter-spacing: 2rpx;
+    line-height: $line-height-label-sm;
   }
 
   &__title {
     display: block;
-    margin-top: 8rpx;
+    margin-top: 12rpx;
     font-size: $font-headline-lg;
     font-weight: 700;
     line-height: $line-height-headline-lg;
@@ -64,19 +64,20 @@
 
   &__desc {
     display: block;
-    margin-top: 16rpx;
+    margin-top: $spacing-sm;
     font-size: $font-body-md;
-    line-height: $line-height-body-md;
-    opacity: 0.9;
-    max-width: 400rpx;
+    line-height: 44rpx;
+    opacity: 0.92;
+    max-width: 420rpx;
   }
 
   &__cta {
     position: relative;
     z-index: 1;
     align-self: flex-start;
+    margin-top: 40rpx;
     background: $color-surface-container-lowest;
-    padding: 16rpx 32rpx;
+    padding: 18rpx 36rpx;
     border-radius: $radius-full;
     box-shadow: $shadow-card;
 
@@ -87,7 +88,8 @@
 
   &__ctaText {
     font-size: $font-label-sm;
-    font-weight: 500;
+    font-weight: 600;
     color: $color-primary;
+    line-height: $line-height-label-sm;
   }
 }

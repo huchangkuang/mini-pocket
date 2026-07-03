@@ -28,25 +28,31 @@ export default defineAppConfig({
     backgroundColor: "#f7f9fc",
   },
   cloud: true,
-  // tabBar: {
-  //   borderStyle: "white",
-  //   list: [
-  //     {
-  //       pagePath: 'pages/pocket/index',
-  //       iconPath: './images/pocket.png',
-  //       selectedIconPath: './images/pocketSelected.png',
-  //       text: '口袋',
-  //       color: "#333",
-  //       selectedColor: "#42e17c",
-  //     },
-  //     {
-  //       pagePath: 'pages/mine/index',
-  //       iconPath: './images/mine.png',
-  //       selectedIconPath: './images/mineSelected.png',
-  //       text: '我的',
-  //       color: "#333",
-  //       selectedColor: "#42e17c",
-  //     },
-  //   ],
-  // }
+  tabBar: {
+    custom: true,
+    color: "#404752",
+    selectedColor: "#005ea4",
+    backgroundColor: "#ffffff",
+    borderStyle: "white",
+    list: [
+      {
+        pagePath: "pages/classify/index",
+        text: "工作坊",
+        iconPath: "images/tabbar/workshop.png",
+        selectedIconPath: "images/tabbar/workshop-active.png",
+      },
+      {
+        pagePath: "pages/favorites/index",
+        text: "收藏",
+        iconPath: "images/tabbar/favorites.png",
+        selectedIconPath: "images/tabbar/favorites-active.png",
+      },
+      {
+        pagePath: "pages/mine/index",
+        text: "我的",
+        iconPath: "images/tabbar/mine.png",
+        selectedIconPath: "images/tabbar/mine-active.png",
+      },
+    ],
+  },
 });
