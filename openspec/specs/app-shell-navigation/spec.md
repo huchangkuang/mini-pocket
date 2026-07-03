@@ -1,0 +1,45 @@
+## ADDED Requirements
+
+### Requirement: 底部 Tab 导航三入口
+系统 SHALL 提供自定义 BottomNav 组件，包含三个 Tab：工作坊、收藏、我的，当前 Tab MUST 以 primary 色高亮并带浅底圆角选中态。
+
+#### Scenario: 工作坊 Tab 默认激活
+- **WHEN** 用户位于 classify 页
+- **THEN** BottomNav 中「工作坊」MUST 显示为选中态
+
+#### Scenario: 切换到收藏 Tab
+- **WHEN** 用户点击「收藏」Tab
+- **THEN** 系统 MUST 导航至收藏页并高亮「收藏」Tab
+
+#### Scenario: 切换到我的 Tab
+- **WHEN** 用户点击「我的」Tab
+- **THEN** 系统 MUST 导航至我的页并高亮「我的」Tab
+
+### Requirement: 收藏与我的为占位页
+系统 SHALL 提供 `pages/favorites/index` 与 `pages/mine/index` 占位页，展示空状态文案，不含业务功能。
+
+#### Scenario: 收藏页空状态
+- **WHEN** 用户进入收藏 Tab
+- **THEN** 页面 MUST 显示空状态提示（如「收藏功能开发中」），BottomNav 可见
+
+#### Scenario: 我的页空状态
+- **WHEN** 用户进入我的 Tab
+- **THEN** 页面 MUST 显示空状态提示（如「个人中心开发中」），BottomNav 可见
+
+### Requirement: BottomNav 仅在 Tab 页显示
+系统 SHALL 仅在三个 Tab 页（classify、favorites、mine）渲染 BottomNav，工具子页面 MUST NOT 显示 BottomNav。
+
+#### Scenario: 进入工具子页
+- **WHEN** 用户从工作坊点击某工具进入子页面
+- **THEN** 子页面 MUST NOT 显示 BottomNav，并使用现有返回导航
+
+#### Scenario: 从子页返回
+- **WHEN** 用户从工具子页返回
+- **THEN** 系统 MUST 回到工作坊 Tab 页并恢复 BottomNav 显示
+
+### Requirement: 安全区域适配
+系统 SHALL 为 BottomNav 与 FAB 预留底部 safe-area 间距，避免与系统手势条重叠。
+
+#### Scenario: iPhone 底部安全区
+- **WHEN** 设备存在 home indicator 安全区
+- **THEN** BottomNav MUST 通过 `env(safe-area-inset-bottom)` 或等效方案增加底部内边距

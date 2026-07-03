@@ -1,0 +1,71 @@
+@import "../../style/tokens.scss";
+
+.homeTopBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(247, 249, 252, 0.92);
+
+  &__inner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $margin-mobile;
+    box-sizing: border-box;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    min-width: 0;
+  }
+
+  &__logo {
+    width: 64rpx;
+    height: 64rpx;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: $font-headline-md;
+    font-weight: 700;
+    color: $color-primary;
+    line-height: $line-height-headline-md;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    flex-shrink: 0;
+  }
+
+  &__action {
+    width: 80rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-full;
+
+    &:active {
+      background: $color-surface-container-low;
+    }
+  }
+
+  &__terminal {
+    font-size: $font-body-md;
+    color: $color-on-surface-variant;
+    font-weight: 600;
+    line-height: 1;
+  }
+}

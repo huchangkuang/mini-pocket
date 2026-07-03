@@ -1,4 +1,5 @@
 export default definePageConfig({
   navigationStyle: "custom",
-  navigationBarTitleText: "百宝口袋工坊",
+  enableShareAppMessage: true,
+  enableShareTimeline: true,
 });

@@ -1,6 +1,8 @@
 export default defineAppConfig({
   pages: [
     "pages/classify/index",
+    "pages/favorites/index",
+    "pages/mine/index",
     "pages/handsBarrage/index",
     "pages/handsBarrage/edit/index",
     "pages/doDescription/index",
@@ -20,9 +22,10 @@ export default defineAppConfig({
   ],
   window: {
     backgroundTextStyle: "light",
-    navigationBarBackgroundColor: "#fff",
-    navigationBarTitleText: "简易口袋",
+    navigationBarBackgroundColor: "#f7f9fc",
+    navigationBarTitleText: "百宝口袋工坊",
     navigationBarTextStyle: "black",
+    backgroundColor: "#f7f9fc",
   },
   cloud: true,
   // tabBar: {

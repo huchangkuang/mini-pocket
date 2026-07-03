@@ -1,0 +1,93 @@
+@import "../../style/tokens.scss";
+
+.featuredBanner {
+  position: relative;
+  width: 100%;
+  height: 352rpx;
+  border-radius: $radius-xl;
+  background: $color-primary-container;
+  color: $color-on-primary-container;
+  padding: 48rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: $shadow-card;
+
+  &__deco {
+    position: absolute;
+    border-radius: 50%;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+
+    &--lg {
+      width: 384rpx;
+      height: 384rpx;
+      border-width: 8rpx;
+      right: -96rpx;
+      top: -96rpx;
+    }
+
+    &--sm {
+      width: 192rpx;
+      height: 192rpx;
+      border-width: 4rpx;
+      border-color: rgba(255, 255, 255, 0.05);
+      right: -32rpx;
+      top: 128rpx;
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__label {
+    display: block;
+    font-size: $font-label-sm;
+    font-weight: 500;
+    opacity: 0.8;
+    letter-spacing: 1rpx;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    display: block;
+    margin-top: 8rpx;
+    font-size: $font-headline-lg;
+    font-weight: 700;
+    line-height: $line-height-headline-lg;
+  }
+
+  &__desc {
+    display: block;
+    margin-top: 16rpx;
+    font-size: $font-body-md;
+    line-height: $line-height-body-md;
+    opacity: 0.9;
+    max-width: 400rpx;
+  }
+
+  &__cta {
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+    background: $color-surface-container-lowest;
+    padding: 16rpx 32rpx;
+    border-radius: $radius-full;
+    box-shadow: $shadow-card;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__ctaText {
+    font-size: $font-label-sm;
+    font-weight: 500;
+    color: $color-primary;
+  }
+}
