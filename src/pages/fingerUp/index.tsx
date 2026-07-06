@@ -10,12 +10,13 @@ import { AtIcon } from "taro-ui";
 import {
   getMenuButtonBoundingClientRect,
   getSystemInfoSync,
-  navigateBack,
+  useDidShow,
   useShareAppMessage,
 } from "@tarojs/taro";
 import cs from "classnames";
 import { randomNum } from "@/utils/generateNum";
 import { IS_WECHAT } from "@/utils/constant";
+import { isFirstPageInStack, navigateBackOrHome } from "@/utils/navigation";
 
 type Fingers = {
   id: number;
@@ -54,7 +55,12 @@ const FingerUp: React.FC = () => {
   const [fingers, setFingers] = useState<Fingers[]>([]);
   const [count, setCount] = useState(3);
   const [selectId, setSelectId] = useState<number>();
+  const [showHome, setShowHome] = useState(() => isFirstPageInStack());
   const disabled = useMemo(() => fingers.length < 2, [fingers.length]);
+
+  useDidShow(() => {
+    setShowHome(isFirstPageInStack());
+  });
 
   const touchStart = (e: Taro.ITouchEvent) => {
     if (timer.current) return;
@@ -208,8 +214,11 @@ const FingerUp: React.FC = () => {
   return (
     <View className="fingerUp">
       {IS_WECHAT && (
-        <View style={{ top }} className="goBack" onClick={() => navigateBack()}>
-          <AtIcon value="chevron-left" size={height - 4} />
+        <View style={{ top }} className="goBack" onClick={navigateBackOrHome}>
+          <AtIcon
+            value={showHome ? "home" : "chevron-left"}
+            size={height - 4}
+          />
         </View>
       )}
 

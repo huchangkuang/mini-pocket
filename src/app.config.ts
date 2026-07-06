@@ -13,6 +13,8 @@ export default defineAppConfig({
     "pages/lottery/index",
     "pages/returnClock/index",
     "pages/guessNumber/index",
+    "pages/feedback/index",
+    "pages/about/index",
   ],
   subPackages: [
     {

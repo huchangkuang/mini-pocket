@@ -5,6 +5,7 @@ import Taro from "@tarojs/taro";
 import classNames from "classnames";
 import { classMap } from "@/pages/handsBarrage/constants";
 import cs from "classnames";
+import { navigateBackOrHome } from "@/utils/navigation";
 
 const HandsBarrage: React.FC = () => {
   const {
@@ -37,7 +38,7 @@ const HandsBarrage: React.FC = () => {
       cancelQuit();
       return;
     }
-    Taro.navigateBack();
+    navigateBackOrHome();
   };
   const cancelQuit = () => {
     setTimeout(() => {

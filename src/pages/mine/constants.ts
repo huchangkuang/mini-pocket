@@ -53,12 +53,12 @@ export const mineMenuItems: MineMenuItem[] = [
     labelLoggedIn: "意见反馈",
     icon: "message",
   },
-  {
-    id: "settings",
-    labelGuest: "系统设置",
-    labelLoggedIn: "系统设置",
-    icon: "settings",
-  },
+  // {
+  //   id: "settings",
+  //   labelGuest: "系统设置",
+  //   labelLoggedIn: "系统设置",
+  //   icon: "settings",
+  // },
   {
     id: "about",
     labelGuest: "关于工坊",

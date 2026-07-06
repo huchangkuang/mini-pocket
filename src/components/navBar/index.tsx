@@ -4,9 +4,11 @@ import React, {
   PropsWithChildren,
   memo,
   Fragment,
+  useState,
 } from "react";
 import Taro, { View } from "@tarojs/components";
-import { getMenuButtonBoundingClientRect, navigateBack } from "@tarojs/taro";
+import { getMenuButtonBoundingClientRect, useDidShow } from "@tarojs/taro";
+import { isFirstPageInStack, navigateBackOrHome } from "@/utils/navigation";
 import "./index.scss";
 import { AtIcon } from "taro-ui";
 
@@ -30,17 +32,27 @@ const NavBar: FC<PropsWithChildren<NavBarProps>> = memo((props) => {
     hasPlace = true,
   } = props;
   const { height, top } = getMenuButtonBoundingClientRect();
+  const [showHome, setShowHome] = useState(() => isFirstPageInStack());
+
+  useDidShow(() => {
+    setShowHome(isFirstPageInStack());
+  });
+
   const wrapperStyle: CSSProperties = {
     height: `${top + height + 5}px;`,
     ...style,
   };
+
   const back = () => {
     if (goBack) {
       goBack();
-    } else {
-      navigateBack();
+      return;
     }
+    navigateBackOrHome();
   };
+
+  const navIcon = showHome ? "home" : "chevron-left";
+
   return (
     <Fragment>
       <View style={wrapperStyle} className="navBarWrapper">
@@ -52,7 +64,7 @@ const NavBar: FC<PropsWithChildren<NavBarProps>> = memo((props) => {
             children
           ) : (
             <View className="content">
-              <AtIcon value="chevron-left" size={height - 4} onClick={back} />
+              <AtIcon value={navIcon} size={height - 4} onClick={back} />
               <View className={contentClass}>{children}</View>
             </View>
           )}

@@ -8,11 +8,8 @@ import terminalIcon from "@/images/common/terminal.svg";
 import { decisionConfig } from "@/pages/doDescription/store";
 import { saveDecision } from "@/utils/decisionBridge";
 import { errorToast } from "@/utils/errorToast";
-import Taro, {
-  navigateBack,
-  setNavigationBarTitle,
-  useRouter,
-} from "@tarojs/taro";
+import Taro, { setNavigationBarTitle, useRouter } from "@tarojs/taro";
+import { navigateBackOrHome } from "@/utils/navigation";
 
 const ACCENTS: Accent[] = ["primary", "tertiary", "secondary"];
 const PLACEHOLDER_MSG = "更多功能正在开发中...";
@@ -99,7 +96,7 @@ const EditDecision: React.FC = () => {
         options: newList,
         editCurrent: !isAdd && !id,
       });
-      navigateBack();
+      navigateBackOrHome();
     } catch (e) {
       errorToast(e instanceof Error ? e.message : "保存失败");
     } finally {

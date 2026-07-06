@@ -127,6 +127,13 @@ export type ApiToggleFavoriteResult = {
   item: ApiFavorite | null;
 };
 
+export type FeedbackType = "feature" | "performance" | "style" | "other";
+
+export type ApiSubmitFeedbackResult = {
+  id: number;
+  createdAt: string;
+};
+
 export type ListToolsQuery = {
   category?: string;
   keyword?: string;

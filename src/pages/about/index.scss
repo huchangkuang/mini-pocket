@@ -1,0 +1,33 @@
+@import "../../style/tokens.scss";
+
+.aboutPage {
+  min-height: 100vh;
+  background: $color-surface;
+  padding: $margin-mobile;
+  box-sizing: border-box;
+
+  &__card {
+    background: $color-surface-container-lowest;
+    border-radius: $radius-xl;
+    border: 1rpx solid rgba(192, 199, 212, 0.3);
+    box-shadow: $shadow-card;
+    padding: $spacing-xl $spacing-lg;
+    text-align: center;
+  }
+
+  &__title {
+    display: block;
+    font-size: $font-headline-md;
+    line-height: $line-height-headline-md;
+    font-weight: 600;
+    color: $color-on-surface;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__desc {
+    display: block;
+    font-size: $font-body-md;
+    line-height: $line-height-body-md;
+    color: $color-on-surface-variant;
+  }
+}

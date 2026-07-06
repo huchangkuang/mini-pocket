@@ -68,6 +68,32 @@ const Mine: React.FC = () => {
     errorToast(PLACEHOLDER_MSG);
   };
 
+  const goFeedback = async () => {
+    if (!isLoggedIn) {
+      const { confirm } = await Taro.showModal({
+        title: "需要登录",
+        content: "提交意见反馈需要先登录，是否立即登录？",
+        confirmText: "登录",
+      });
+      if (!confirm) return;
+      const ok = await login();
+      if (!ok) return;
+    }
+    Taro.navigateTo({ url: "/pages/feedback/index" });
+  };
+
+  const handleMenuClick = (id: string) => {
+    if (id === "feedback") {
+      void goFeedback();
+      return;
+    }
+    if (id === "about") {
+      Taro.navigateTo({ url: "/pages/about/index" });
+      return;
+    }
+    handlePlaceholder();
+  };
+
   const handleAvatarChoose = async (tempPath: string) => {
     Taro.showLoading({ title: "上传中...", mask: true });
     try {
@@ -138,7 +164,7 @@ const Mine: React.FC = () => {
           <MineMenuList
             items={mineMenuItems}
             isLoggedIn={isLoggedIn}
-            onItemClick={handlePlaceholder}
+            onItemClick={handleMenuClick}
           />
 
           {isReady ? (
