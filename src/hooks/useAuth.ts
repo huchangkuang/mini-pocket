@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import Taro from "@tarojs/taro";
-import { wechatLogin } from "@/services/authApi";
 import {
   clearAuth,
   getToken,
@@ -8,16 +7,12 @@ import {
   hydrateUserFromStorage,
   isLoggedIn,
   isSessionReady,
-  setToken,
-  setUser,
   subscribe,
 } from "@/utils/authStore";
-import { restoreSession } from "@/utils/session";
+import { performSilentLogin, restoreSession } from "@/utils/session";
 import { syncDailyActive } from "@/utils/statsSync";
 import type { ApiUserMe } from "@/types/api";
-import { ApiError } from "@/utils/request";
 import { errorToast } from "@/utils/errorToast";
-import { DEFAULT_USER_LEVEL } from "@/utils/levelMapper";
 
 export function useAuth() {
   const [user, setUserState] = useState<ApiUserMe | null>(() => {
@@ -56,43 +51,22 @@ export function useAuth() {
     Taro.showLoading({ title: "登录中...", mask: true });
 
     try {
-      const { code } = await Taro.login();
-      if (!code) {
-        throw new Error("获取微信登录凭证失败");
+      const ok = await performSilentLogin();
+      if (!ok) {
+        throw new Error("登录失败，请稍后重试");
       }
 
-      const result = await wechatLogin(code);
-      setToken(result.token);
-      setUser({
-        ...result.user,
-        stats: {
-          favoriteCount: 0,
-          activeDaysCount: 0,
-          usedToolsCount: 0,
-          totalXp: 0,
-        },
-        level: DEFAULT_USER_LEVEL,
-      });
-
-      await refreshProfile();
       await syncDailyActive();
-
       Taro.showToast({ title: "登录成功", icon: "success", duration: 1500 });
       return true;
     } catch (e) {
-      if (e instanceof ApiError) {
-        errorToast(e.message);
-      } else if (e instanceof Error) {
-        errorToast(e.message);
-      } else {
-        errorToast("登录失败，请稍后重试");
-      }
+      errorToast(e instanceof Error ? e.message : "登录失败，请稍后重试");
       return false;
     } finally {
       Taro.hideLoading();
       setLoggingIn(false);
     }
-  }, [loggingIn, refreshProfile]);
+  }, [loggingIn]);
 
   const logout = useCallback(() => {
     clearAuth();
@@ -108,23 +82,4 @@ export function useAuth() {
     logout,
     refreshProfile,
   };
-}
-
-export function promptLogin(): Promise<boolean> {
-  return new Promise((resolve) => {
-    Taro.showModal({
-      title: "需要登录",
-      content: "登录后可同步收藏到云端，是否前往登录？",
-      confirmText: "去登录",
-      success: (res) => {
-        if (res.confirm) {
-          Taro.switchTab({ url: "/pages/mine/index" });
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      },
-      fail: () => resolve(false),
-    });
-  });
 }

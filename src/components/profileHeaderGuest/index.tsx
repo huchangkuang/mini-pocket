@@ -20,10 +20,10 @@ const ProfileHeaderGuest: FC<ProfileHeaderGuestProps> = memo(({ onLogin }) => {
       </View>
       <View className="profileHeaderGuest__content">
         <Text className="profileHeaderGuest__cta" onClick={() => onLogin?.()}>
-          点击登录/注册
+          登录失败，点击重试
         </Text>
         <Text className="profileHeaderGuest__desc">
-          登录百宝口袋工坊，同步您的工具配置与收藏
+          百宝口袋工坊将自动登录，同步您的工具配置与收藏
         </Text>
       </View>
     </View>

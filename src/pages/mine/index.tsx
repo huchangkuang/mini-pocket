@@ -122,7 +122,7 @@ const Mine: React.FC = () => {
 
       <ScrollView scrollY className="minePage__scroll">
         <View className="minePage__content">
-          {isReady && isLoggedIn && loggedInUser ? (
+          {!isReady ? null : isLoggedIn && loggedInUser ? (
             <ProfileHeaderLoggedIn
               user={loggedInUser}
               savingNickname={savingNickname}
@@ -141,12 +141,14 @@ const Mine: React.FC = () => {
             onItemClick={handlePlaceholder}
           />
 
-          <MineAuthActions
-            isLoggedIn={isLoggedIn}
-            loggingIn={loggingIn}
-            onLogin={handleLogin}
-            onLogout={handleLogout}
-          />
+          {isReady ? (
+            <MineAuthActions
+              isLoggedIn={isLoggedIn}
+              loggingIn={loggingIn}
+              onLogin={handleLogin}
+              onLogout={handleLogout}
+            />
+          ) : null}
 
           <LevelProgress
             variant={isLoggedIn ? "loggedIn" : "guest"}

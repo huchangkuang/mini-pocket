@@ -26,11 +26,11 @@ const FavoritesEmpty: FC<FavoritesEmptyProps> = memo(
           mode="aspectFit"
         />
         <Text className="favoritesEmpty__title">
-          {isGuest ? "登录后查看收藏" : "还没有收藏的工具"}
+          {isGuest ? "登录失败" : "还没有收藏的工具"}
         </Text>
         <Text className="favoritesEmpty__desc">
           {isGuest
-            ? "登录百宝口袋工坊，同步您的工具收藏"
+            ? "自动登录未成功，请稍后重试"
             : "去工作坊逛逛，发现让你心动的百宝工具吧！"}
         </Text>
         <Button
@@ -40,7 +40,7 @@ const FavoritesEmpty: FC<FavoritesEmptyProps> = memo(
           onClick={isGuest ? onLogin : goDiscover}
         >
           <Text className="favoritesEmpty__ctaText">
-            {isGuest ? "立即登录" : "去发现"}
+            {isGuest ? "重试登录" : "去发现"}
           </Text>
         </Button>
       </View>

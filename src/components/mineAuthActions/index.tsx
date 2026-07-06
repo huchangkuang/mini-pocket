@@ -22,7 +22,7 @@ const MineAuthActions: FC<MineAuthActionsProps> = memo(
             onClick={onLogin}
           >
             <AtIcon value="user" size="20" color="#ffffff" />
-            <Text className="mineAuthActions__loginText">立即登录</Text>
+            <Text className="mineAuthActions__loginText">重试登录</Text>
           </Button>
         </View>
       );

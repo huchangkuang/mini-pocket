@@ -4,13 +4,13 @@ import type { ToolItem } from "@/pages/classify/constants";
 import type { FavoriteItem } from "@/pages/favorites/constants";
 import { toggleFavorite as toggleFavoriteApi } from "@/services/favoritesApi";
 import { isLoggedIn } from "@/utils/authStore";
-import { promptLogin, useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { errorToast } from "@/utils/errorToast";
 
 export function useFavorites(options?: {
   onToolFavoriteChange?: (path: string, isFavorite: boolean) => void;
 }) {
-  const { isLoggedIn: loggedIn } = useAuth();
+  const { isLoggedIn: loggedIn, isReady } = useAuth();
   const [favoritePaths, setFavoritePaths] = useState<Set<string>>(new Set());
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [toggling, setToggling] = useState(false);
@@ -29,8 +29,13 @@ export function useFavorites(options?: {
 
   const toggleFavorite = useCallback(
     async (tool: ToolItem) => {
+      if (!isReady) {
+        errorToast("正在登录，请稍后再试");
+        return null;
+      }
+
       if (!loggedIn && !isLoggedIn()) {
-        await promptLogin();
+        errorToast("登录失败，请稍后重试");
         return null;
       }
 
@@ -57,7 +62,7 @@ export function useFavorites(options?: {
         setToggling(false);
       }
     },
-    [loggedIn, toggling, options]
+    [loggedIn, isReady, toggling, options]
   );
 
   const setFavoritesList = useCallback((items: FavoriteItem[]) => {
