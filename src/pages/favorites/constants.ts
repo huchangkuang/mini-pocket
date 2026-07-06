@@ -8,6 +8,7 @@ export type FavoriteCategory = "dev" | "efficiency" | "fun";
 
 export type FavoriteItem = {
   id: string;
+  toolId?: number;
   icon: string;
   text: string;
   desc: string;

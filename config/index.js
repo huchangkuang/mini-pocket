@@ -31,6 +31,9 @@ const config = {
     "@": path.resolve(__dirname, "../src"),
   },
   mini: {
+    miniCssExtractPluginOption: {
+      ignoreOrder: true,
+    },
     postcss: {
       pxtransform: {
         enable: true,
@@ -52,6 +55,9 @@ const config = {
     },
   },
   h5: {
+    miniCssExtractPluginOption: {
+      ignoreOrder: true,
+    },
     publicPath: "/",
     staticDirectory: "static",
     postcss: {

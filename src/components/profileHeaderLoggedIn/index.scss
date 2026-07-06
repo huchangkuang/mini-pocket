@@ -14,6 +14,19 @@
     transform: scale(0.99);
   }
 
+  &__avatarBtn {
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    line-height: normal;
+    flex-shrink: 0;
+
+    &::after {
+      border: none;
+    }
+  }
+
   &__avatarWrap {
     width: 160rpx;
     height: 160rpx;
@@ -44,6 +57,55 @@
     font-weight: 600;
     color: $color-on-surface;
     line-height: $line-height-headline-md;
+  }
+
+  &__nameRow {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    width: 100%;
+  }
+
+  &__nameInput {
+    flex: 1;
+    min-width: 0;
+    padding: 8rpx 16rpx;
+    font-size: $font-headline-md;
+    font-weight: 600;
+    color: $color-on-surface;
+    line-height: $line-height-headline-md;
+    background: $color-surface-container;
+    border-radius: $radius-md;
+  }
+
+  &__nameActions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 8rpx;
+  }
+
+  &__nameAction {
+    padding: 8rpx 16rpx;
+    font-size: $font-label-sm;
+    font-weight: 500;
+    line-height: $line-height-label-sm;
+    border-radius: $radius-md;
+    white-space: nowrap;
+
+    &--save {
+      color: $color-primary;
+      background: rgba(0, 94, 164, 0.1);
+    }
+
+    &--cancel {
+      color: $color-on-surface-variant;
+      background: rgba(192, 199, 212, 0.2);
+    }
+
+    &:active {
+      opacity: 0.7;
+    }
   }
 
   &__date {

@@ -5,12 +5,8 @@ import { AtIcon } from "taro-ui";
 import type { Accent } from "@/pages/classify/constants";
 import decisionIcon from "@/images/classify/decision.svg";
 import terminalIcon from "@/images/common/terminal.svg";
-import {
-  addLocalItem,
-  decisionConfig,
-  getDecisionId,
-  updateLocalItem,
-} from "@/pages/doDescription/store";
+import { decisionConfig } from "@/pages/doDescription/store";
+import { saveDecision } from "@/utils/decisionBridge";
 import { errorToast } from "@/utils/errorToast";
 import Taro, {
   navigateBack,
@@ -81,23 +77,33 @@ const EditDecision: React.FC = () => {
     setList((data) => data.filter((_, i) => i !== index));
   };
 
-  const onSave = () => {
+  const onSave = async () => {
     const newList = list.map((i) => i.trim()).filter(Boolean);
     if (newList.length < 2) {
       errorToast("至少填写两个选项");
       return;
     }
-    decisionConfig.title = title.trim() || decisionConfig.title;
-    decisionConfig.list = newList;
-    navigateBack();
-    if (isAdd || !id) {
-      addLocalItem({
-        id: getDecisionId() as string,
-        title: decisionConfig.title,
-        list: newList,
+
+    const trimmedTitle = title.trim() || decisionConfig.title;
+    Taro.showLoading({ title: "保存中...", mask: true });
+
+    try {
+      const apiIdFromRoute =
+        id && /^\d+$/.test(id) ? Number(id) : decisionConfig.apiId;
+
+      await saveDecision({
+        type: isAdd ? "add" : "edit",
+        id: id || undefined,
+        apiId: apiIdFromRoute,
+        title: trimmedTitle,
+        options: newList,
+        editCurrent: !isAdd && !id,
       });
-    } else {
-      updateLocalItem({ id, title: decisionConfig.title, list: newList });
+      navigateBack();
+    } catch (e) {
+      errorToast(e instanceof Error ? e.message : "保存失败");
+    } finally {
+      Taro.hideLoading();
     }
   };
 

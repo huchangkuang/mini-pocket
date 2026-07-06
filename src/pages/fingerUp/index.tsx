@@ -25,6 +25,25 @@ type Fingers = {
 };
 const colors = ["#cb4e18", "#2FD688", "#449de0", "#d73838", "#00FFFF"];
 
+const BACK_HIT_PADDING = 16;
+
+function isUiZoneTouch(pageX: number, pageY: number) {
+  const { windowHeight = 0, windowWidth = 0 } = getSystemInfoSync();
+  const menu = getMenuButtonBoundingClientRect();
+
+  const inBackZone =
+    pageX <= menu.left + menu.width + BACK_HIT_PADDING &&
+    pageY <= menu.top + menu.height + BACK_HIT_PADDING;
+
+  const startTop = windowHeight - 160;
+  const startLeft = windowWidth / 2 - 120;
+  const startRight = windowWidth / 2 + 120;
+  const inStartZone =
+    pageY >= startTop && pageX >= startLeft && pageX <= startRight;
+
+  return inBackZone || inStartZone;
+}
+
 const FingerUp: React.FC = () => {
   const { windowWidth = 0 } = getSystemInfoSync();
   const transformX = (windowWidth / 375) * 50;
@@ -39,12 +58,18 @@ const FingerUp: React.FC = () => {
 
   const touchStart = (e: Taro.ITouchEvent) => {
     if (timer.current) return;
-    e.touches.forEach((t) => activeTouchIdsRef.current.add(t.identifier));
+
+    const validTouches = e.touches.filter(
+      (t) => !isUiZoneTouch(t.pageX, t.pageY)
+    );
+    if (validTouches.length === 0) return;
+
+    validTouches.forEach((t) => activeTouchIdsRef.current.add(t.identifier));
     setFingers((prev) => {
       const ids = new Set(prev.map((i) => i.id));
       const additions: Fingers[] = [];
       let colorIndex = prev.length;
-      e.touches.forEach((t) => {
+      validTouches.forEach((t) => {
         if (!ids.has(t.identifier)) {
           additions.push({
             id: t.identifier,
@@ -181,55 +206,61 @@ const FingerUp: React.FC = () => {
   }));
 
   return (
-    <View
-      className="fingerUp"
-      onTouchStart={touchStart}
-      onTouchMove={touchMove}
-      onTouchEnd={handleTouchEndOrCancel}
-      onTouchCancel={handleTouchEndOrCancel}
-    >
+    <View className="fingerUp">
       {IS_WECHAT && (
         <View style={{ top }} className="goBack" onClick={() => navigateBack()}>
           <AtIcon value="chevron-left" size={height - 4} />
         </View>
       )}
-      <CustomWrapper>
-        {fingers.map((i) => (
-          <MovableArea key={i.id} className="area">
-            <MovableView
-              direction="none"
-              disabled
-              x={i.x - transformX}
-              y={i.y - transformX}
-              className="item"
-              style={{
-                "--bgColor": i.color,
-                opacity:
-                  typeof selectId === "number" && i.id !== selectId ? 0.5 : 1,
-              }}
-            >
-              {[0, 1].map((ring) => (
-                <View
-                  key={ring}
-                  className={cs(
-                    "bg",
-                    typeof selectId === "number" && i.id !== selectId && "dark"
-                  )}
-                />
-              ))}
-            </MovableView>
-          </MovableArea>
-        ))}
-      </CustomWrapper>
-      {!fingers.length && (
-        <View className="tips">
-          <View>1.请每位玩家（2~5）人用一根手指按住屏幕</View>
-          <View>2.等待3秒后自动开始或点击下方开始按钮</View>
-          <View>
-            3.继续按住屏幕直到动画结束，被选中者（赢家）将会被高亮显示
+
+      <View
+        className="fingerUp__playArea"
+        onTouchStart={touchStart}
+        onTouchMove={touchMove}
+        onTouchEnd={handleTouchEndOrCancel}
+        onTouchCancel={handleTouchEndOrCancel}
+      >
+        <CustomWrapper>
+          {fingers.map((i) => (
+            <MovableArea key={i.id} className="area">
+              <MovableView
+                direction="none"
+                disabled
+                x={i.x - transformX}
+                y={i.y - transformX}
+                className="item"
+                style={{
+                  "--bgColor": i.color,
+                  opacity:
+                    typeof selectId === "number" && i.id !== selectId ? 0.5 : 1,
+                }}
+              >
+                {[0, 1].map((ring) => (
+                  <View
+                    key={ring}
+                    className={cs(
+                      "bg",
+                      typeof selectId === "number" &&
+                        i.id !== selectId &&
+                        "dark"
+                    )}
+                  />
+                ))}
+              </MovableView>
+            </MovableArea>
+          ))}
+        </CustomWrapper>
+        {!fingers.length && (
+          <View className="tips">
+            <View>1.请每位玩家（2~5）人用一根手指按住屏幕</View>
+            <View>2.等待3秒后自动开始或点击下方开始按钮</View>
+            <View>
+              3.继续按住屏幕直到动画结束，被选中者（赢家）将会被高亮显示
+            </View>
           </View>
-        </View>
-      )}
+        )}
+      </View>
+
       <View
         catchMove
         className={cs("start", (!clock.current || disabled) && "disabled")}

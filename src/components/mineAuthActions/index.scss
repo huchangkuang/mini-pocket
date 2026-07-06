@@ -10,9 +10,16 @@
     gap: $spacing-xs;
     width: 100%;
     padding: 32rpx 0;
+    margin: 0;
+    line-height: $line-height-headline-md;
     background: $color-primary;
     border-radius: $radius-full;
+    border: none;
     box-shadow: 0 16rpx 48rpx rgba(0, 94, 164, 0.2);
+
+    &::after {
+      border: none;
+    }
 
     &:active {
       transform: scale(0.98);
@@ -29,28 +36,6 @@
   &--loggedIn {
     display: flex;
     flex-direction: column;
-    gap: $gutter-mobile;
-  }
-
-  &__outline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-xs;
-    height: 96rpx;
-    border-radius: $radius-xl;
-    border: 2rpx solid $color-primary;
-
-    &:active {
-      transform: scale(0.98);
-      background: rgba(0, 94, 164, 0.05);
-    }
-  }
-
-  &__outlineText {
-    font-size: $font-body-lg;
-    font-weight: 500;
-    color: $color-primary;
   }
 
   &__logout {

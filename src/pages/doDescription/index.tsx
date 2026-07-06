@@ -4,7 +4,6 @@ import "./index.scss";
 import { AtIcon } from "taro-ui";
 import Taro, {
   getMenuButtonBoundingClientRect,
-  getStorageSync,
   getSystemInfoSync,
   navigateTo,
   showActionSheet,
@@ -14,12 +13,15 @@ import Taro, {
 } from "@tarojs/taro";
 import type { Accent } from "@/pages/classify/constants";
 import decisionIcon from "@/images/classify/decision.svg";
+import { decisionConfig } from "@/pages/doDescription/store";
 import {
-  decisionConfig,
-  DecisionItem,
-  deleteLocalItem,
-  USE_LIST,
-} from "@/pages/doDescription/store";
+  activateDecision,
+  clearDecisionConfigSelection,
+  loadDecisions,
+  removeDecision,
+  type DecisionViewItem,
+} from "@/utils/decisionBridge";
+import { errorToast } from "@/utils/errorToast";
 
 /** 扇区底色：两色交替；奇数项时最后一扇用第三色，避免与第一扇同色相邻 */
 const SEGMENT_COLORS = ["#f2f4f7", "#ffffff", "#eceef1"];
@@ -39,10 +41,9 @@ const DoDecision: React.FC = () => {
   const [rotateDeg, setRotateDeg] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const spinTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  const [useList, setUseList] = useState<
-    (typeof decisionConfig & { id: string })[]
-  >(getStorageSync(USE_LIST) || []);
+  const [useList, setUseList] = useState<DecisionViewItem[]>([]);
   const [selectId, setSelectId] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   const { windowWidth = 375 } = getSystemInfoSync();
   const menuRect = getMenuButtonBoundingClientRect();
@@ -88,19 +89,22 @@ const DoDecision: React.FC = () => {
     }, SPIN_DURATION_MS);
   };
 
-  const selectCurItem = (item: DecisionItem) => {
+  const selectCurItem = async (item: DecisionViewItem) => {
     if (selectId === item.id) {
       setSelectId(undefined);
-      decisionConfig.id = undefined;
+      clearDecisionConfigSelection();
       return;
     }
-    setSelectId(item.id);
-    setTitle(item.title);
-    setItemList(item.list);
-    decisionConfig.id = item.id;
-    decisionConfig.title = item.title;
-    decisionConfig.list = item.list;
-    setRotateDeg(0);
+
+    try {
+      await activateDecision(item);
+      setSelectId(item.id);
+      setTitle(item.title);
+      setItemList(item.list);
+      setRotateDeg(0);
+    } catch (e) {
+      errorToast(e instanceof Error ? e.message : "切换失败");
+    }
   };
 
   const goEdit = () => {
@@ -115,18 +119,24 @@ const DoDecision: React.FC = () => {
     navigateTo({ url: "/pages/doDescription/edit/index?type=add" });
   };
 
-  const handleDeleteItem = (item: DecisionItem) => {
+  const handleDeleteItem = (item: DecisionViewItem) => {
     showModal({
       title: "删除确认",
       content: `是否删除「${item.title}」？`,
-      success(res) {
-        if (res.confirm) {
-          deleteLocalItem(item.id);
-          setUseList(getStorageSync(USE_LIST) || []);
+      async success(res) {
+        if (!res.confirm) return;
+
+        try {
+          await removeDecision(item);
+          const data = await loadDecisions();
+          setUseList(data.list);
+          setTitle(data.current.title);
+          setItemList(data.current.list);
           if (selectId === item.id) {
-            setSelectId(undefined);
-            decisionConfig.id = undefined;
+            setSelectId(data.current.id || undefined);
           }
+        } catch (e) {
+          errorToast(e instanceof Error ? e.message : "删除失败");
         }
       },
     });
@@ -144,14 +154,25 @@ const DoDecision: React.FC = () => {
   };
 
   useDidShow(() => {
-    setTitle(decisionConfig.title);
-    setItemList(decisionConfig.list);
     setRotateDeg(0);
     setIsSpinning(false);
-    setUseList(getStorageSync(USE_LIST) || []);
-    if (decisionConfig.id) {
-      setSelectId(decisionConfig.id);
-    }
+
+    const refresh = async () => {
+      setLoading(true);
+      try {
+        const data = await loadDecisions();
+        setTitle(data.current.title);
+        setItemList(data.current.list);
+        setUseList(data.list);
+        setSelectId(decisionConfig.id);
+      } catch (e) {
+        errorToast(e instanceof Error ? e.message : "加载失败");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    refresh();
   });
 
   useShareAppMessage(() => ({
@@ -238,7 +259,11 @@ const DoDecision: React.FC = () => {
               </View>
             </View>
 
-            {useList.length === 0 ? (
+            {loading ? (
+              <View className="doDescription__empty">
+                <Text className="doDescription__emptyText">加载中...</Text>
+              </View>
+            ) : useList.length === 0 ? (
               <View className="doDescription__empty">
                 <Text className="doDescription__emptyText">
                   还没有常用决定，点「新建」添加你的决策场景

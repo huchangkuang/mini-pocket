@@ -6,7 +6,10 @@ export type DecisionItem = {
   title: string;
   list: string[];
 };
-export const decisionConfig: Omit<DecisionItem, "id"> & { id?: string } = {
+export const decisionConfig: Omit<DecisionItem, "id"> & {
+  id?: string;
+  apiId?: number;
+} = {
   title: "今晚吃什么？",
   list: ["火锅", "披萨", "寿司", "烤肉", "面条", "沙拉"],
 };

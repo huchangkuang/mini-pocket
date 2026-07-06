@@ -12,6 +12,8 @@ declare module "*.sass";
 declare module "*.styl";
 declare module "*.mp3";
 
+declare const API_BASE_URL: string;
+
 declare namespace NodeJS {
   interface ProcessEnv {
     TARO_ENV:

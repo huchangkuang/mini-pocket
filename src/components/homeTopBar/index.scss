@@ -14,7 +14,6 @@
     right: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 $margin-mobile;
     box-sizing: border-box;
   }
@@ -40,32 +39,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: $spacing-xs;
-    flex-shrink: 0;
-  }
-
-  &__action {
-    width: 80rpx;
-    height: 80rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: $radius-full;
-
-    &:active {
-      background: $color-surface-container-low;
-    }
-  }
-
-  &__terminal {
-    font-size: $font-body-md;
-    color: $color-on-surface-variant;
-    font-weight: 600;
-    line-height: 1;
   }
 }

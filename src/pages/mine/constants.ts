@@ -48,12 +48,6 @@ export const loggedInStats: StatItem[] = [
 
 export const mineMenuItems: MineMenuItem[] = [
   {
-    id: "history",
-    labelGuest: "使用历史",
-    labelLoggedIn: "使用历史",
-    icon: "clock",
-  },
-  {
     id: "feedback",
     labelGuest: "问题反馈",
     labelLoggedIn: "意见反馈",
@@ -80,13 +74,4 @@ export const guestLevelProgress: LevelProgressData = {
   percent: 2,
   hint: "登录后开启工坊大师之路",
   showMedal: true,
-};
-
-export const loggedInLevelProgress: LevelProgressData = {
-  title: "当前等级进度",
-  current: 850,
-  total: 1000,
-  percent: 85,
-  hint: '再使用 15 次工具即可晋升 "工坊大师"',
-  showMedal: false,
 };

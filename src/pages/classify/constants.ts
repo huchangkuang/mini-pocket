@@ -11,12 +11,17 @@ import randomIcon from "@/images/classify/random.svg";
 export type Accent = "primary" | "secondary" | "tertiary";
 
 export type ToolItem = {
+  id?: number;
   icon: string;
   text: string;
   desc: string;
   path: string;
   accent: Accent;
   category?: string;
+  categoryLabel?: string;
+  heat: string;
+  heatRank: number;
+  isFavorite?: boolean;
 };
 
 export type CategoryChip = {
@@ -40,6 +45,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/handsBarrage/edit/index",
     accent: "primary",
     category: "fun",
+    heat: "1.2k",
+    heatRank: 1200,
   },
   {
     icon: decisionIcon,
@@ -48,6 +55,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/doDescription/index",
     accent: "secondary",
     category: "fun",
+    heat: "999+",
+    heatRank: 999,
   },
   {
     icon: fingerUp,
@@ -56,6 +65,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/fingerUp/index",
     accent: "tertiary",
     category: "fun",
+    heat: "2.5k",
+    heatRank: 2500,
   },
   {
     icon: qrcode,
@@ -64,6 +75,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/qrcode/index",
     accent: "primary",
     category: "efficiency",
+    heat: "850",
+    heatRank: 850,
   },
   {
     icon: metronome,
@@ -72,6 +85,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/metronome/index",
     accent: "secondary",
     category: "life",
+    heat: "620",
+    heatRank: 620,
   },
   {
     icon: lottery,
@@ -80,6 +95,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/lottery/index",
     accent: "tertiary",
     category: "fun",
+    heat: "540",
+    heatRank: 540,
   },
   {
     icon: clock,
@@ -88,6 +105,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/returnClock/index",
     accent: "primary",
     category: "life",
+    heat: "430",
+    heatRank: 430,
   },
   // {
   //   icon: beadArtIcon,
@@ -104,6 +123,8 @@ export const classifyList: ToolItem[] = [
     path: "/pages/guessNumber/index",
     accent: "tertiary",
     category: "fun",
+    heat: "780",
+    heatRank: 780,
   },
 ];
 

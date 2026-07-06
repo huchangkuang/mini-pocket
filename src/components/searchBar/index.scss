@@ -20,16 +20,15 @@
     height: 96rpx;
     padding: 0 32rpx 0 88rpx;
     border-radius: $radius-xl;
-    background: $color-surface-container-lowest;
-    box-shadow: $shadow-card;
-    border: 1rpx solid rgba($color-outline-variant, 0.5);
+    background: $color-surface-container-low;
+    border: none;
     font-size: $font-body-md;
     color: $color-on-surface;
     box-sizing: border-box;
   }
 
   &__placeholder {
-    color: $color-outline;
+    color: rgba($color-on-surface-variant, 0.5);
     font-size: $font-body-md;
   }
 }

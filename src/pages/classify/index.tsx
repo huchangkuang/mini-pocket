@@ -1,12 +1,17 @@
-import React from "react";
-import Taro from "@tarojs/taro";
+import React, { useEffect } from "react";
 import { ScrollView, View, Text } from "@tarojs/components";
+import { AtIcon } from "taro-ui";
+import cs from "classnames";
 import HomeTopBar from "@/components/homeTopBar";
 import FeaturedBanner from "@/components/featuredBanner";
-import ToolCard from "@/components/toolCard";
+import CategoryChips from "@/components/categoryChips";
+import SearchBar from "@/components/searchBar";
+import ToolCard, { type ToolCardLayout } from "@/components/toolCard";
 import { errorToast } from "@/utils/errorToast";
+import { openToolPage } from "@/utils/statsSync";
 import { useTabBarSelected } from "@/utils/useTabBarSelected";
-import { classifyList, excludeClassifyList } from "@/pages/classify/constants";
+import { useFavorites } from "@/utils/useFavorites";
+import { useTools } from "@/hooks/useTools";
 import "./index.scss";
 
 const PLACEHOLDER_MSG = "更多功能正在开发中...";
@@ -14,63 +19,124 @@ const PLACEHOLDER_MSG = "更多功能正在开发中...";
 const Classify: React.FC = () => {
   useTabBarSelected("workshop");
 
-  const viewToPage = (url: string) => {
-    if (!url) {
+  const [selectedCategory, setSelectedCategory] = React.useState("all");
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [sortByHeatDesc, setSortByHeatDesc] = React.useState(true);
+  const [layoutMode, setLayoutMode] = React.useState<ToolCardLayout>("grid");
+
+  const { tools, categoryChips, updateToolFavorite } = useTools(
+    selectedCategory,
+    searchQuery,
+    sortByHeatDesc
+  );
+
+  const { isFavorite, toggleFavorite, syncFavoritePathsFromTools } =
+    useFavorites({
+      onToolFavoriteChange: updateToolFavorite,
+    });
+
+  useEffect(() => {
+    syncFavoritePathsFromTools(tools);
+  }, [tools, syncFavoritePathsFromTools]);
+
+  const viewToPage = (path: string, toolId?: number) => {
+    if (!path) {
       errorToast(PLACEHOLDER_MSG);
       return;
     }
-    Taro.navigateTo({ url });
+    openToolPage(path, toolId);
   };
 
-  const visibleTools = classifyList.filter(
-    (item) => !excludeClassifyList.includes(item.path)
-  );
+  const toggleSortByHeat = () => {
+    setSortByHeatDesc((prev) => !prev);
+  };
+
+  const toggleLayoutMode = () => {
+    setLayoutMode((prev) => (prev === "grid" ? "list" : "grid"));
+  };
+
+  const getCategoryTag = (category?: string, categoryLabel?: string) => {
+    if (categoryLabel) return categoryLabel.toUpperCase();
+    const chip = categoryChips.find((item) => item.id === category);
+    return chip?.label.toUpperCase() ?? "";
+  };
 
   return (
     <View className="workshop">
-      <HomeTopBar
-        onSearch={() => errorToast(PLACEHOLDER_MSG)}
-        onTerminal={() => errorToast(PLACEHOLDER_MSG)}
-      />
+      <HomeTopBar />
 
       <ScrollView scrollY className="workshop__scroll">
         <View className="workshop__content">
           <FeaturedBanner />
 
+          <View className="workshop__filters">
+            <CategoryChips
+              chips={categoryChips}
+              selectedId={selectedCategory}
+              onSelect={setSelectedCategory}
+            />
+            <SearchBar
+              value={searchQuery}
+              placeholder="搜索工具..."
+              onChange={setSearchQuery}
+            />
+          </View>
+
           <View className="workshop__section">
             <View className="workshop__sectionHeader">
               <Text className="workshop__sectionTitle">全部工具</Text>
-              <Text
-                className="workshop__manage"
-                onClick={() => errorToast(PLACEHOLDER_MSG)}
-              >
-                管理
-              </Text>
+              <View className="workshop__sectionActions">
+                <View
+                  className={cs(
+                    "workshop__actionBtn",
+                    sortByHeatDesc && "workshop__actionBtn--active"
+                  )}
+                  onClick={toggleSortByHeat}
+                >
+                  <Text className="workshop__actionBtnText">热度</Text>
+                  <AtIcon
+                    value={sortByHeatDesc ? "chevron-up" : "chevron-down"}
+                    size="12"
+                    color="#005ea4"
+                  />
+                </View>
+                <View
+                  className="workshop__actionBtn"
+                  onClick={toggleLayoutMode}
+                >
+                  <AtIcon value="chevron-left" size="10" color="#005ea4" />
+                  <Text className="workshop__actionBtnText">
+                    {layoutMode === "grid" ? "方格" : "列表"}
+                  </Text>
+                  <AtIcon value="chevron-right" size="10" color="#005ea4" />
+                </View>
+              </View>
             </View>
 
-            <View className="workshop__grid">
-              {visibleTools.map((item) => (
+            <View
+              className={cs(
+                layoutMode === "grid" ? "workshop__grid" : "workshop__list"
+              )}
+            >
+              {tools.map((item) => (
                 <ToolCard
                   key={item.path}
+                  layout={layoutMode}
                   icon={item.icon}
                   title={item.text}
                   desc={item.desc}
                   accent={item.accent}
-                  onClick={() => viewToPage(item.path)}
+                  heat={item.heat}
+                  tag={getCategoryTag(item.category, item.categoryLabel)}
+                  isFavorite={isFavorite(item.path)}
+                  onFavoriteToggle={() => toggleFavorite(item)}
+                  onClick={() => viewToPage(item.path, item.id)}
                 />
               ))}
             </View>
           </View>
-
-          {/* 暂时隐藏底部分类筛选 */}
-          {/* <CategoryChips chips={categoryChips} selectedId={selectedCategory} onSelect={setSelectedCategory} /> */}
         </View>
       </ScrollView>
-
-      {/* 暂时隐藏 FAB + 号 */}
-      {/* <View className="workshop__fab" onClick={() => errorToast(PLACEHOLDER_MSG)}>
-        <AtIcon value="add" size="28" color="#ffffff" />
-      </View> */}
     </View>
   );
 };

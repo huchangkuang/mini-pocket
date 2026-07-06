@@ -22,6 +22,13 @@ page {
     box-sizing: border-box;
   }
 
+  &__filters {
+    margin-top: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
   &__section {
     margin-top: $spacing-lg;
   }
@@ -38,16 +45,36 @@ page {
     line-height: $line-height-headline-md;
   }
 
-  &__manage {
-    font-size: $font-label-sm;
-    font-weight: 500;
-    color: $color-primary;
-    line-height: $line-height-label-sm;
-    padding: 8rpx 0;
+  &__sectionActions {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    flex-shrink: 0;
+  }
+
+  &__actionBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6rpx;
+    padding: 12rpx 28rpx;
+    border-radius: $radius-lg;
+    background: $color-surface-container;
+    flex-shrink: 0;
+
+    &--active {
+      background: rgba($color-primary, 0.1);
+    }
 
     &:active {
-      opacity: 0.7;
+      opacity: 0.85;
     }
+  }
+
+  &__actionBtnText {
+    font-size: $font-label-sm;
+    font-weight: 600;
+    color: $color-primary;
+    line-height: $line-height-label-sm;
   }
 
   &__grid {
@@ -56,22 +83,9 @@ page {
     gap: $gutter-mobile;
   }
 
-  &__fab {
-    position: fixed;
-    right: 48rpx;
-    bottom: calc(#{$bottom-nav-height} + env(safe-area-inset-bottom) + 32rpx);
-    z-index: 40;
-    width: $fab-size;
-    height: $fab-size;
-    border-radius: $radius-xl;
-    background: $color-primary;
-    box-shadow: $shadow-fab;
+  &__list {
     display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:active {
-      transform: scale(0.95);
-    }
+    flex-direction: column;
+    gap: $gutter-mobile;
   }
 }

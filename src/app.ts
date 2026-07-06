@@ -1,12 +1,17 @@
 import React, { Component } from "react";
 import Taro from "@tarojs/taro";
+import { restoreSession } from "@/utils/session";
+import { syncDailyActive } from "@/utils/statsSync";
 
 import "./app.scss";
 
 // 踩坑记录：
 // 1. https://github.com/NervJS/taro-ui/issues/1555
 class App extends Component {
-  componentDidMount() {}
+  async componentDidMount() {
+    await restoreSession();
+    await syncDailyActive();
+  }
 
   updateApp() {
     const updateManager = Taro.getUpdateManager();
@@ -36,6 +41,7 @@ class App extends Component {
 
   componentDidShow() {
     this.updateApp();
+    void syncDailyActive();
   }
 
   componentDidHide() {}

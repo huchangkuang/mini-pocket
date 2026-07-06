@@ -32,9 +32,15 @@
   &__cta {
     margin-top: 48rpx;
     padding: 24rpx 64rpx;
+    line-height: $line-height-body-lg;
     background: $color-primary;
     border-radius: $radius-full;
+    border: none;
     box-shadow: $shadow-fab;
+
+    &::after {
+      border: none;
+    }
 
     &:active {
       transform: scale(0.95);

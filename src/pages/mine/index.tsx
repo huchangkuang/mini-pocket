@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
+import Taro from "@tarojs/taro";
 import { ScrollView, View } from "@tarojs/components";
 import MineTopBar from "@/components/mineTopBar";
 import ProfileHeaderGuest from "@/components/profileHeaderGuest";
@@ -9,37 +10,108 @@ import MineAuthActions from "@/components/mineAuthActions";
 import LevelProgress from "@/components/levelProgress";
 import { errorToast } from "@/utils/errorToast";
 import { useTabBarSelected } from "@/utils/useTabBarSelected";
+import { useAuth } from "@/hooks/useAuth";
+import { updateUserAvatar, updateUserNickname } from "@/utils/profileSync";
 import {
-  demoLoggedInUser,
   guestStats,
   loggedInStats,
   mineMenuItems,
   guestLevelProgress,
-  loggedInLevelProgress,
 } from "@/pages/mine/constants";
+import {
+  DEFAULT_USER_LEVEL,
+  mapLevelToProgressData,
+} from "@/utils/levelMapper";
 import "./index.scss";
 
 const PLACEHOLDER_MSG = "更多功能正在开发中...";
 
 const Mine: React.FC = () => {
   useTabBarSelected("mine");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {
+    user,
+    isLoggedIn,
+    isReady,
+    loggingIn,
+    login,
+    logout,
+    refreshProfile,
+  } = useAuth();
 
-  const handleToggle = () => {
-    setIsLoggedIn((prev) => !prev);
-  };
+  const stats = useMemo(() => {
+    if (!isLoggedIn || !user) {
+      return guestStats;
+    }
+    return loggedInStats.map((item) => {
+      if (item.label === "已用工具") {
+        return { ...item, value: String(user.stats.usedToolsCount) };
+      }
+      if (item.label === "活跃天数") {
+        return { ...item, value: String(user.stats.activeDaysCount) };
+      }
+      if (item.label === "收藏") {
+        return { ...item, value: String(user.stats.favoriteCount) };
+      }
+      return item;
+    });
+  }, [isLoggedIn, user]);
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    login();
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    logout();
   };
 
   const handlePlaceholder = () => {
     errorToast(PLACEHOLDER_MSG);
   };
+
+  const handleAvatarChoose = async (tempPath: string) => {
+    Taro.showLoading({ title: "上传中...", mask: true });
+    try {
+      await updateUserAvatar(tempPath);
+      await refreshProfile();
+      Taro.showToast({ title: "头像已更新", icon: "success", duration: 1500 });
+    } catch (e) {
+      errorToast(e instanceof Error ? e.message : "头像更新失败");
+    } finally {
+      Taro.hideLoading();
+    }
+  };
+
+  const [savingNickname, setSavingNickname] = React.useState(false);
+
+  const handleNicknameSave = async (nickname: string) => {
+    setSavingNickname(true);
+    Taro.showLoading({ title: "保存中...", mask: true });
+    try {
+      await updateUserNickname(nickname);
+      await refreshProfile();
+      Taro.showToast({ title: "昵称已更新", icon: "success", duration: 1500 });
+    } catch (e) {
+      errorToast(e instanceof Error ? e.message : "昵称更新失败");
+      throw e;
+    } finally {
+      Taro.hideLoading();
+      setSavingNickname(false);
+    }
+  };
+
+  const levelProgress = useMemo(() => {
+    if (!isLoggedIn || !user) return guestLevelProgress;
+    return mapLevelToProgressData(user.level ?? DEFAULT_USER_LEVEL);
+  }, [isLoggedIn, user]);
+
+  const loggedInUser = user
+    ? {
+        nickname: user.nickname || "微信用户",
+        joinDate: user.joinDate,
+        badge: user.level?.title ?? DEFAULT_USER_LEVEL.title,
+        avatarUrl: user.avatarUrl,
+      }
+    : null;
 
   return (
     <View className="minePage">
@@ -50,17 +122,18 @@ const Mine: React.FC = () => {
 
       <ScrollView scrollY className="minePage__scroll">
         <View className="minePage__content">
-          {isLoggedIn ? (
+          {isReady && isLoggedIn && loggedInUser ? (
             <ProfileHeaderLoggedIn
-              user={demoLoggedInUser}
-              onToggle={handleToggle}
-              onEdit={handlePlaceholder}
+              user={loggedInUser}
+              savingNickname={savingNickname}
+              onAvatarChoose={handleAvatarChoose}
+              onNicknameSave={handleNicknameSave}
             />
           ) : (
-            <ProfileHeaderGuest onLogin={handleLogin} onToggle={handleToggle} />
+            <ProfileHeaderGuest onLogin={handleLogin} />
           )}
 
-          <StatsGrid items={isLoggedIn ? loggedInStats : guestStats} />
+          <StatsGrid items={stats} />
 
           <MineMenuList
             items={mineMenuItems}
@@ -70,14 +143,14 @@ const Mine: React.FC = () => {
 
           <MineAuthActions
             isLoggedIn={isLoggedIn}
+            loggingIn={loggingIn}
             onLogin={handleLogin}
-            onSwitchAccount={handlePlaceholder}
             onLogout={handleLogout}
           />
 
           <LevelProgress
             variant={isLoggedIn ? "loggedIn" : "guest"}
-            data={isLoggedIn ? loggedInLevelProgress : guestLevelProgress}
+            data={levelProgress}
           />
         </View>
       </ScrollView>
