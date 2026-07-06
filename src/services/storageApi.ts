@@ -1,9 +1,16 @@
 import Taro from "@tarojs/taro";
-import type { ApiResponse, ApiUploadResult } from "@/types/api";
+import type {
+  ApiPersistStorageResult,
+  ApiResponse,
+  ApiUploadResult,
+  PersistScope,
+} from "@/types/api";
 import { getToken } from "@/utils/authStore";
 import { ApiError } from "@/utils/request";
+import { post } from "@/utils/request";
 
-export async function uploadTempFile(
+async function uploadFileTo(
+  path: "avatar" | "upload",
   filePath: string
 ): Promise<ApiUploadResult> {
   const token = getToken();
@@ -13,7 +20,7 @@ export async function uploadTempFile(
 
   const base = API_BASE_URL.replace(/\/$/, "");
   const response = await Taro.uploadFile({
-    url: `${base}/storage/upload`,
+    url: `${base}/storage/${path}`,
     filePath,
     name: "file",
     header: {
@@ -41,4 +48,22 @@ export async function uploadTempFile(
   }
 
   return body.data;
+}
+
+/** 头像直传永久目录 avatars/{userId}/ */
+export function uploadAvatarFile(filePath: string): Promise<ApiUploadResult> {
+  return uploadFileTo("avatar", filePath);
+}
+
+/** 临时上传至 temp/{userId}/，供反馈等场景 */
+export function uploadTempFile(filePath: string): Promise<ApiUploadResult> {
+  return uploadFileTo("upload", filePath);
+}
+
+/** 保存时将 temp 文件复制到永久目录 */
+export function persistStorageFiles(
+  ossKeys: string[],
+  scope: PersistScope = "general"
+): Promise<ApiPersistStorageResult> {
+  return post<ApiPersistStorageResult>("/storage/persist", { ossKeys, scope });
 }

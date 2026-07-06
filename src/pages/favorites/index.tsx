@@ -90,10 +90,7 @@ const Favorites: React.FC = () => {
   if (!isLoggedIn) {
     return (
       <View className="favoritesPage">
-        <FavoritesTopBar
-          onTerminal={() => errorToast(PLACEHOLDER_MSG)}
-          onFilter={() => errorToast(PLACEHOLDER_MSG)}
-        />
+        <FavoritesTopBar onFilter={() => errorToast(PLACEHOLDER_MSG)} />
         <View className="favoritesPage__emptyWrap">
           <FavoritesEmpty
             variant="guest"
@@ -107,10 +104,7 @@ const Favorites: React.FC = () => {
 
   return (
     <View className="favoritesPage">
-      <FavoritesTopBar
-        onTerminal={() => errorToast(PLACEHOLDER_MSG)}
-        onFilter={() => errorToast(PLACEHOLDER_MSG)}
-      />
+      <FavoritesTopBar onFilter={() => errorToast(PLACEHOLDER_MSG)} />
 
       {favorites.length === 0 && !loading ? (
         <View className="favoritesPage__emptyWrap">

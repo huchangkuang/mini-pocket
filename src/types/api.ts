@@ -122,6 +122,18 @@ export type ApiUploadResult = {
   mimeType: string;
 };
 
+export type PersistScope = "feedback" | "general";
+
+export type ApiPersistedFile = {
+  ossKey: string;
+  url: string;
+  sourceOssKey: string;
+};
+
+export type ApiPersistStorageResult = {
+  files: ApiPersistedFile[];
+};
+
 export type ApiToggleFavoriteResult = {
   isFavorite: boolean;
   item: ApiFavorite | null;

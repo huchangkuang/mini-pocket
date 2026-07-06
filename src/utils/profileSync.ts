@@ -1,5 +1,5 @@
 import Taro from "@tarojs/taro";
-import { uploadTempFile } from "@/services/storageApi";
+import { uploadAvatarFile } from "@/services/storageApi";
 import { updateProfile } from "@/services/authApi";
 
 export type LoginProfile = {
@@ -42,7 +42,7 @@ export async function syncProfileAfterLogin(
   if (profile?.avatarTempPath) {
     const localPath = await resolveAvatarLocalPath(profile.avatarTempPath);
     if (localPath) {
-      const uploaded = await uploadTempFile(localPath);
+      const uploaded = await uploadAvatarFile(localPath);
       updates.avatarUrl = uploaded.url;
     }
   }

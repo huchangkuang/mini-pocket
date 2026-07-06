@@ -11,7 +11,7 @@ import {
 import { AtIcon } from "taro-ui";
 import { BomFixed } from "@/components/bomFixed";
 import { submitFeedback } from "@/services/feedbackApi";
-import { uploadTempFile } from "@/services/storageApi";
+import { persistStorageFiles, uploadTempFile } from "@/services/storageApi";
 import { errorToast } from "@/utils/errorToast";
 import type { FeedbackType } from "@/types/api";
 import "./index.scss";
@@ -22,7 +22,7 @@ const MAX_IMAGES = 3;
 type FeedbackImageItem = {
   id: string;
   preview: string;
-  url?: string;
+  ossKey?: string;
   status: "uploading" | "done" | "error";
 };
 
@@ -48,8 +48,7 @@ const Feedback: React.FC = () => {
           item.id === id
             ? {
                 ...item,
-                url: uploaded.url,
-                preview: uploaded.url,
+                ossKey: uploaded.ossKey,
                 status: "done",
               }
             : item
@@ -105,19 +104,25 @@ const Feedback: React.FC = () => {
       return;
     }
 
-    const imageUrls = images
-      .filter((item) => item.status === "done" && item.url)
-      .map((item) => item.url as string);
+    const ossKeys = images
+      .filter((item) => item.status === "done" && item.ossKey)
+      .map((item) => item.ossKey as string);
 
     setSubmitting(true);
     Taro.showLoading({ title: "正在提交...", mask: true });
 
     try {
+      let imageUrls: string[] | undefined;
+      if (ossKeys.length > 0) {
+        const persisted = await persistStorageFiles(ossKeys, "feedback");
+        imageUrls = persisted.files.map((item) => item.url);
+      }
+
       await submitFeedback({
         type: feedbackType,
         content: trimmed,
         contact: contact.trim() || undefined,
-        imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+        imageUrls,
       });
 
       Taro.showToast({

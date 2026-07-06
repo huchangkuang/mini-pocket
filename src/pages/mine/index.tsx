@@ -141,10 +141,7 @@ const Mine: React.FC = () => {
 
   return (
     <View className="minePage">
-      <MineTopBar
-        onTerminal={handlePlaceholder}
-        onNotification={handlePlaceholder}
-      />
+      <MineTopBar onNotification={handlePlaceholder} />
 
       <ScrollView scrollY className="minePage__scroll">
         <View className="minePage__content">
