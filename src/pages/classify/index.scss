@@ -1,25 +1,24 @@
 @import "../../style/common.scss";
 
 page {
+  @include tabPageShell;
   background: $color-surface;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
 }
 
 .workshop {
-  min-height: 100vh;
+  @include tabPageRoot;
   background: $color-surface;
   position: relative;
 
   &__scroll {
-    height: 100vh;
-    box-sizing: border-box;
+    @include tabPageScroll;
   }
 
   &__content {
-    padding: $spacing-md $margin-mobile 0;
-    padding-bottom: calc(#{$bottom-nav-height} + env(safe-area-inset-bottom) + 48rpx);
-    box-sizing: border-box;
+    @include tabPageContent;
+    padding-top: $spacing-md;
   }
 
   &__filters {

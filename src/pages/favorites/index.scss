@@ -1,25 +1,22 @@
-@import "../../style/tokens.scss";
+@import "../../style/common.scss";
 
 page {
+  @include tabPageShell;
   background: $color-surface;
 }
 
 .favoritesPage {
-  min-height: 100vh;
+  @include tabPageRoot;
   background: $color-surface;
   position: relative;
 
   &__scroll {
-    height: 100vh;
-    box-sizing: border-box;
+    @include tabPageScroll;
   }
 
   &__content {
-    padding: $spacing-md $margin-mobile 0;
-    padding-bottom: calc(
-      #{$bottom-nav-height} + env(safe-area-inset-bottom) + 48rpx
-    );
-    box-sizing: border-box;
+    @include tabPageContent;
+    padding-top: $spacing-md;
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
@@ -49,10 +46,8 @@ page {
   }
 
   &__emptyWrap {
-    padding-bottom: calc(
-      #{$bottom-nav-height} + env(safe-area-inset-bottom) + 32rpx
-    );
-    min-height: calc(100vh - 200rpx);
+    flex: 1;
+    min-height: 0;
     display: flex;
     align-items: center;
     justify-content: center;

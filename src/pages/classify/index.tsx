@@ -65,7 +65,7 @@ const Classify: React.FC = () => {
     <View className="workshop">
       <HomeTopBar />
 
-      <ScrollView scrollY className="workshop__scroll">
+      <ScrollView scrollY enhanced className="workshop__scroll">
         <View className="workshop__content">
           <FeaturedBanner />
 

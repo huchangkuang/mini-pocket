@@ -143,7 +143,7 @@ const Mine: React.FC = () => {
     <View className="minePage">
       <MineTopBar onNotification={handlePlaceholder} />
 
-      <ScrollView scrollY className="minePage__scroll">
+      <ScrollView scrollY enhanced className="minePage__scroll">
         <View className="minePage__content">
           {!isReady ? null : isLoggedIn && loggedInUser ? (
             <ProfileHeaderLoggedIn

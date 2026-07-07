@@ -111,7 +111,7 @@ const Favorites: React.FC = () => {
           <FavoritesEmpty />
         </View>
       ) : (
-        <ScrollView scrollY className="favoritesPage__scroll">
+        <ScrollView scrollY enhanced className="favoritesPage__scroll">
           <View className="favoritesPage__content">
             <SearchBar
               value={searchQuery}
