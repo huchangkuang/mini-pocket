@@ -109,6 +109,8 @@ export type ApiRecordToolUseResult = {
   newTitle: string | null;
   stats: ApiUserStats;
   level: ApiUserLevel;
+  heatScore?: number;
+  heat?: string;
 };
 
 export type ApiLoginResult = {
