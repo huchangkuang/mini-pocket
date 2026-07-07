@@ -55,20 +55,19 @@ export async function syncDailyActive(): Promise<void> {
 }
 
 export function openToolPage(path: string, toolId?: number): void {
-  if (isLoggedIn()) {
-    recordToolUse({ toolId, routePath: path })
-      .then((result) => {
-        updateUserProgress(result.stats, result.level);
-        if (result.leveledUp && result.newTitle) {
-          Taro.showToast({
-            title: `恭喜晋升「${result.newTitle}」`,
-            icon: "success",
-            duration: 2000,
-          });
-        }
-      })
-      .catch(() => {});
-  }
+  recordToolUse({ toolId, routePath: path })
+    .then((result) => {
+      if (!isLoggedIn()) return;
+      updateUserProgress(result.stats, result.level);
+      if (result.leveledUp && result.newTitle) {
+        Taro.showToast({
+          title: `恭喜晋升「${result.newTitle}」`,
+          icon: "success",
+          duration: 2000,
+        });
+      }
+    })
+    .catch(() => {});
 
   Taro.navigateTo({ url: path });
 }
