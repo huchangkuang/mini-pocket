@@ -5,6 +5,9 @@ import qrcode from "@/images/classify/qrcode.svg";
 import metronome from "@/images/classify/metronome.svg";
 import lottery from "@/images/classify/lottery.svg";
 import clock from "@/images/classify/clock.svg";
+import timeTravelIcon from "@/images/classify/timeTravel.svg";
+import xiahouDunIcon from "@/images/classify/xiahouDun.svg";
+import hawkingIcon from "@/images/classify/hawking.svg";
 // import beadArtIcon from "@/images/classify/beadArt.svg";
 import randomIcon from "@/images/classify/random.svg";
 
@@ -125,6 +128,36 @@ export const classifyList: ToolItem[] = [
     category: "fun",
     heat: "780",
     heatRank: 780,
+  },
+  {
+    icon: timeTravelIcon,
+    text: "时间穿越",
+    desc: "一键快进未来",
+    path: "/pages/timeTravel/index",
+    accent: "primary",
+    category: "fun",
+    heat: "400",
+    heatRank: 400,
+  },
+  {
+    icon: xiahouDunIcon,
+    text: "夏侯惇模拟器",
+    desc: "左眼视觉体验",
+    path: "/pages/xiahouDun/index",
+    accent: "secondary",
+    category: "fun",
+    heat: "380",
+    heatRank: 380,
+  },
+  {
+    icon: hawkingIcon,
+    text: "霍金模拟器",
+    desc: "屏幕倾斜体验",
+    path: "/pages/hawking/index",
+    accent: "tertiary",
+    category: "fun",
+    heat: "360",
+    heatRank: 360,
   },
 ];
 
