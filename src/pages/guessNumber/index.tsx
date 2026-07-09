@@ -46,7 +46,7 @@ const GuessNumber: React.FC = () => {
     setGameIdFromUrl(gid || null);
   });
 
-  const { isReady: isSessionReady } = useAuth();
+  const { isReady: isSessionReady, isLoggedIn, login } = useAuth();
 
   // ── Creator state ──
   const [targetNumber, setTargetNumber] = useState<string[]>(["", "", "", ""]);
@@ -105,10 +105,21 @@ const GuessNumber: React.FC = () => {
       return;
     }
 
-    setGuesserState(GUESSER_STATE.LOADING_GAME);
+    const loadGame = async () => {
+      // Session 就绪但未登录（新用户 silent login 可能失败），重试登录
+      if (!isLoggedIn) {
+        const ok = await login();
+        if (!ok) {
+          setGuesserState(GUESSER_STATE.ERROR);
+          errorToast("登录失败，请重试");
+          return;
+        }
+      }
 
-    getGameInfo(gameIdFromUrl!)
-      .then((info) => {
+      setGuesserState(GUESSER_STATE.LOADING_GAME);
+
+      try {
+        const info = await getGameInfo(gameIdFromUrl!);
         // Creator opened own share → switch to creator view
         if (info.isCreator) {
           setModeOverride("creator");
@@ -129,17 +140,26 @@ const GuessNumber: React.FC = () => {
         } else {
           setGuesserState(GUESSER_STATE.READY);
         }
-      })
-      .catch((err) => {
-        const statusCode = err?.statusCode;
+      } catch (err) {
+        const statusCode = (err as any)?.statusCode;
         if (statusCode === 404) {
           setGuesserState(GUESSER_STATE.NOT_FOUND);
         } else {
           setGuesserState(GUESSER_STATE.ERROR);
-          errorToast(err?.message || "加载游戏失败");
+          errorToast((err as any)?.message || "加载游戏失败");
         }
-      });
-  }, [gameIdFromUrl, guesserState, isSessionReady, modeOverride]);
+      }
+    };
+
+    loadGame();
+  }, [
+    gameIdFromUrl,
+    guesserState,
+    isSessionReady,
+    isLoggedIn,
+    login,
+    modeOverride,
+  ]);
 
   // ── Share ──
   useShareAppMessage(() => {
@@ -249,7 +269,7 @@ const GuessNumber: React.FC = () => {
   };
 
   const focusGuesserGuessInput = () => {
-    if (guesserState === GUESSER_STATE.READY) {
+    if (isGuesserMode) {
       guessInputRef.current?.focus();
     }
   };
@@ -577,22 +597,6 @@ const GuessNumber: React.FC = () => {
 
   // ── Render: guesser mode ──
   const renderGuesserMode = () => {
-    if (
-      guesserState === GUESSER_STATE.CHECKING_AUTH ||
-      guesserState === GUESSER_STATE.LOADING_GAME
-    ) {
-      return (
-        <View className="guessNumber__loadingState">
-          <AtIcon value="loading" size="24" color="#6750a4" />
-          <Text className="guessNumber__loadingText">
-            {guesserState === GUESSER_STATE.CHECKING_AUTH
-              ? "登录中..."
-              : "加载游戏中..."}
-          </Text>
-        </View>
-      );
-    }
-
     if (guesserState === GUESSER_STATE.NOT_FOUND) {
       return (
         <View className="guessNumber__errorState">
@@ -611,6 +615,12 @@ const GuessNumber: React.FC = () => {
           <AtIcon value="close-circle" size="48" color="#ba1a1a" />
           <Text className="guessNumber__errorTitle">加载失败</Text>
           <Text className="guessNumber__errorHint">网络异常，请稍后重试</Text>
+          <Button
+            className="guessNumber__primaryBtn"
+            onClick={() => setGuesserState(GUESSER_STATE.CHECKING_AUTH)}
+          >
+            重试
+          </Button>
         </View>
       );
     }
@@ -690,7 +700,7 @@ const GuessNumber: React.FC = () => {
         <Button
           className="guessNumber__primaryBtn"
           onClick={handleVerifyGuess}
-          disabled={submittingGuess}
+          disabled={submittingGuess || !gameInfo}
         >
           <AtIcon value="check-circle" size="20" color="#ffffff" />
           {submittingGuess ? "验证中..." : "验证"}
