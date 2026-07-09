@@ -23,21 +23,23 @@ export function useAuth() {
   const [ready, setReady] = useState(() => isSessionReady());
   const [loggingIn, setLoggingIn] = useState(false);
 
-  useEffect(() => {
-    return subscribe(() => {
-      setUserState(getUser());
-      setLoggedIn(isLoggedIn());
-      setReady(isSessionReady());
-    });
-  }, []);
-
   // 冷启动：app.ts 校验 token 完成前，先用本地缓存展示已登录态
+  // 同时确保 ready 状态同步 + 订阅 auth 变更
+  // NOTE: 合并为单个 effect，避免 restoreSession() 在两个 effect 之间完成导致通知丢失
   useEffect(() => {
     if (!isSessionReady() && getToken()) {
       hydrateUserFromStorage();
       setLoggedIn(true);
       setUserState(getUser());
     }
+    // 立即同步 sessionReady 状态，避免 race condition
+    setReady(isSessionReady());
+
+    return subscribe(() => {
+      setUserState(getUser());
+      setLoggedIn(isLoggedIn());
+      setReady(isSessionReady());
+    });
   }, []);
 
   const refreshProfile = useCallback(async () => {

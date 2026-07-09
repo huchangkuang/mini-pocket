@@ -187,6 +187,32 @@ page {
     }
   }
 
+  &__shareBtn {
+    width: 100%;
+    height: 96rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xs;
+    margin-top: $spacing-md;
+    background: $color-surface-container-high;
+    color: $color-primary;
+    border: 2rpx solid rgba($color-primary, 0.3);
+    border-radius: $radius-full;
+    font-size: $font-body-lg;
+    font-weight: 600;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+
+    &::after {
+      border: none;
+    }
+
+    &:active {
+      transform: scale(0.95);
+      opacity: 0.9;
+    }
+  }
+
   &__guess {
     background: $color-surface-container-lowest;
     border-radius: $radius-xl;
@@ -282,5 +308,159 @@ page {
     line-height: $line-height-body-md;
     color: $color-outline;
     text-align: center;
+  }
+
+  // ── Share guide card (creator mode) ──
+  &__shareGuide {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-top: $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    background: $color-surface-container-lowest;
+    border-radius: $radius-xl;
+    border: 2rpx solid rgba($color-outline-variant, 0.3);
+    box-shadow: $shadow-card;
+
+    &--success {
+      border-color: rgba($color-primary, 0.3);
+      background: rgba($color-primary-container, 0.1);
+    }
+  }
+
+  &__shareGuideBody {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4rpx;
+  }
+
+  &__shareGuideTitle {
+    font-size: $font-body-lg;
+    line-height: $line-height-body-lg;
+    font-weight: 600;
+    color: $color-on-surface;
+  }
+
+  &__shareGuideText {
+    font-size: $font-body-md;
+    line-height: $line-height-body-md;
+    color: $color-on-surface-variant;
+  }
+
+  &__shareGuideHint {
+    font-size: $font-body-md;
+    line-height: $line-height-body-md;
+    color: $color-outline;
+  }
+
+  &__retryBtn {
+    margin: 0;
+    padding: 12rpx 24rpx;
+    font-size: $font-body-md;
+    line-height: $line-height-body-md;
+    background: $color-surface-container-high;
+    color: $color-on-surface;
+    border: none;
+    border-radius: $radius-full;
+    flex-shrink: 0;
+
+    &::after {
+      border: none;
+    }
+  }
+
+  // ── Creator info (guesser mode) ──
+  &__creatorInfo {
+    padding: $spacing-md;
+    background: rgba($color-primary-container, 0.1);
+    border-radius: $radius-lg;
+    border: 2rpx solid rgba($color-primary, 0.2);
+  }
+
+  &__creatorText {
+    font-size: $font-body-lg;
+    line-height: $line-height-body-lg;
+    font-weight: 500;
+    color: $color-on-surface;
+  }
+
+  // ── Loading state (guesser mode) ──
+  &__loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
+    padding: 120rpx $spacing-lg;
+  }
+
+  &__loadingText {
+    font-size: $font-body-md;
+    line-height: $line-height-body-md;
+    color: $color-on-surface-variant;
+  }
+
+  // ── Error state (guesser mode) ──
+  &__errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
+    padding: 120rpx $spacing-lg;
+    text-align: center;
+  }
+
+  &__errorTitle {
+    font-size: $font-headline-md;
+    line-height: $line-height-headline-md;
+    font-weight: 600;
+    color: $color-on-surface;
+  }
+
+  &__errorHint {
+    font-size: $font-body-md;
+    line-height: $line-height-body-md;
+    color: $color-on-surface-variant;
+  }
+
+  // ── Won state (guesser mode) ──
+  &__wonState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $spacing-xl $spacing-lg;
+    background: $color-surface-container-lowest;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-card;
+    border: 2rpx solid rgba($color-outline-variant, 0.5);
+  }
+
+  &__wonIcon {
+    margin-bottom: $spacing-sm;
+  }
+
+  &__wonTitle {
+    font-size: $font-headline-lg;
+    line-height: $line-height-headline-lg;
+    font-weight: 700;
+    color: $color-on-surface;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__wonSubtitle {
+    font-size: $font-body-lg;
+    line-height: $line-height-body-lg;
+    color: $color-on-surface-variant;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__wonHistory {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    margin-top: $spacing-lg;
   }
 }

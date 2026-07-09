@@ -1,8 +1,5 @@
-# guess-number-ui Specification
+## MODIFIED Requirements
 
-## Purpose
-TBD - created by archiving change redesign-guess-number-ui. Updated by syncing change add-guess-number-share-mode to support share-to-play multiplayer mode.
-## Requirements
 ### Requirement: 猜数字页展示 MD3 完整结构
 
 系统 SHALL 在 `pages/guessNumber/index` 根据 URL query 参数 `gameId` 是否存在渲染不同模式：
@@ -26,22 +23,6 @@ TBD - created by archiving change redesign-guess-number-ui. Updated by syncing c
 #### Scenario: 无设置入口
 - **WHEN** 用户位于猜数字游戏页
 - **THEN** 页面 MUST NOT 显示设置齿轮或等效设置入口
-
-### Requirement: 原生导航栏浅色样式
-
-系统 SHALL 将猜数字页原生导航栏背景设为 #f7f9fc，标题文字为黑色，标题文案为「猜数字游戏」。
-
-#### Scenario: 导航栏配色
-- **WHEN** 用户打开猜数字游戏页
-- **THEN** 原生导航栏 MUST 使用浅色背景与黑色标题
-
-### Requirement: 游戏规则说明卡片
-
-系统 SHALL 在页面顶部展示 MD3 卡片，含 info 图标、标题「游戏规则」，以及 A/B 说明：A 为「位置和数字都正确」（primary 色强调），B 为「数字正确但位置不正确」（secondary 色强调）。
-
-#### Scenario: 规则卡片展示
-- **WHEN** 用户进入猜数字游戏页
-- **THEN** 页面 MUST 显示含 A/B 规则说明的白色圆角卡片
 
 ### Requirement: 目标数字设置与锁定
 
@@ -79,34 +60,6 @@ TBD - created by archiving change redesign-guess-number-ui. Updated by syncing c
 - **WHEN** 提交猜测时 API 返回错误（如网络异常）
 - **THEN** 系统 MUST Toast 提示错误信息，MUST NOT 追加历史记录，猜测输入 MUST 保留
 
-### Requirement: 历史猜测徽章展示
-
-系统 SHALL 展示历史猜测列表：每条记录含 `#NN` 序号（两位补零）、猜测数字、分离的 `XA`（primary-container 徽章）与 `YB`（secondary-container 徽章）。系统 MUST NOT 提供「清空记录」入口。
-
-#### Scenario: 历史记录格式
-- **WHEN** 用户完成一次验证且结果为 0A4B
-- **THEN** 历史 MUST 显示序号、猜测数字、以及分离的 `0A` 与 `4B` 两个 pill 徽章
-
-#### Scenario: 无清空记录
-- **WHEN** 用户查看历史猜测区
-- **THEN** 页面 MUST NOT 显示「清空记录」按钮或链接
-
-### Requirement: 历史空状态占位
-
-系统 SHALL 在历史记录少于 2 条时，于列表底部展示虚线边框占位卡片，文案为「继续猜测以查看更多历史」。
-
-#### Scenario: 零条历史
-- **WHEN** 目标已锁定且尚无历史记录
-- **THEN** 历史区 MUST 显示虚线空状态占位
-
-#### Scenario: 一条历史
-- **WHEN** 历史记录仅有 1 条
-- **THEN** 历史区 MUST 在记录下方显示虚线空状态占位
-
-#### Scenario: 两条及以上历史
-- **WHEN** 历史记录达到 2 条或以上
-- **THEN** 虚线空状态占位 MUST NOT 显示
-
 ### Requirement: 胜利 Modal 与重新开始
 
 系统 SHALL 在猜题者模式的猜测响应中 `won: true` 时弹出 Modal，标题祝贺、内容展示使用次数，确认按钮文案为「知道了」；用户确认后 MUST 关闭 Modal，页面保持胜利状态（不展示猜测输入区，展示已完成标识）。出题者模式 MUST NOT 展示胜利 Modal（出题者不猜题）。系统 MUST NOT 以页内 gameOver 区块作为主要胜利反馈。
@@ -138,6 +91,8 @@ TBD - created by archiving change redesign-guess-number-ui. Updated by syncing c
 #### Scenario: 创建游戏前分享兜底
 - **WHEN** 用户在锁定目标前或游戏创建失败时触发分享
 - **THEN** 分享 MUST 使用标题「猜数字游戏」和路径 `/pages/guessNumber/index`（无 gameId）
+
+## ADDED Requirements
 
 ### Requirement: 猜题者等待登录完成
 
