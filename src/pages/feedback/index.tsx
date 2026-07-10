@@ -219,17 +219,6 @@ const Feedback: React.FC = () => {
             </View>
           </View>
 
-          <View className="feedbackPage__section">
-            <Text className="feedbackPage__label">联系方式</Text>
-            <Input
-              className="feedbackPage__input"
-              value={contact}
-              placeholder="留下手机号或邮箱，方便我们联系您（选填）"
-              placeholderClass="feedbackPage__placeholder"
-              onInput={(e) => setContact(e.detail.value)}
-            />
-          </View>
-
           <View className="feedbackPage__info">
             <AtIcon value="alert-circle" size="20" color="#004881" />
             <Text className="feedbackPage__infoText">
